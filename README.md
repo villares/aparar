@@ -3,7 +3,7 @@
 ### Anotador de Pranchas para Análise e Registro de Áreas Relativas
 
 #### Objetivo
-Ferramenta para facilitar a anotação e posterior análise de documentos, especialmente "pranchas" usadas para representação de projetos, permitindo  marcar e identificar com categorias regiões do documento, gerando depois um relatório com quantificação das áreas relativas entre as regiões.
+Ferramenta experimental para facilitar a anotação e posterior análise de documentos, especialmente "pranchas" usadas para representação de projetos, permitindo  marcar e identificar com categorias regiões do documento, gerando depois um relatório com quantificação das áreas relativas entre as regiões.
 
 #### Dependências e instalação
  - Instale o [Processing modo Python](https://abav.lugaralgum.com/como-instalar-o-processing-modo-python/)
