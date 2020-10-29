@@ -15,15 +15,12 @@ from __future__ import unicode_literals
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import lista_imagens, adicionar_imagens, imagens, gera_csv
-from arquivos import salva_sessao, carrega_sessao, carrega_pranchas
+from arquivos import imagens, adicionar_imagens
 
 DEBUG = False
 
 def setup():
-    global img
     size(1200, 720)
-    textSize(18)
     interface.setup_interface()
 
 def draw():
