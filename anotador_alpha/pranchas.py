@@ -30,7 +30,7 @@ class Prancha:
         
     @classmethod        
     def get_names(cls):
-        names = [p.nome for p in cls.pranchas]
+        return [p.nome for p in cls.pranchas]
             
     @classmethod
     def display_nome_atual(cls):
@@ -55,3 +55,8 @@ class Prancha:
     @classmethod
     def get_areas_atual(cls):
         return cls.pranchas[cls.atual].areas
+    
+    @classmethod
+    def desselect_all(cls):
+        for r in cls.get_areas_atual():
+            r.drag = False

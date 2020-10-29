@@ -49,7 +49,6 @@ def mouse_pressed():
             return True
     return False
 
-
 def prox_prancha():
     Prancha.atual = (Prancha.atual + 1) % len(Prancha.pranchas)
     print(Prancha.atual)

@@ -26,29 +26,8 @@ def lista_imagens(dir=None):
         return []
     return f_list
 
-def imgext(file_name):
-    ext = file_name.split('.')[-1]
-    # extensões dos formatos de imagem que o Processing aceita!
-    valid_ext = ('jpg',
-                 'png',
-                 'jpeg',
-                 'gif',
-                 'tif',
-                 'tga',
-                 )
-    return ext.lower() in valid_ext
-
-def salva_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "wb") as file:
-        sessao = (Prancha.pranchas, Prancha.path)
-        pickle.dump(sessao, file)
-    print('Salvo em: ' + Prancha.path)
-    
-
-def carrega_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "rb") as file:
-        Prancha.pranchas, Prancha.path = pickle.load(file)
-        adicionar_imagens(File(Prancha.path))
+def carrega_pranchas():
+    selectFolder("Selecione uma pasta", "adicionar_imagens")
 
 def adicionar_imagens(selection):
     if selection == None:
@@ -63,7 +42,7 @@ def adicionar_imagens(selection):
             print("imagem " + img_name + " carregada.")
             imagens[img_name.lower()] = img
             fator = float(height - 100) / img.height
-            if True:  # not Prancha.in_pranchas(img_name):
+            if not Prancha.in_pranchas(img_name):
                 p = Prancha(img_name)
                 p.areas.append(Area(Prancha.ox, Prancha.oy,
                                     img.width * fator, img.height * fator))
@@ -71,3 +50,26 @@ def adicionar_imagens(selection):
 
         print len(Prancha.pranchas)
         print('Número de imagens: ' + str(len(imagens)))
+
+def salva_sessao():
+    with open(join(Prancha.path, "aparar_session.pickle"), "wb") as file:
+        sessao = (Prancha.pranchas, Prancha.path)
+        pickle.dump(sessao, file)
+    print('Salvo em: ' + Prancha.path)
+    
+def carrega_sessao():
+    with open(join(Prancha.path, "aparar_session.pickle"), "rb") as file:
+        Prancha.pranchas, Prancha.path = pickle.load(file)
+        adicionar_imagens(File(Prancha.path))
+
+def imgext(file_name):
+    ext = file_name.split('.')[-1]
+    # extensões dos formatos de imagem que o Processing aceita!
+    valid_ext = ('jpg',
+                 'png',
+                 'jpeg',
+                 'gif',
+                 'tif',
+                 'tga',
+                 )
+    return ext.lower() in valid_ext

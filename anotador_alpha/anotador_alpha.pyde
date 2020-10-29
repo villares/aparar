@@ -8,16 +8,13 @@ Colaboradores: Carolina Celete, Raissa Rodrigues, Larissa Negris de Souza e Alex
 Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
-
 from __future__ import unicode_literals
-
-import pickle
-from os.path import join
 
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import lista_imagens, salva_sessao, carrega_sessao, adicionar_imagens, imagens
+from arquivos import lista_imagens, adicionar_imagens, imagens
+from arquivos import salva_sessao, carrega_sessao, carrega_pranchas
 
 DEBUG = False
 # offset da área que mos.tra a imagem da prancha
@@ -31,7 +28,6 @@ lm = len(interface.modos)
 LOAD_PRANCHAS, SALVA_SESSAO, LOAD_SESSAO, GERA_CSV = range(lm, lm + 4)
 PROX_PRANCHA, VOLTA_PRANCHA, PROX_PROJ, VOLTA_PROJ = range(lm + 4, lm + 8)
 
-# imagens = {}
 Prancha.atual = 0
 
 def setup():
@@ -98,23 +94,17 @@ def mousePressed():
             r.drag = True
             areas.append(r)
 
-def desselect_all():
-    for r in Prancha.get_areas_atual():
-        r.drag = False
 
 def keyReleased():
-    desselect_all()
+    Prancha.desselect_all()
 
 def mouseReleased():
-    desselect_all()
+    Prancha.desselect_all()
     if interface.ativo['modo'] == SELEC:
         for r in reversed(Prancha.get_areas_atual()):
             if r.mouse_over():
                 r.drag = not r.drag
                 break
-    # else:
-    #
-
 
 def mouseDragged():
     for r in reversed(Prancha.get_areas_atual()):
@@ -139,11 +129,6 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
-
-def carrega_pranchas():
-    selectFolder("Selecione uma pasta", "adicionar_imagens")
-    # adicionar_imagens(sketchPath('data'))
-
 
 def gera_csv():
     pass
