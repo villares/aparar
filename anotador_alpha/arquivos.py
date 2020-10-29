@@ -60,7 +60,8 @@ def salva_sessao():
 def carrega_sessao():
     with open(join(sketchPath('data'), "aparar_session.pickle"), "rb") as file:
         Prancha.pranchas, Prancha.path = pickle.load(file)
-        adicionar_imagens(File(Prancha.path))
+        if len(Prancha.pranchas) > 1:  # evita carregar sessão vazia
+            adicionar_imagens(File(Prancha.path))
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
@@ -73,3 +74,6 @@ def imgext(file_name):
                  'tga',
                  )
     return ext.lower() in valid_ext
+
+def gera_csv():
+    pass
