@@ -8,6 +8,8 @@ Colaboradores: Carolina Celete, Raissa Rodrigues, Larissa Negris de Souza e Alex
 Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
+# Salva sessão na pasta /data/ inclui path das últimas imagens carregadas
+
 from __future__ import unicode_literals
 
 import interface

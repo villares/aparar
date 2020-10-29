@@ -52,13 +52,13 @@ def adicionar_imagens(selection):
         print('Número de imagens: ' + str(len(imagens)))
 
 def salva_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "wb") as file:
+    with open(join(sketchPath('data'), "aparar_session.pickle"), "wb") as file:
         sessao = (Prancha.pranchas, Prancha.path)
         pickle.dump(sessao, file)
-    print('Salvo em: ' + Prancha.path)
+    print('Salvo em: ' + sketchPath('data'))
     
 def carrega_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "rb") as file:
+    with open(join(sketchPath('data'), "aparar_session.pickle"), "rb") as file:
         Prancha.pranchas, Prancha.path = pickle.load(file)
         adicionar_imagens(File(Prancha.path))
 
