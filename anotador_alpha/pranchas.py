@@ -33,9 +33,9 @@ class Prancha:
 
     def update(self):
         primeira = self.areas[0]
-        primeira.cobertura = 1
         for a in self.areas[1:]:
-            a.cobertura = a.area / primeira.area
+            a.area = a.w * a.h
+            a.cobertura = a.area / float(primeira.area)
 
     @classmethod
     def in_pranchas(cls, nome):
