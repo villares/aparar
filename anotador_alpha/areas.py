@@ -7,20 +7,20 @@ class Area:
         self.y = y
         self.w = w
         self.h = h
-        self.drag = False
-        self.destaque = False
+        self.selected = False
+        self.over = False
         self.area = self.w * self.h
         self.cobertura = 1
 
     def display(self, mp):
         fill(0, 20)
         stroke(0)
-        if self.drag:
-            strokeWeight(5)
-        elif self.destaque and not mp:
+        if self.selected:
             stroke(200, 0, 0)
             strokeWeight(3)
-            self.destaque = False
+        elif self.over and not mp:
+            strokeWeight(5)
+            self.over = False
         else:
             strokeWeight(2)
         rect(self.x, self.y, self.w, self.h)

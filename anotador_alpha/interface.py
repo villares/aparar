@@ -96,7 +96,7 @@ def mouse_pressed():
     if modo_ativo == MOVER:
         for r in reversed(areas):
             if r.mouse_over():
-                r.drag = True
+                r.selected = True
                 break
     elif modo_ativo == REMOV:  # remover
         for r in reversed(areas[1:]):
@@ -105,19 +105,19 @@ def mouse_pressed():
                 break
     elif modo_ativo == CRIAR:  # criar
         r = Area(mouseX, mouseY, 100, 100)
-        r.drag = True
+        r.selected = True
         areas.append(r)
 
 def mouse_released():
     if modo_ativo == SELEC:
         for r in reversed(Prancha.get_areas_atual()):
             if r.mouse_over():
-                r.drag = not r.drag
+                r.selected = not r.selected
                 break
 
 def mouse_dragged(mb):
     for r in reversed(Prancha.get_areas_atual()):
-        if r.drag:
+        if r.selected:
             dx = mouseX - pmouseX
             dy = mouseY - pmouseY
             if modo_ativo == MOVER and mb == LEFT:

@@ -18,9 +18,14 @@ class Prancha:
             if a.mouse_over() and modo_ativo != interface.CRIAR:
                 if i != 0:
                     a.over = True
+                    if modo_ativo == interface.REMOV:
+                        a.selected = True
                 elif modo_ativo == interface.MOVER:                    
                     a.over = True
                 break
+            elif modo_ativo == interface.REMOV:
+                a.selected = False
+            
         for a in reversed(self.areas):
             a.display(mp)
 
