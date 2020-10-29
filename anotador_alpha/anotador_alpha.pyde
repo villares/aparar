@@ -17,7 +17,7 @@ from os.path import join
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import lista_imagens
+from arquivos import lista_imagens, salva_sessao, carrega_sessao, adicionar_imagens, imagens
 
 DEBUG = False
 # offset da área que mos.tra a imagem da prancha
@@ -31,9 +31,8 @@ lm = len(interface.modos)
 LOAD_PRANCHAS, SALVA_SESSAO, LOAD_SESSAO, GERA_CSV = range(lm, lm + 4)
 PROX_PRANCHA, VOLTA_PRANCHA, PROX_PROJ, VOLTA_PROJ = range(lm + 4, lm + 8)
 
-imagens = {}
+# imagens = {}
 Prancha.atual = 0
-Prancha.path = sketchPath('data')
 
 def setup():
     global img
@@ -44,6 +43,7 @@ def setup():
     fator = float(height - 100) / img.height
     imagens["home"] = img
     p = Prancha("home")
+    Prancha.path = sketchPath('data')
     p.areas.append(Area(Prancha.ox, Prancha.oy,
                         img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
@@ -63,9 +63,9 @@ def setup():
         (200, 20, 140, 20, LEFT, "(←) volta. prancha", VOLTA_PRANCHA),
     )
     # dict de funções acionadas pelos botões
-    interface.comandos = {LOAD_PRANCHAS: load_pranchas,
+    interface.comandos = {LOAD_PRANCHAS: carrega_pranchas,
                           SALVA_SESSAO: salva_sessao,
-                          LOAD_SESSAO: load_sessao,
+                          LOAD_SESSAO: carrega_sessao,
                           GERA_CSV: gera_csv,
                           PROX_PRANCHA: interface.prox_prancha,
                           VOLTA_PRANCHA: interface.volta_prancha,
@@ -140,45 +140,10 @@ def mouseDragged():
 def keyPressed():
     interface.key_pressed(key, keyCode)
 
-def load_pranchas():
+def carrega_pranchas():
     selectFolder("Selecione uma pasta", "adicionar_imagens")
     # adicionar_imagens(sketchPath('data'))
 
-def salva_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "wb") as file:
-        sessao = (Prancha.pranchas, Prancha.path)
-        pickle.dump(sessao, file)
-    print('Salvo em: ' + Prancha.path)
-
-
-def load_sessao():
-    with open(join(Prancha.path, "aparar_session.pickle"), "rb") as file:
-        Prancha.pranchas, Prancha.path = pickle.load(file)
-        adicionar_imagens(Prancha.path)
 
 def gera_csv():
     pass
-
-
-
-def adicionar_imagens(selection):
-    if selection == None:
-        print("Seleção cancelada.")
-    else:
-        dir_path = selection.getAbsolutePath()
-        Prancha.path = dir_path
-        print("Pasta selecionada: " + dir_path)
-        for file_name, file_path in lista_imagens(dir_path):
-            img = loadImage(file_path)
-            img_name = file_name.split('.')[0]
-            print("imagem " + img_name + " carregada.")
-            imagens[img_name.lower()] = img
-            fator = float(height - 100) / img.height
-            if True:  # not Prancha.in_pranchas(img_name):
-                p = Prancha(img_name)
-                p.areas.append(Area(Prancha.ox, Prancha.oy,
-                                    img.width * fator, img.height * fator))
-                Prancha.pranchas.append(p)
-
-        print len(Prancha.pranchas)
-        print('Número de imagens: ' + str(len(imagens)))
