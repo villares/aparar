@@ -13,7 +13,6 @@ class Area:
         self.cobertura = 1
 
     def display(self, mp):
-        fill(0, 20)
         stroke(0)
         if self.selected:
             stroke(200, 0, 0)
@@ -23,7 +22,10 @@ class Area:
             self.over = False
         else:
             strokeWeight(2)
+        fill(0, 20)
         rect(self.x, self.y, self.w, self.h)
+        fill(0)
+        text('{:2.0%}'.format(self.cobertura), self.x, self.y + 20)
 
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
