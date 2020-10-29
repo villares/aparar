@@ -9,6 +9,11 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 # Salva sessão na pasta /data/ inclui path das últimas imagens carregadas
+# carregar categorias e tags
+# mostrar categorias e tags na interface
+# tags como dicionário?
+# categoria como atributo?
+# contagem de desenho da mesma categoria (Counter?)
 
 from __future__ import unicode_literals
 
