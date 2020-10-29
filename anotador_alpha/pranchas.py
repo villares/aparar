@@ -13,19 +13,21 @@ class Prancha:
         self.areas = []
         self.nome = nome
 
-    def display_areas(self, mp, modo_ativo):
+    def display_areas(self, mp):
+        ma = interface.modo_ativo
         for i, a in reversed(list(enumerate(self.areas))):
-            if a.mouse_over() and modo_ativo != interface.CRIAR:
+            if a.mouse_over() and ma != interface.CRIAR:
                 if i != 0:
                     a.over = True
-                    if modo_ativo == interface.REMOV:
+                    if ma == interface.REMOV:
                         a.selected = True
-                elif modo_ativo == interface.MOVER:                    
+                elif ma == interface.MOVER:                    
                     a.over = True
                 break
-            elif modo_ativo == interface.REMOV:
+            elif ma == interface.REMOV:
                 a.selected = False
-            
+        
+        self.update()    
         for a in reversed(self.areas):
             a.display(mp)
 
@@ -67,8 +69,8 @@ class Prancha:
               img.width * fator, img.height * fator)
 
     @classmethod
-    def display_areas_atual(cls, mp, modo_ativo):
-        cls.pranchas[cls.atual].display_areas(mp, modo_ativo)
+    def display_areas_atual(cls, mp):
+        cls.pranchas[cls.atual].display_areas(mp)
 
     @classmethod
     def get_areas_atual(cls):

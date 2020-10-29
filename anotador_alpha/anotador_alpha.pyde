@@ -31,7 +31,7 @@ def draw():
     interface.display_botoes(DEBUG)
     Prancha.display_nome_atual()
     Prancha.display_imagem_atual(imagens)
-    Prancha.display_areas_atual(mousePressed, interface.modo_ativo)
+    Prancha.display_areas_atual(mousePressed)
 
 def mousePressed():
     interface.mouse_pressed()
