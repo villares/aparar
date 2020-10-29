@@ -15,6 +15,7 @@ PROX_PRANCHA, VOLTA_PRANCHA, PROX_PROJ, VOLTA_PROJ = range(lm + 4, lm + 8)
 
 def setup_interface():
     global botoes, comandos
+    textSize(18)
     botoes = (  # são os textos que servem de botões na interface
         (20, 20, 140, 20, "i", "carregar (i)mgs.", LOAD_PRANCHAS),
         (20, 60, 140, 20, "s", "(s)alvar sessão", SALVA_SESSAO),
