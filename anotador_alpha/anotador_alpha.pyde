@@ -25,23 +25,13 @@ def setup():
     size(1200, 720)
     textSize(18)
     interface.setup_interface()
-    
-    splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
-    img = loadImage(splash_img_file)
-    fator = float(height - 100) / img.height
-    imagens["home"] = img
-    p = Prancha("home")
-    Prancha.path = sketchPath('data')
-    p.areas.append(Area(Prancha.ox, Prancha.oy,
-                        img.width * fator, img.height * fator))
-    Prancha.pranchas.append(p)
 
 def draw():
     background(200)
     interface.display_botoes(DEBUG)
     Prancha.display_nome_atual()
     Prancha.display_imagem_atual(imagens)
-    Prancha.display_areas_atual(mousePressed)
+    Prancha.display_areas_atual(mousePressed, interface.modo_ativo)
 
 def mousePressed():
     interface.mouse_pressed()

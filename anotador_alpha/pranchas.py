@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import interface
+
 class Prancha:
 
     atual = 0
@@ -11,20 +13,22 @@ class Prancha:
         self.areas = []
         self.nome = nome
 
-    def display_areas(self, mp):
-        for r in reversed(self.areas):
-            if r.mouse_over():
-                r.destaque = True
+    def display_areas(self, mp, modo_ativo):
+        for i, a in reversed(list(enumerate(self.areas))):
+            if a.mouse_over() and modo_ativo != interface.CRIAR:
+                if i != 0:
+                    a.over = True
+                elif modo_ativo == interface.MOVER:                    
+                    a.over = True
                 break
-        for r in reversed(self.areas):
-            r.display(mp)
+        for a in reversed(self.areas):
+            a.display(mp)
 
     def update(self):
-        primeiro = areas[0]
-        primeiro.cobertura = 1
-        total = primeiro.area
-        for r in self.areas[1:]:
-            r.cobertura = r.area / total
+        primeira = self.areas[0]
+        primeira.cobertura = 1
+        for a in self.areas[1:]:
+            a.cobertura = a.area / primeira.area
 
     @classmethod
     def in_pranchas(cls, nome):
@@ -58,8 +62,8 @@ class Prancha:
               img.width * fator, img.height * fator)
 
     @classmethod
-    def display_areas_atual(cls, mp):
-        cls.pranchas[cls.atual].display_areas(mp)
+    def display_areas_atual(cls, mp, modo_ativo):
+        cls.pranchas[cls.atual].display_areas(mp, modo_ativo)
 
     @classmethod
     def get_areas_atual(cls):
@@ -68,4 +72,4 @@ class Prancha:
     @classmethod
     def desselect_all(cls):
         for r in cls.get_areas_atual():
-            r.drag = False
+            r.selected = False

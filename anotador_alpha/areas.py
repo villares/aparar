@@ -10,28 +10,20 @@ class Area:
         self.drag = False
         self.destaque = False
         self.area = self.w * self.h
+        self.cobertura = 1
 
     def display(self, mp):
-        colorMode(HSB)
-        noFill()
-        area = abs(self.w * self.h)
-        matiz = area * 255 / (width * height)
-        stroke(matiz, 255, 255)
-        colorMode(RGB)
-
+        fill(0, 20)
+        stroke(0)
         if self.drag:
             strokeWeight(5)
-
         elif self.destaque and not mp:
-            stroke(0)
+            stroke(200, 0, 0)
             strokeWeight(3)
             self.destaque = False
         else:
             strokeWeight(2)
-
         rect(self.x, self.y, self.w, self.h)
-
-        self.area = self.w * self.h
 
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
