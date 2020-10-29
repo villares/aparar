@@ -18,14 +18,14 @@ def setup_interface():
     textSize(18)
     botoes = (  # são os textos que servem de botões na interface
         (20, 20, 140, 20, "i", "carregar (i)mgs.", LOAD_PRANCHAS),
-        (20, 60, 140, 20, "s", "(s)alvar sessão", SALVA_SESSAO),
-        (20, 100, 140, 20, "v", "(v)oltar sessão", LOAD_SESSAO),
-        (20, 140, 140, 20, "g", "(g)erar CSV", GERA_CSV),
+        (20, 50, 140, 20, "s", "(s)alvar sessão", SALVA_SESSAO),
+        (20, 80, 140, 20, "v", "(v)oltar sessão", LOAD_SESSAO),
+        (20, 110, 140, 20, "g", "(g)erar CSV", GERA_CSV),
         # modos / estados de operação da ferramenta
-        (20, 220, 140, 20, "m", "(m)over/redim", MOVER),
-        (20, 260, 140, 20, "c", "(c)riar", CRIAR),
-        (20, 300, 140, 20, "r", "(r)emover", REMOV),
-        (20, 340, 140, 20, "a", "(a)notar", SELEC),
+        (20, 160, 140, 20, "m", "(m)over/redim", MOVER),
+        (20, 190, 140, 20, "c", "(c)riar", CRIAR),
+        (20, 220, 140, 20, "r", "(r)emover", REMOV),
+        (20, 250, 140, 20, "a", "(a)notar", SELEC),
         # (20, 370, 100, 40, "z", "(z)oom", ZOOM), # não implementado
         (200, 20, 140, 20, LEFT, "(←) volta prancha", VOLTA_PRANCHA),
         (390, 20, 140, 20, RIGHT, "(→) prox. prancha", PROX_PRANCHA),

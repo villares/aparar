@@ -20,7 +20,8 @@ from arquivos import imagens, adicionar_imagens
 DEBUG = False
 
 def setup():
-    size(1200, 720)
+    # size(1200, 720)
+    fullScreen()
     interface.setup_interface()
 
 def draw():
