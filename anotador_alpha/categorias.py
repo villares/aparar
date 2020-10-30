@@ -1,4 +1,32 @@
-def draw_cats():
+# -*- coding: utf-8 -*-
+
+def setup_cats(arquivo, x, y, width_, lh):
+    lines = loadStrings(arquivo)
+    cat_nomes = [cat for cat in lines
+                 if cat and not '(' in cat
+                 and not cat.startswith('\t')]
+    pos.x = pos.xo = x
+    pos.y = y  # initial x and y
+    cats =  {cat: {'state': False,
+                  'x': pos(i, cat, width_, lh),
+                  'y': pos.y,
+                  'w': pos.tw,
+                  'h': lh,
+                  }
+            for i, cat in enumerate(cat_nomes)}
+    return cats
+
+def pos(i, t, lw, lh=25, wgap=20, hgap=2):
+    # set pos.x, pos.xo, pox.y before you call this
+    pos.tw = textWidth(t)
+    if pos.x + pos.tw > lw:
+        pos.x = pos.xo
+        pos.y += lh + hgap
+    x = pos.x
+    pos.x += pos.tw + wgap
+    return x
+
+def draw_cats(cats):
     for cat in cats:
         x, y = cats[cat]['x'], cats[cat]['y']
         w, h = cats[cat]['w'], cats[cat]['h']
@@ -9,51 +37,26 @@ def draw_cats():
             fill(255)
         else:
             fill(0)
-        if mouse_over_cat(cat):
+        if mouse_over_cat(cat, cats):
             fill(255, 128 * selected, 128 * selected)
         text(cat, x, y + h * 0.75)
     
 def seleciona_tag(cats):    
     for cat in cats:
-        if mouse_over_cat(cat):
+        if mouse_over_cat(cat, cats):
             cats[cat]['state'] ^= 1
 
 def seleciona_cat(cats):    
     for cat in cats:
-        if mouse_over_cat(cat):
+        if mouse_over_cat(cat, cats):
             cats[cat]['state'] = True
         else:
             cats[cat]['state'] = False
 
 
 
-def mouse_over_cat(cat):
+def mouse_over_cat(cat, cats):
     x, y = cats[cat]['x'], cats[cat]['y']
     w, h = cats[cat]['w'], cats[cat]['h']
     return (x < mouseX < x + w
             and y < mouseY < y + h)
-
-def pos(i, t, lw, lh=25, wgap=20):
-    # set pos.x, pos.xo, pox.y before you call this
-    pos.tw = textWidth(t)
-    if pos.x + pos.tw > lw:
-        pos.x = pos.xo
-        pos.y += lh
-    x = pos.x
-    pos.x += pos.tw + wgap
-    return x
-
-def setup_cats(arquivo, x, y, width_):
-    lines = loadStrings(arquivo)
-    cat_nomes = [cat for cat in lines[200:]
-                 if cat and not '(' in cat
-                 and not cat.startswith('\t')]
-    pos.x = pos.xo = x
-    pos.y = y  # initial x and y
-    return {cat: {'state': False,
-                  'x': pos(i, cat, width_),
-                  'y': pos.y,
-                  'w': pos.tw,
-                  'h': 20,
-                  }
-            for i, cat in enumerate(cat_nomes)}
