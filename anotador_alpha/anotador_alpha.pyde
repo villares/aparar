@@ -38,12 +38,8 @@ def draw():
 
 def mousePressed():
     interface.mouse_pressed()
-    
-def keyReleased():
-    Prancha.desselect_all()
 
 def mouseReleased():
-    Prancha.desselect_all()
     interface.mouse_released()
 
 def mouseDragged():
