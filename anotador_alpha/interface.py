@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
 from pranchas import Prancha
 from arquivos import *
 from areas import Area
-from categorias import setup_cats, seleciona_cat, seleciona_tag
+from categorias import setup_cats, draw_cats, seleciona_cat, seleciona_tag
 
 # offset da área que mostra a imagem da prancha
 ox, oy = 200, 50
@@ -30,7 +31,6 @@ modo_ativo = MOVER
 
 def setup_interface():
     global botoes, comandos, categorias, tags
-    textSize(18)
     botoes = {LOAD_PRANCHAS: (20, 20, 140, 20),
               SALVA_SESSAO: (20, 50, 140, 20),
               LOAD_SESSAO: (20, 80, 140, 20),
@@ -55,22 +55,26 @@ def setup_interface():
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
     img = loadImage(splash_img_file)
-    fator = float(height - (oy + rodape)) / img.height
+    fator = Prancha.calc_fator(img)
     imagens["home"] = img
     p = Prancha("home")
     Prancha.path = sketchPath('data')
     p.areas.append(Area(ox, oy, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
     
-    categorias = setup_cats("categorias.txt", 20, 400, ox)
-    tags = setup_cats("tags.txt", 20, height - rodape, width)
-    
+    categorias = setup_cats("categorias.txt", 20, 300, ox, 16)
+    tags = setup_cats("tags.txt", 20, 20 + height - rodape, width, 16)
+ 
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
     return (x < mouseX < x + w and y < mouseY < y + h)
 
 def display_botoes(DEBUG=False):
+    textSize(12)
+    draw_cats(categorias)
+    draw_cats(tags)
+    textSize(18)
     for b in botoes:
         x, y, w, h = botoes[b]
         tecla, nome = b
