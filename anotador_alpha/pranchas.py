@@ -18,10 +18,10 @@ class Prancha:
     def display_areas(self, mp):
         ma = interface.modo_ativo
         if ma == interface.REMOV:
-                Prancha.desselect_all()
+            Prancha.desselect_all()
         for i, a in reversed(list(enumerate(self.areas))):
             if a.mouse_over() and ma != interface.CRIAR:
-                # mouse sobre, exceto no modo CRIAR
+            # mouse sobre, exceto no modo CRIAR
                 if i != 0:  # exceto para a primeira área
                     a.over = True
                     if ma == interface.REMOV:
@@ -31,7 +31,6 @@ class Prancha:
                     # primeira área destaca com mouse over par MOVER
                     a.over = True
                 break
-
 
         self.update()
         for a in reversed(self.areas):
