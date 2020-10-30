@@ -9,11 +9,8 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 # Salva sessão na pasta /data/ inclui path das últimas imagens carregadas
-# carregar categorias e tags
-# mostrar categorias e tags na interface
-# tags como dicionário?
-# categoria como atributo?
-# contagem de desenho da mesma categoria (Counter?)
+# arquivos categorias.txt e tags.txt na pasta /data/
+# mostra categorias e tags na interface só para posicionar
 
 from __future__ import unicode_literals
 
@@ -25,8 +22,8 @@ from arquivos import imagens, adicionar_imagens
 DEBUG = False
 
 def setup():
-    # size(1200, 720)
-    fullScreen()
+    size(1200, 700)
+    # fullScreen()
     interface.setup_interface()
 
 def draw():
