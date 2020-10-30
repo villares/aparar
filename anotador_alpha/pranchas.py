@@ -70,9 +70,14 @@ class Prancha:
     @classmethod
     def display_imagem_atual(cls, imagens):
         img = imagens[cls.nome_prancha_atual().lower()]
-        fator = float(height - 100) / img.height
+        fator = cls.calc_fator(img)
         image(img, interface.ox, interface.oy,
               img.width * fator, img.height * fator)
+
+    @classmethod
+    def calc_fator(cls, img):
+        return float(height - (interface.oy + interface.rodape)) / img.height
+
 
     @classmethod
     def display_areas_atual(cls, mp):

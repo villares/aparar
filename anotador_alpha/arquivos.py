@@ -8,6 +8,7 @@ from java.io import File
 
 from pranchas import Prancha
 from areas import Area
+import interface
 
 imagens = {}
 
@@ -41,10 +42,10 @@ def adicionar_imagens(selection):
             img_name = file_name.split('.')[0]
             print("imagem " + img_name + " carregada.")
             imagens[img_name.lower()] = img
-            fator = float(height - 100) / img.height
+            fator = Prancha.calc_fator(img)
             if not Prancha.in_pranchas(img_name):
                 p = Prancha(img_name)
-                p.areas.append(Area(Prancha.ox, Prancha.oy,
+                p.areas.append(Area(interface.ox, interface.oy,
                                     img.width * fator, img.height * fator))
                 Prancha.pranchas.append(p)
 
@@ -77,3 +78,5 @@ def imgext(file_name):
 
 def gera_csv():
     pass
+    
+    
