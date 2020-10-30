@@ -9,23 +9,31 @@ class Prancha:
 
     def __init__(self, nome):
         self.areas = []
-        self.nome = nome
+        self.nome = nome       # AAA_BBB_CCCxxxxxx
+        self.ida = nome[:3]    # AAA
+        self.idb = nome[4:7]   # BBB
+        self.idc = nome[8:11]  # CCC
+        print(self.ida, self.idb, self.idc)
 
     def display_areas(self, mp):
         ma = interface.modo_ativo
+        if ma == interface.REMOV:
+                Prancha.desselect_all()
         for i, a in reversed(list(enumerate(self.areas))):
             if a.mouse_over() and ma != interface.CRIAR:
-                if i != 0:
+                # mouse sobre, exceto no modo CRIAR
+                if i != 0:  # exceto para a primeira área
                     a.over = True
                     if ma == interface.REMOV:
-                        a.selected = True
-                elif ma == interface.MOVER:                    
+                        a.selected = True  # destaque extra no REMOV
+                        break
+                elif ma == interface.MOVER:
+                    # primeira área destaca com mouse over par MOVER
                     a.over = True
                 break
-            elif ma == interface.REMOV:
-                a.selected = False
-        
-        self.update()    
+
+
+        self.update()
         for a in reversed(self.areas):
             a.display(mp)
 
