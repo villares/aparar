@@ -5,31 +5,43 @@ from pranchas import Prancha
 from arquivos import *
 from areas import Area
 
-# modos (estados da ferramenta)
-modos = (MOVER, REMOV, CRIAR, SELEC, ZOOM) = range(5)
+# offset da área que mostra a imagem da prancha
+ox, oy = 200, 50
+# menu
+LOAD_PRANCHAS = "i", "carregar (i)mgs."
+SALVA_SESSAO = "s", "(s)alvar sessão"
+LOAD_SESSAO = "v", "(v)oltar sessão"
+GERA_CSV = "g", "(g)erar CSV"
+
+VOLTA_PRANCHA = LEFT, "(←) volta prancha"
+PROX_PRANCHA = RIGHT, "(→) prox. prancha"
+
+# modos / estados de operação da ferramenta
+MOVER = "m", "(m)over/redim"
+CRIAR = "c", "(c)riar"
+REMOV = "r", "(r)emover"
+SELEC = "a", "(a)notar"
+ZOOM = "z", "(z)oom"  # não implementado
+
+modos = (MOVER, REMOV, CRIAR, SELEC, ZOOM)
 modo_ativo = MOVER
-# comandos (outros comandos)
-lm = len(modos)
-LOAD_PRANCHAS, SALVA_SESSAO, LOAD_SESSAO, GERA_CSV = range(lm, lm + 4)
-PROX_PRANCHA, VOLTA_PRANCHA, PROX_PROJ, VOLTA_PROJ = range(lm + 4, lm + 8)
 
 def setup_interface():
     global botoes, comandos
     textSize(18)
-    botoes = (  # são os textos que servem de botões na interface
-        (20, 20, 140, 20, "i", "carregar (i)mgs.", LOAD_PRANCHAS),
-        (20, 50, 140, 20, "s", "(s)alvar sessão", SALVA_SESSAO),
-        (20, 80, 140, 20, "v", "(v)oltar sessão", LOAD_SESSAO),
-        (20, 110, 140, 20, "g", "(g)erar CSV", GERA_CSV),
-        # modos / estados de operação da ferramenta
-        (20, 160, 140, 20, "m", "(m)over/redim", MOVER),
-        (20, 190, 140, 20, "c", "(c)riar", CRIAR),
-        (20, 220, 140, 20, "r", "(r)emover", REMOV),
-        (20, 250, 140, 20, "a", "(a)notar", SELEC),
-        # (20, 370, 100, 40, "z", "(z)oom", ZOOM), # não implementado
-        (200, 20, 140, 20, LEFT, "(←) volta prancha", VOLTA_PRANCHA),
-        (390, 20, 140, 20, RIGHT, "(→) prox. prancha", PROX_PRANCHA),
-    )
+    botoes = {LOAD_PRANCHAS: (20, 20, 140, 20),
+              SALVA_SESSAO: (20, 50, 140, 20),
+              LOAD_SESSAO: (20, 80, 140, 20),
+              GERA_CSV: (20, 110, 140, 20),
+              # modos / estados de operação da ferramenta
+              MOVER: (20, 160, 140, 20),
+              CRIAR: (20, 190, 140, 20),
+              REMOV: (20, 220, 140, 20),
+              SELEC: (20, 250, 140, 20),
+              # ZOOM :(20, 370, 100, 40),# não implementado
+              VOLTA_PRANCHA: (200, 20, 140, 20),
+              PROX_PRANCHA: (390, 20, 140, 20),
+              }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
                 SALVA_SESSAO: salva_sessao,
@@ -45,18 +57,18 @@ def setup_interface():
     imagens["home"] = img
     p = Prancha("home")
     Prancha.path = sketchPath('data')
-    p.areas.append(Area(Prancha.ox, Prancha.oy,
-                        img.width * fator, img.height * fator))
+    p.areas.append(Area(ox, oy, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
 def mouse_over(b):
-    x, y, w, h, tecla, nome, const = b
+    x, y, w, h = botoes[b]
     return (x < mouseX < x + w and y < mouseY < y + h)
 
 def display_botoes(DEBUG=False):
     for b in botoes:
-        x, y, w, h, tecla, nome, const = b
-        if const == modo_ativo:
+        x, y, w, h = botoes[b]
+        tecla, nome = b
+        if b == modo_ativo:
             fill(200, 0, 0)
         else:
             if mouse_over(b):
@@ -75,23 +87,24 @@ def key_pressed(k, kc):
     global modo_ativo
     if k == CODED:
         k = kc
-    for x, y, w, h, tecla, nome, const in botoes:
+    for b in botoes:
+        x, y, w, h = botoes[b]
+        tecla, nome = b
         # primeira letra do nome do botao atalho pro modo
         if tecla == k:
-            if const in modos:
-                modo_ativo = const
-            if const in comandos:
-                comandos[const]()
+            if b in modos:
+                modo_ativo = b
+            if b in comandos:
+                comandos[b]()
 
 def mouse_pressed():
     global modo_ativo
     for b in botoes:
-        x, y, w, h, tecla, nome, const = b
         if mouse_over(b):
-            if const in modos:
-                modo_ativo = const
-            if const in comandos:
-                comandos[const]()
+            if b in modos:
+                modo_ativo = b
+            if b in comandos:
+                comandos[b]()
             return
     areas = Prancha.get_areas_atual()
     if modo_ativo == MOVER:
@@ -105,10 +118,11 @@ def mouse_pressed():
                 areas.remove(r)
                 break
     elif modo_ativo == CRIAR:  # criar
-        r = Area(mouseX, mouseY, 100, 100)
-        r.selected = True
-        areas.append(r)
-
+        if mouseX > ox and mouseY > oy:
+            r = Area(mouseX, mouseY, 100, 100)
+            r.selected = True
+            areas.append(r)
+    
 def mouse_released():
     if modo_ativo == SELEC:
         for r in reversed(Prancha.get_areas_atual()):
@@ -134,8 +148,10 @@ def mouse_dragged(mb):
                 if r.h + dy > 2:
                     r.h = r.h + dy
             elif modo_ativo == CRIAR:
-                r.w = mouseX - r.x
-                r.h = mouseY - r.y
+                if mouseX - r.x > 2:
+                    r.w = mouseX - r.x  
+                if mouseY - r.y > 2:
+                    r.h = mouseY - r.y
 
 def prox_prancha():
     Prancha.atual = (Prancha.atual + 1) % len(Prancha.pranchas)

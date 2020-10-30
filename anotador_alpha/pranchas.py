@@ -6,8 +6,6 @@ class Prancha:
 
     atual = 0
     pranchas = []
-    # offset da área que mos.tra a imagem da prancha
-    ox, oy = 200, 50
 
     def __init__(self, nome):
         self.areas = []
@@ -32,10 +30,11 @@ class Prancha:
             a.display(mp)
 
     def update(self):
-        primeira = self.areas[0]
-        for a in self.areas[1:]:
+        a0 = self.areas[0]
+        for a in self.areas:
             a.area = a.w * a.h
-            a.cobertura = a.area / float(primeira.area)
+            if a != a0:
+                a.cobertura = a.area / float(a0.area)
 
     @classmethod
     def in_pranchas(cls, nome):
@@ -65,7 +64,7 @@ class Prancha:
     def display_imagem_atual(cls, imagens):
         img = imagens[cls.nome_prancha_atual().lower()]
         fator = float(height - 100) / img.height
-        image(img, cls.ox, cls.oy,
+        image(img, interface.ox, interface.oy,
               img.width * fator, img.height * fator)
 
     @classmethod
