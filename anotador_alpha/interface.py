@@ -62,7 +62,6 @@ def setup_interface():
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
-
 def mouse_over(b):
     x, y, w, h = botoes[b]
     return (x < mouseX < x + w and y < mouseY < y + h)
