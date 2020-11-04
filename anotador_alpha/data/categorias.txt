@@ -1,17 +1,17 @@
-ORTOGONAIS Implantação
-ORTOGONAIS Plantas
-ORTOGONAIS Elevações
-ORTOGONAIS Cortes
-ORTOGONAIS Diagramas
-ORTOGONAIS Detalhes
-PERSPECTIVAS Exterior
-PERSPECTIVAS Interior
-PERSPECTIVAS Modelagem
-PERSPECTIVAS Fotografia
-AXONOMETRIA Diagramas
-AXONOMETRIA Outras rep.
-AXONOMETRIA Precedentes
-TEXTO Função
-TEXTO Tabelas
-TEXTO Títulos
-TEXTO Gráficos
+ORTO Implantação
+ORTO Plantas
+ORTO Elevações
+ORTO Cortes
+ORTO Diagramas
+ORTO Detalhes
+PERS Exterior
+PERS Interior
+PERS Modelagem
+PERS Fotografia
+ANON Diagramas
+ANON Outras rep.
+ANON Precedentes
+TEXT Função
+TEXT Tabelas
+TEXT Títulos
+TEXT Gráficos
