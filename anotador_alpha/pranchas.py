@@ -62,7 +62,7 @@ class Prancha:
             text(texto, width / 2, 30)
         else:
             fill(0)
-            text("({}) carregadas".format(total), width / 2, 30)
+            text("({}) pranchas carregadas".format(total), width / 2, 30)
 
     @classmethod
     def nome_prancha_atual(cls):
