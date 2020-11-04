@@ -22,24 +22,25 @@ class Prancha:
         for i, a in reversed(list(enumerate(self.areas))):
             if a.mouse_over() and ma != interface.CRIAR:
             # mouse sobre, exceto no modo CRIAR
-                if i != 0:  # exceto para a primeira área
+                if i != 0:  # exceto para 1° obj. Area
                     a.over = True
                     if ma == interface.REMOV:
                         a.selected = True  # destaque extra no REMOV
                         break
                 elif ma == interface.MOVER:
-                    # primeira área destaca com mouse over par MOVER
+                    # 1° obj. Area destaca com mouse over para MOVER
                     a.over = True
                 break
 
-        self.update()
+        self.update()  # atualiza cálculo de áreas dos objetos Area
         for a in reversed(self.areas):
             a.display(mp)
 
     def update(self):
-        a0 = self.areas[0]
+        """Recalcule areas e % de cobertura dos obj. Area desta prancha."""
+        a0 = self.areas[0]  # primeiro obj. Area define 100% de cobertura
         for a in self.areas:
-            a.area = a.w * a.h
+            a.area = a.w * a.h  # atualiza area
             if a != a0:
                 a.cobertura = a.area / float(a0.area)
 
