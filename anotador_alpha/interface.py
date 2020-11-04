@@ -8,8 +8,9 @@ from categorias import setup_terms, draw_terms, select_cat, select_tag
 
 
 # offset da área que mostra a imagem da prancha
-ox, oy = 200, 50
+OX, OY = 200, 50
 rodape = 100
+MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar (i)mgs."
 SALVA_SESSAO = "s", "(s)alvar sessão"
@@ -30,7 +31,7 @@ modos = (MOVER, REMOV, CRIAR, SELEC, ZOOM)
 modo_ativo = MOVER
 
 def setup_interface():
-    Area.categorias = setup_terms("categorias.txt", 20, 300, ox - 10, 16)
+    Area.categorias = setup_terms("categorias.txt", 20, 300, OX - 10, 16)
     Area.tags = setup_terms("tags.txt", 20, 20 + height - rodape, width, 16)
     global botoes, comandos, categorias, tags
     botoes = {LOAD_PRANCHAS: (20, 20, 140, 20),
@@ -61,7 +62,7 @@ def setup_interface():
     imagens["home"] = img
     p = Prancha("home")
     Prancha.path = sketchPath('data')
-    p.areas.append(Area(ox, oy, img.width * fator, img.height * fator))
+    p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
 
@@ -159,14 +160,14 @@ def mouse_dragged(mb):
                     r.x = x
                     r.y = y
             elif modo_ativo == MOVER and mb == RIGHT:
-                if r.w + dx > 2:
+                if r.w + dx > MIN_SIZE:
                     r.w = r.w + dx
-                if r.h + dy > 2:
+                if r.h + dy > MIN_SIZE:
                     r.h = r.h + dy
             elif modo_ativo == CRIAR and areas[0].mouse_over():
-                if mouseX - r.x > 20:
+                if mouseX - r.x > MIN_SIZE:
                     r.w = mouseX - r.x
-                if mouseY - r.y > 20:
+                if mouseY - r.y > MIN_SIZE:
                     r.h = mouseY - r.y
 
 def prox_prancha():
