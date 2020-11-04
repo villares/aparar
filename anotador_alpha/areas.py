@@ -29,6 +29,10 @@ class Area:
             stroke(200, 0, 0)
             fill(100, 0, 0)
             strokeWeight(3)
+            not_remove_mode = interface.modo_ativo != interface.REMOV
+            if (self.cobertura != 1 and not_remove_mode):
+                draw_terms(self.categorias)
+                draw_terms(self.tags)
         elif self.over and not mp:
             strokeWeight(5)
             self.over = False
@@ -44,11 +48,6 @@ class Area:
         fill(0, 20)
         rect(self.x, self.y, self.w, self.h)
 
-        ma = interface.modo_ativo
-        if (self.cobertura != 1 and self.selected
-                and ma != interface.REMOV):
-            draw_terms(self.categorias)
-            draw_terms(self.tags)
 
     def cat_and_tag_selection(self):
         select_cat(self.categorias)
