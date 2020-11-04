@@ -6,6 +6,9 @@ class Prancha:
 
     atual = 0
     pranchas = []
+    path_sessao = ""
+    nome_sessao = ""
+    carregando = False
 
     def __init__(self, nome):
         self.areas = []
@@ -13,7 +16,7 @@ class Prancha:
         self.ida = nome[:3]    # AAA
         self.idb = nome[4:7]   # BBB
         self.idc = nome[8:11]  # CCC
-        print(self.ida, self.idb, self.idc)
+        # print(self.ida, self.idb, self.idc)
 
     def display_areas(self, mp):
         ma = interface.modo_ativo
@@ -70,11 +73,14 @@ class Prancha:
 
     @classmethod
     def display_imagem_atual(cls, imagens):
-        img = imagens[cls.nome_prancha_atual().lower()]
-        fator = cls.calc_fator(img)
-        image(img, interface.OX, interface.OY,
-              img.width * fator, img.height * fator)
-
+        img = imagens.get(cls.nome_prancha_atual().lower())
+        if img is not None:
+            fator = cls.calc_fator(img)
+            image(img, interface.OX, interface.OY,
+                img.width * fator, img.height * fator)
+        else:
+            cls.avisos("IMAGEM NÃO CARREGADA")
+            
     @classmethod
     def calc_fator(cls, img):
         return float(height - (interface.OY + interface.rodape)) / img.height
@@ -92,3 +98,14 @@ class Prancha:
     def desselect_all(cls):
         for r in cls.get_areas_atual():
             r.selected = False
+            
+    @classmethod        
+    def avisos(cls, t=None):
+        if cls.carregando:
+            t = "CARREGANDO IMAGENS"
+        if t:
+            push()
+            fill(200, 0, 0)
+            textSize(24)
+            text(t, width / 2, height / 2)
+            pop()

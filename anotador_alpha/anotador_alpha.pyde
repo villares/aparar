@@ -34,6 +34,7 @@ def draw():
     Prancha.display_nome_atual()
     Prancha.display_imagem_atual(imagens)
     Prancha.display_areas_atual(mousePressed)
+    Prancha.avisos()
 
 def mousePressed():
     interface.mouse_pressed(mouseButton)
