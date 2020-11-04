@@ -101,7 +101,7 @@ def key_pressed(k, kc):
             if b in comandos:
                 comandos[b]()
 
-def mouse_pressed():
+def mouse_pressed(mb):
     # tratamento dos botões
     global modo_ativo
     for b in botoes:
@@ -130,10 +130,10 @@ def mouse_pressed():
             if a.mouse_over():
                 areas.remove(a)
                 break
-    elif modo_ativo == CRIAR:  # criar
+    elif modo_ativo == CRIAR and mb == LEFT:  # criar
         if areas[0].mouse_over():
             Prancha.desselect_all()
-            a = Area(mouseX, mouseY, 100, 100)
+            a = Area(mouseX, mouseY, MIN_SIZE, MIN_SIZE)
             a.selected = True
             areas.append(a)
 

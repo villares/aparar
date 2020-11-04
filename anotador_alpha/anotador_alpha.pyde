@@ -36,7 +36,7 @@ def draw():
     Prancha.display_areas_atual(mousePressed)
 
 def mousePressed():
-    interface.mouse_pressed()
+    interface.mouse_pressed(mouseButton)
 
 def mouseDragged():
     interface.mouse_dragged(mouseButton)
