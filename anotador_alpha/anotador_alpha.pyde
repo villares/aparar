@@ -8,9 +8,11 @@ Colaboradores: Carolina Celete, Raissa Rodrigues, Larissa Negris de Souza e Alex
 Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
-# Salva sessão na pasta /data/ inclui path das últimas imagens carregadas
 # arquivos categorias.txt e tags.txt na pasta /data/
-# mostra categorias e tags na interface só para posicionar
+# [ ] Melhorar display de nomes longos de categoria...
+# [ ] Salvar sessão na pasta das últimas imagens carregadas
+# [ ] Evitar crash se não carregou as imagens...
+# [ ] Gerar planilha CSV
 
 from __future__ import unicode_literals
 
