@@ -37,8 +37,9 @@ class Area:
         self.cat_selected = active_term(self.categorias)
         self.tags_selected = active_term(self.tags, all=True)
 
-        text('{} ({:2.0%})'.format(self.cat_selected, self.cobertura),
-             self.x + 10, self.y + 20)
+        text(self.cat_selected, self.x + 10, self.y + 20)
+        text("{:2.0%}".format(self.cobertura), self.x + 10, self.y + self.h - 10)
+        
         fill(0, 20)
         rect(self.x, self.y, self.w, self.h)
 
