@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from pranchas import Prancha
 from arquivos import *
 from areas import Area
-from categorias import setup_cats, draw_cats, seleciona_cat, seleciona_tag
+from categorias import setup_terms, draw_terms, select_cat, select_tag
 
 
 # offset da área que mostra a imagem da prancha
@@ -30,8 +30,8 @@ modos = (MOVER, REMOV, CRIAR, SELEC, ZOOM)
 modo_ativo = MOVER
 
 def setup_interface():
-    Area.categorias = setup_cats("categorias.txt", 20, 300, ox - 10, 16)
-    Area.tags = setup_cats("tags.txt", 20, 20 + height - rodape, width, 16)
+    Area.categorias = setup_terms("categorias.txt", 20, 300, ox - 10, 16)
+    Area.tags = setup_terms("tags.txt", 20, 20 + height - rodape, width, 16)
     global botoes, comandos, categorias, tags
     botoes = {LOAD_PRANCHAS: (20, 20, 140, 20),
               SALVA_SESSAO: (20, 50, 140, 20),
@@ -111,8 +111,15 @@ def mouse_pressed():
                 modo_ativo = b
             if b in comandos:
                 comandos[b]()
-            return
+            return # evita que qualquer outra edição seja realizada        
+        
     areas = Prancha.get_areas_atual()
+    
+    if modo_ativo in (SELEC, CRIAR):
+        for a in areas:
+            if a.selected:
+                a.cat_and_tag_selection()
+    
     if modo_ativo == MOVER:
         for a in reversed(areas):
             if a.mouse_over():
@@ -130,23 +137,17 @@ def mouse_pressed():
             a = Area(mouseX, mouseY, 100, 100)
             a.selected = True
             areas.append(a)
-
-def mouse_released():
-    areas = Prancha.get_areas_atual()
-    if modo_ativo == SELEC:
+    elif modo_ativo == SELEC:
         for a in reversed(areas):
             if a.mouse_over():
                 Prancha.desselect_all()
                 a.selected = True
                 break
             
-    if modo_ativo in (SELEC, CRIAR):
-        for a in areas:
-            if a.selected:
-                a.cat_and_tag_selection()
 
 def mouse_dragged(mb):
-    for r in reversed(Prancha.get_areas_atual()):
+    areas = Prancha.get_areas_atual()    
+    for r in reversed(areas):
         if r.selected:
             dx = mouseX - pmouseX
             dy = mouseY - pmouseY
@@ -162,10 +163,10 @@ def mouse_dragged(mb):
                     r.w = r.w + dx
                 if r.h + dy > 2:
                     r.h = r.h + dy
-            elif modo_ativo == CRIAR:
-                if mouseX - r.x > 2:
+            elif modo_ativo == CRIAR and areas[0].mouse_over():
+                if mouseX - r.x > 20:
                     r.w = mouseX - r.x
-                if mouseY - r.y > 2:
+                if mouseY - r.y > 20:
                     r.h = mouseY - r.y
 
 def prox_prancha():

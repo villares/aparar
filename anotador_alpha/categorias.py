@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 
-def setup_cats(arquivo, x, y, width_, lh):
+def setup_terms(arquivo, x, y, width_, lh):
     lines = loadStrings(arquivo)
-    cat_nomes = [cat for cat in lines
-                 if cat and not '(' in cat
-                 and not cat.startswith('\t')]
+    term_names = [term for term in lines
+                 if term and not '(' in term
+                 and not term.startswith('\t')]
     pos.x = pos.xo = x
     pos.y = y  # initial x and y
-    cats =  {cat: {'state': False,
-                  'x': pos(i, cat, width_, lh),
+    terms =  {term: {'state': False,
+                  'x': pos(i, term, width_, lh),
                   'y': pos.y,
                   'w': pos.tw,
                   'h': lh,
                   }
-            for i, cat in enumerate(cat_nomes)}
-    return cats
+            for i, term in enumerate(term_names)}
+    return terms
 
 def pos(i, t, lw, lh=25, wgap=20, hgap=2):
     # set pos.x, pos.xo, pox.y before you call this
@@ -26,47 +26,47 @@ def pos(i, t, lw, lh=25, wgap=20, hgap=2):
     pos.x += pos.tw + wgap
     return x
 
-def draw_cats(cats):
-    for cat in cats:
-        x, y = cats[cat]['x'], cats[cat]['y']
-        w, h = cats[cat]['w'], cats[cat]['h']
+def draw_terms(terms):
+    for term in terms:
+        x, y = terms[term]['x'], terms[term]['y']
+        w, h = terms[term]['w'], terms[term]['h']
         noFill()
         # rect(x, y, w, h)
-        selected = cats[cat]['state']
+        selected = terms[term]['state']
         if selected:
             fill(200, 0, 0)
         else:
             fill(0)
-        if mouse_over_cat(cat, cats):
+        if mouse_over_term(term, terms):
             fill(200, 128 + 128 * selected, 128 + 128 * selected)
-        text(cat, x, y + h * 0.75)
+        text(term, x, y + h * 0.75)
             
-def seleciona_tag(cats):    
-    for cat in cats:
-        if mouse_over_cat(cat, cats):
-            cats[cat]['state'] ^= 1
+def select_tag(terms):    
+    for term in terms:
+        if mouse_over_term(term, terms):
+            terms[term]['state'] ^= 1
 
-def seleciona_cat(cats):    
-    for cat in cats:
-        if mouse_over_cat(cat, cats):
-            if cats[cat]['state']:
-                cats[cat]['state'] = False
+def select_cat(terms):    
+    for term in terms:
+        if mouse_over_term(term, terms):
+            if terms[term]['state']:
+                terms[term]['state'] = False
             else:
-                for other in cats:
-                    cats[other]['state'] = False
-                cats[cat]['state'] = True
+                for other in terms:
+                    terms[other]['state'] = False
+                terms[term]['state'] = True
 
-def active_cat(cats, all=False):
+def active_term(terms, all=False):
     if not all:
-        for cat in cats:
-            if cats[cat]['state']:
-                return cat
+        for term in terms:
+            if terms[term]['state']:
+                return term
         return ""
     else:
-        return [cat for cat in cats if cats[cat]['state']]
+        return [term for term in terms if terms[term]['state']]
 
-def mouse_over_cat(cat, cats):
-    x, y = cats[cat]['x'], cats[cat]['y']
-    w, h = cats[cat]['w'], cats[cat]['h']
+def mouse_over_term(term, terms):
+    x, y = terms[term]['x'], terms[term]['y']
+    w, h = terms[term]['w'], terms[term]['h']
     return (x < mouseX < x + w
             and y < mouseY < y + h)

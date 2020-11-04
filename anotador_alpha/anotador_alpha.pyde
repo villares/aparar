@@ -38,9 +38,6 @@ def draw():
 def mousePressed():
     interface.mouse_pressed()
 
-def mouseReleased():
-    interface.mouse_released()
-
 def mouseDragged():
     interface.mouse_dragged(mouseButton)
 

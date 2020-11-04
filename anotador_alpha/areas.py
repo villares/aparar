@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from copy import deepcopy
-from categorias import draw_cats, seleciona_cat, seleciona_tag, active_cat
+from categorias import draw_terms, select_cat, select_tag, active_term
 import interface
 
 class Area:
@@ -18,7 +18,8 @@ class Area:
         self.cobertura = 1  # 100%
         self.tags = deepcopy(Area.tags)
         self.categorias = deepcopy(Area.categorias)
-        self.cat = ""
+        self.cat_selected = ""
+        self.tags_selected = []
 
     def display(self, mp):
         textSize(11)
@@ -33,8 +34,10 @@ class Area:
             self.over = False
         else:
             strokeWeight(2)
-        self.cat = active_cat(self.categorias)
-        text('{} ({:2.0%})'.format(self.cat, self.cobertura),
+        self.cat_selected = active_term(self.categorias)
+        self.tags_selected = active_term(self.tags, all=True)
+
+        text('{} ({:2.0%})'.format(self.cat_selected, self.cobertura),
              self.x + 10, self.y + 20)
         fill(0, 20)
         rect(self.x, self.y, self.w, self.h)
@@ -42,12 +45,12 @@ class Area:
         ma = interface.interface.modo_ativo
         if (self.cobertura != 1 and self.selected and
                 ma in (interface.SELEC, interface.CRIAR)):
-            draw_cats(self.categorias)
-            draw_cats(self.tags)
+            draw_terms(self.categorias)
+            draw_terms(self.tags)
 
     def cat_and_tag_selection(self):
-        seleciona_cat(self.categorias)
-        seleciona_tag(self.tags)
+        select_cat(self.categorias)
+        select_tag(self.tags)
 
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
