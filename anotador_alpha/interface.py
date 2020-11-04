@@ -29,6 +29,7 @@ modos = (EDITA, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
 
 def setup_interface():
+    Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Area.categorias = setup_terms("categorias.txt", 20, 300, OX - 10, 16)
     Area.tags = setup_terms("tags.txt", 20, 20 + height - rodape, width, 16)
     global botoes, comandos, categorias, tags
@@ -162,8 +163,6 @@ def mouse_dragged(mb):
 
 def prox_prancha():
     Prancha.atual = (Prancha.atual + 1) % len(Prancha.pranchas)
-    print(Prancha.atual)
 
 def volta_prancha():
     Prancha.atual = (Prancha.atual - 1) % len(Prancha.pranchas)
-    print(Prancha.atual)
