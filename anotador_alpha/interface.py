@@ -95,7 +95,7 @@ def key_pressed(k, kc):
         x, y, w, h = botoes[b]
         tecla, nome = b
         # primeira letra do nome do botao atalho pro modo
-        if tecla == k:
+        if tecla == k or str(tecla).upper() == k:
             if b in modos:
                 modo_ativo = b
             if b in comandos:
@@ -150,7 +150,7 @@ def mouse_dragged(mb):
                 if na_tela:
                     r.x = x
                     r.y = y
-            elif modo_ativo == EDITA and mb == RIGHT:
+            elif modo_ativo in (EDITA, CRIAR) and mb == RIGHT:
                 if r.w + dx > MIN_SIZE:
                     r.w = r.w + dx
                 if r.h + dy > MIN_SIZE:
