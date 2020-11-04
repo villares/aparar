@@ -34,13 +34,13 @@ def draw_cats(cats):
         # rect(x, y, w, h)
         selected = cats[cat]['state']
         if selected:
-            fill(255)
+            fill(200, 0, 0)
         else:
             fill(0)
         if mouse_over_cat(cat, cats):
-            fill(255, 128 * selected, 128 * selected)
+            fill(200, 128 + 128 * selected, 128 + 128 * selected)
         text(cat, x, y + h * 0.75)
-    
+            
 def seleciona_tag(cats):    
     for cat in cats:
         if mouse_over_cat(cat, cats):
@@ -49,11 +49,21 @@ def seleciona_tag(cats):
 def seleciona_cat(cats):    
     for cat in cats:
         if mouse_over_cat(cat, cats):
-            cats[cat]['state'] = True
-        else:
-            cats[cat]['state'] = False
+            if cats[cat]['state']:
+                cats[cat]['state'] = False
+            else:
+                for other in cats:
+                    cats[other]['state'] = False
+                cats[cat]['state'] = True
 
-
+def active_cat(cats, all=False):
+    if not all:
+        for cat in cats:
+            if cats[cat]['state']:
+                return cat
+        return ""
+    else:
+        return [cat for cat in cats if cats[cat]['state']]
 
 def mouse_over_cat(cat, cats):
     x, y = cats[cat]['x'], cats[cat]['y']
