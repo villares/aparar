@@ -38,14 +38,15 @@ class Area:
         self.tags_selected = active_term(self.tags, all=True)
 
         text(self.cat_selected, self.x + 10, self.y + 20)
-        text("{:2.0%}".format(self.cobertura), self.x + 10, self.y + self.h - 10)
-        
+        text("{:2.0%}".format(self.cobertura),
+             self.x + 10, self.y + self.h - 10)
+
         fill(0, 20)
         rect(self.x, self.y, self.w, self.h)
 
-        ma = interface.interface.modo_ativo
-        if (self.cobertura != 1 and self.selected and
-                ma in (interface.SELEC, interface.CRIAR)):
+        ma = interface.modo_ativo
+        if (self.cobertura != 1 and self.selected
+                and ma != interface.REMOV):
             draw_terms(self.categorias)
             draw_terms(self.tags)
 

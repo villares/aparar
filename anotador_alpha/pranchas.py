@@ -27,7 +27,7 @@ class Prancha:
                     if ma == interface.REMOV:
                         a.selected = True  # destaque extra no REMOV
                         break
-                elif ma == interface.MOVER:
+                elif ma == interface.EDITA:
                     # 1° obj. Area destaca com mouse over para MOVER
                     a.over = True
                 break

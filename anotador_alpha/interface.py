@@ -2,10 +2,9 @@
 from __future__ import unicode_literals
 
 from pranchas import Prancha
-from arquivos import *
 from areas import Area
 from categorias import setup_terms, draw_terms, select_cat, select_tag
-
+from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 50
@@ -21,14 +20,13 @@ VOLTA_PRANCHA = LEFT, "(←) volta prancha"
 PROX_PRANCHA = RIGHT, "(→) prox. prancha"
 
 # modos / estados de operação da ferramenta
-MOVER = "m", "(m)over/redim"
 CRIAR = "c", "(c)riar"
+EDITA = "e", "(e)editar"
 REMOV = "r", "(r)emover"
-SELEC = "a", "(a)notar"
 ZOOM = "z", "(z)oom"  # não implementado
 
-modos = (MOVER, REMOV, CRIAR, SELEC, ZOOM)
-modo_ativo = MOVER
+modos = (EDITA, REMOV, CRIAR, ZOOM)
+modo_ativo = CRIAR
 
 def setup_interface():
     Area.categorias = setup_terms("categorias.txt", 20, 300, OX - 10, 16)
@@ -39,11 +37,10 @@ def setup_interface():
               LOAD_SESSAO: (20, 80, 140, 20),
               GERA_CSV: (20, 110, 140, 20),
               # modos / estados de operação da ferramenta
-              MOVER: (20, 160, 140, 20),
-              CRIAR: (20, 190, 140, 20),
+              CRIAR: (20, 160, 140, 20),
+              EDITA: (20, 190, 140, 20),
               REMOV: (20, 220, 140, 20),
-              SELEC: (20, 250, 140, 20),
-              # ZOOM :(20, 370, 100, 40),# não implementado
+              # ZOOM :(20, 250, 100, 40),# não implementado
               VOLTA_PRANCHA: (200, 20, 140, 20),
               PROX_PRANCHA: (390, 20, 140, 20),
               }
@@ -105,6 +102,7 @@ def key_pressed(k, kc):
                 comandos[b]()
 
 def mouse_pressed():
+    # tratamento dos botões
     global modo_ativo
     for b in botoes:
         if mouse_over(b):
@@ -112,21 +110,21 @@ def mouse_pressed():
                 modo_ativo = b
             if b in comandos:
                 comandos[b]()
-            return # evita que qualquer outra edição seja realizada        
+            return # evita que qualquer outra ação seja realizada        
         
     areas = Prancha.get_areas_atual()
-    
-    if modo_ativo in (SELEC, CRIAR):
+    # tratamento dos tags e categorias
+    if modo_ativo in (EDITA, CRIAR):  
         for a in areas:
             if a.selected:
                 a.cat_and_tag_selection()
-    
-    if modo_ativo == MOVER:
+    # tratamento dos objetos Area
+    if modo_ativo == EDITA:  # editar
         for a in reversed(areas):
             if a.mouse_over():
                 Prancha.desselect_all()
                 a.selected = True
-                break
+                break      
     elif modo_ativo == REMOV:  # remover
         for a in reversed(areas[1:]):
             if a.mouse_over():
@@ -138,13 +136,6 @@ def mouse_pressed():
             a = Area(mouseX, mouseY, 100, 100)
             a.selected = True
             areas.append(a)
-    elif modo_ativo == SELEC:
-        for a in reversed(areas):
-            if a.mouse_over():
-                Prancha.desselect_all()
-                a.selected = True
-                break
-            
 
 def mouse_dragged(mb):
     areas = Prancha.get_areas_atual()    
@@ -152,14 +143,14 @@ def mouse_dragged(mb):
         if r.selected:
             dx = mouseX - pmouseX
             dy = mouseY - pmouseY
-            if modo_ativo == MOVER and mb == LEFT:
+            if modo_ativo == EDITA and mb == LEFT:
                 x = r.x + dx
                 y = r.y + dy
                 na_tela = 0 < x < width - r.w and 0 < y < height - r.h
                 if na_tela:
                     r.x = x
                     r.y = y
-            elif modo_ativo == MOVER and mb == RIGHT:
+            elif modo_ativo == EDITA and mb == RIGHT:
                 if r.w + dx > MIN_SIZE:
                     r.w = r.w + dx
                 if r.h + dy > MIN_SIZE:
