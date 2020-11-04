@@ -28,7 +28,10 @@ def lista_imagens(dir=None):
     return f_list
 
 def carrega_pranchas():
+    # Operação normal, via callback (que silencia erros!)
     selectFolder("Selecione uma pasta", "adicionar_imagens")
+    # Essencial para o debug usar "chamada direta" de adicionar_imagens()
+    # adicionar_imagens(File("/home/villares/Área de Trabalho"))
 
 def adicionar_imagens(selection):
     if selection == None:
@@ -45,7 +48,7 @@ def adicionar_imagens(selection):
             fator = Prancha.calc_fator(img)
             if not Prancha.in_pranchas(img_name):
                 p = Prancha(img_name)
-                p.areas.append(Area(interface.ox, interface.oy,
+                p.areas.append(Area(interface.OX, interface.OY,
                                     img.width * fator, img.height * fator))
                 Prancha.pranchas.append(p)
 
@@ -57,7 +60,7 @@ def salva_sessao():
         sessao = (Prancha.pranchas, Prancha.path)
         pickle.dump(sessao, file)
     print('Salvo em: ' + sketchPath('data'))
-    
+
 def carrega_sessao():
     with open(join(sketchPath('data'), "aparar_session.pickle"), "rb") as file:
         Prancha.pranchas, Prancha.path = pickle.load(file)
@@ -78,5 +81,3 @@ def imgext(file_name):
 
 def gera_csv():
     pass
-    
-    
