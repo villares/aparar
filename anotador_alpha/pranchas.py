@@ -60,7 +60,7 @@ class Prancha:
     def display_nome_atual(cls):
         nome = cls.nome_prancha_atual()
         total = len(cls.pranchas) - 1  # home não conta!
-        if nome != 'home':
+        if nome != '000':  # prancha "home" teste
             fill(200, 0, 0)
             texto = "({:03}/{:03}) {}".format(cls.atual, total, nome)
             text(texto, width / 2, 30)

@@ -11,16 +11,16 @@ OX, OY = 200, 50
 rodape = 100
 MIN_SIZE = 20
 # menu
-LOAD_PRANCHAS = "i", "carregar (i)mgs."
+LOAD_PRANCHAS = "i", "carregar (i)magens"
 SALVA_SESSAO = "s", "(s)alvar sessão"
-LOAD_SESSAO = "v", "(v)oltar sessão"
+LOAD_SESSAO = "c", "(c)carregar sessão"
 GERA_CSV = "g", "(g)erar CSV"
 
 VOLTA_PRANCHA = LEFT, "(←) volta prancha"
 PROX_PRANCHA = RIGHT, "(→) prox. prancha"
 
 # modos / estados de operação da ferramenta
-CRIAR = "c", "(c)riar"
+CRIAR = "a", "(a)adicionar"
 EDITA = "e", "(e)editar"
 REMOV = "r", "(r)emover"
 ZOOM = "z", "(z)oom"  # não implementado
@@ -30,18 +30,21 @@ modo_ativo = CRIAR
 
 def setup_interface():
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
-    Area.categorias = setup_terms("categorias.txt", 20, 300, OX - 10, 16)
-    Area.tags = setup_terms("tags.txt", 20, 20 + height - rodape, width, 16)
+    Area.categorias = setup_terms("categorias.txt", 20, 350, OX - 10, 16)
+    Area.tags = setup_terms("tags.txt", 20 + OX, 20 + height - rodape, width, 16)
     global botoes, comandos, categorias, tags
-    botoes = {LOAD_PRANCHAS: (20, 20, 140, 20),
-              SALVA_SESSAO: (20, 50, 140, 20),
-              LOAD_SESSAO: (20, 80, 140, 20),
-              GERA_CSV: (20, 110, 140, 20),
+    botoes = {
+              ("", "ARQUIVOS"): (20, 40, 140, 20),
+              LOAD_PRANCHAS: (20, 70, 140, 20),
+              SALVA_SESSAO: (20, 100, 140, 20),
+              LOAD_SESSAO: (20, 130, 140, 20),
+              GERA_CSV: (20, 160, 140, 20),
               # modos / estados de operação da ferramenta
-              CRIAR: (20, 160, 140, 20),
-              EDITA: (20, 190, 140, 20),
-              REMOV: (20, 220, 140, 20),
-              # ZOOM :(20, 250, 100, 40),# não implementado
+              ("", "ÁREAS"): (20, 210, 140, 20),
+              CRIAR: (20, 240, 140, 20),
+              EDITA: (20, 270, 140, 20),
+              REMOV: (20, 300, 140, 20),
+              # ZOOM :(20, 330, 100, 40),# não implementado
               VOLTA_PRANCHA: (200, 20, 140, 20),
               PROX_PRANCHA: (390, 20, 140, 20),
               }
@@ -57,8 +60,8 @@ def setup_interface():
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
     img = loadImage(splash_img_file)
     fator = Prancha.calc_fator(img)
-    imagens["home"] = img
-    p = Prancha("home")
+    imagens["000"] = img
+    p = Prancha("000")
     Prancha.path = sketchPath('data')
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
@@ -75,7 +78,7 @@ def display_botoes(DEBUG=False):
         if b == modo_ativo:
             fill(200, 0, 0)
         else:
-            if mouse_over(b):
+            if mouse_over(b) and tecla != "":
                 fill(255)
             else:
                 fill(0)
