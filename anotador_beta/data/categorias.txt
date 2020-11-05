@@ -1,17 +1,17 @@
-ORTO-Implantação
-ORTO-Plantas
-ORTO-Elevações
-ORTO-Cortes
-ORTO-Diagramas
-ORTO-Detalhes
-PERS-Exterior
-PERS-Interior
-PERS-Modelagem
-PERS-Fotografia
-ANON-Diagramas
-ANON-Outras rep.
-ANON-Precedentes
-TEXT-Função
-TEXT-Tabelas
-TEXT-Títulos
-TEXT-Gráficos
+orto-Implantação
+orto-Plantas
+orto-Elevações
+orto-Cortes
+orto-Diagramas
+orto-Detalhes
+persp-Exterior
+persp-Interior
+persp-Modelagem
+persp-Fotografia
+axono-Diagramas
+axono-Outras rep.
+axono-Precedentes
+texto-Função
+texto-Tabelas
+texto-Títulos
+texto-Gráficos
