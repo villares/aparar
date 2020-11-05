@@ -96,7 +96,7 @@ def gera_csv():
         table.addColumn(cat + "_area")
     tags = sorted(Area.tags.keys())
     for tag in tags:    
-        table.addColumn(tag + "_area")
+        table.addColumn(tag)
         
     for prancha in Prancha.pranchas:
         cat_count = Counter()
