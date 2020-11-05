@@ -14,10 +14,13 @@ class Prancha:
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
-        self.ida = nome[:3]    # AAA
-        self.idb = nome[4:7]   # BBB
-        self.idc = nome[8:11]  # CCC
-        # print(self.ida, self.idb, self.idc)
+        sep_pos = nome.find("_")
+            if sep_pos > 0:
+               self.ida = nome[:sep_pos]    # AAA ou AAAA
+               self.idb = nome[sep_pos:sep_pos+3]   # BBB
+               self.idc = nome[sep_pos+3:sep_pos+6]  # CCC
+            else:
+                self.ida = self.idb = self.idc = nome
 
     def display_areas(self, mp):
         ma = interface.modo_ativo
