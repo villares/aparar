@@ -66,6 +66,7 @@ def salva_sessao():
     print('Salvo em: ' + Prancha.path_sessao)
 
 def carrega_sessao():
+    from categorias import find_super_cats
     with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
         Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
         Area.categorias = Prancha.pranchas[0].areas[0].categorias
