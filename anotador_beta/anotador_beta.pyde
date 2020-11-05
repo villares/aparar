@@ -10,9 +10,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 """
 # arquivos categorias.txt e tags.txt na pasta /data/
 # [ ] Melhorar display de nomes longos de categoria...
-# [X] Salvar sessão na pasta das últimas imagens carregadas
-# [X] Evitar crash se não carregou as imagens.
-# [X] Gerar planilha CSV
+# [X] Categorias com prefixo NNN-MMM são somadas em NNN
 
 from __future__ import unicode_literals
 
