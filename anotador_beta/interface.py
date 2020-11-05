@@ -20,8 +20,8 @@ VOLTA_PRANCHA = LEFT, "(←) volta prancha"
 PROX_PRANCHA = RIGHT, "(→) prox. prancha"
 
 # modos / estados de operação da ferramenta
-CRIAR = "a", "(a)adicionar"
-EDITA = "e", "(e)editar"
+CRIAR = "a", "(a)dicionar"
+EDITA = "e", "(e)ditar"
 REMOV = "r", "(r)emover"
 ZOOM = "z", "(z)oom"  # não implementado
 
