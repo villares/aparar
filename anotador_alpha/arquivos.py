@@ -10,7 +10,7 @@ from pranchas import Prancha
 from areas import Area
 import interface
 
-imagens = {}
+imagens = {}  # dicionário contendo as imagens carregadas
 
 def lista_imagens(dir=None):
     """
@@ -37,8 +37,10 @@ def adicionar_imagens(selection):
     if selection == None:
         print("Seleção cancelada.")
     else:
+        Prancha.carregando = True
         dir_path = selection.getAbsolutePath()
-        Prancha.path = dir_path
+        Prancha.path_sessao = dir_path
+        Prancha.nome_sessao = unicode(selection)
         print("Pasta selecionada: " + dir_path)
         for file_name, file_path in lista_imagens(dir_path):
             img = loadImage(file_path)
@@ -54,18 +56,19 @@ def adicionar_imagens(selection):
 
         print len(Prancha.pranchas)
         print('Número de imagens: ' + str(len(imagens)))
+        Prancha.carregando = False
 
 def salva_sessao():
-    with open(join(sketchPath('data'), "aparar_session.pickle"), "wb") as file:
-        sessao = (Prancha.pranchas, Prancha.path)
+    with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
+        sessao = (Prancha.pranchas, Prancha.path_sessao)
         pickle.dump(sessao, file)
-    print('Salvo em: ' + sketchPath('data'))
+    print('Salvo em: ' + Prancha.path_sessao)
 
 def carrega_sessao():
-    with open(join(sketchPath('data'), "aparar_session.pickle"), "rb") as file:
-        Prancha.pranchas, Prancha.path = pickle.load(file)
-        if len(Prancha.pranchas) > 1:  # evita carregar sessão vazia
-            adicionar_imagens(File(Prancha.path))
+    with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
+        Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
+        # if len(Prancha.pranchas) > 1:  # evita carregar sessão vazia
+        #     adicionar_imagens(File(Prancha.path_sessao))
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
@@ -80,4 +83,37 @@ def imgext(file_name):
     return ext.lower() in valid_ext
 
 def gera_csv():
-    pass
+    from processing.data import Table
+    from collections import Counter, defaultdict
+    table = Table()
+    table.addColumn("AAA")
+    table.addColumn("BBB")
+    table.addColumn("CCC")
+   
+    categorias = sorted(Area.categorias.keys())
+    for cat in categorias:    
+        table.addColumn(cat + "_num")
+        table.addColumn(cat + "_area")
+    tags = sorted(Area.tags.keys())
+    for tag in tags:    
+        table.addColumn(tag + "_area")
+        
+    for prancha in Prancha.pranchas:
+        contador = Counter()
+        cobertura = defaultdict(lambda: 0) 
+        nova_linha = table.addRow()
+        nova_linha.setString("AAA", self.ida)
+        nova_linha.setString("BBB", self.idb)
+        nova_linha.setString("CCC", self.idc)
+        
+        for area in prancha.areas[1:]:  # pula o primeiro obj. Area
+            contador[area.cat_selected] += 1
+            cobertura[area.cat_selected] += area.cobertura
+            
+        for cat in categorias:
+            nova_linha.setInt(cat + "_num", contador[cat])
+            nova_linha.setFloat(cat + "_area", cobertura[cat])
+            # newRow.setString("name", "Lion")
+    
+    file = join(Prancha.path_sessao, "tabela_aparar.csv")
+    saveTable(table, file)
