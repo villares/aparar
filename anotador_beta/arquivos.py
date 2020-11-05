@@ -5,6 +5,7 @@ import pickle
 from os import listdir
 from os.path import isfile, join
 from java.io import File
+from copy import deepcopy
 
 from pranchas import Prancha
 from areas import Area
@@ -67,8 +68,11 @@ def salva_sessao():
 def carrega_sessao():
     with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
         Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
-        # if len(Prancha.pranchas) > 1:  # evita carregar sessão vazia
-        #     adicionar_imagens(File(Prancha.path_sessao))
+        Area.categorias = Prancha.pranchas[0].areas[0].categorias
+        Area.tags = Prancha.pranchas[0].areas[0].tags
+        Area.super_cats = find_super_cats(Area.categorias)
+
+    
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
