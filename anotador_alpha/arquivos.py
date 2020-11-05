@@ -99,21 +99,25 @@ def gera_csv():
         table.addColumn(tag + "_area")
         
     for prancha in Prancha.pranchas:
-        contador = Counter()
+        cat_count = Counter()
+        tag_count = Counter()
         cobertura = defaultdict(lambda: 0) 
         nova_linha = table.addRow()
-        nova_linha.setString("AAA", self.ida)
-        nova_linha.setString("BBB", self.idb)
-        nova_linha.setString("CCC", self.idc)
+        nova_linha.setString("AAA", prancha.ida)
+        nova_linha.setString("BBB", prancha.idb)
+        nova_linha.setString("CCC", prancha.idc)
         
         for area in prancha.areas[1:]:  # pula o primeiro obj. Area
-            contador[area.cat_selected] += 1
+            cat_count[area.cat_selected] += 1
             cobertura[area.cat_selected] += area.cobertura
+            tag_count.update(area.tags_selected)
             
         for cat in categorias:
-            nova_linha.setInt(cat + "_num", contador[cat])
+            nova_linha.setInt(cat + "_num", cat_count[cat])
             nova_linha.setFloat(cat + "_area", cobertura[cat])
-            # newRow.setString("name", "Lion")
+
+        for tag in tags:
+            nova_linha.setInt(tag, tag_count[tag])
     
     file = join(Prancha.path_sessao, "tabela_aparar.csv")
     saveTable(table, file)
