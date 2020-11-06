@@ -10,6 +10,8 @@ class Prancha:
     path_sessao = ""
     nome_sessao = ""
     carregando = False
+    avisos_timer = 0
+    avisos_texto = ""
 
     def __init__(self, nome):
         self.areas = []
@@ -126,8 +128,20 @@ class Prancha:
 
     @classmethod
     def avisos(cls, t=None):
+        
+        if t and cls.avisos_timer == 0:
+            cls.avisos_texto = t
+            cls.avisos_timer = millis()
+        
+        if millis() - cls.avisos_timer > 1200:
+            cls.avisos_texto = t = ""
+            cls.avisos_timer = 0
+
         if cls.carregando:
             t = "CARREGANDO IMAGENS"
+        else:
+            t = cls.avisos_texto       
+                 
         if t:
             push()
             fill(200, 0, 0)

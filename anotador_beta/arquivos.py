@@ -36,7 +36,7 @@ def carrega_pranchas():
 
 def adicionar_imagens(selection):
     if selection == None:
-        print("Seleção cancelada.")
+        Prancha.avisos("seleção cancelada da pasta cancelada")
     else:
         Prancha.carregando = True
         dir_path = selection.getAbsolutePath()
@@ -63,15 +63,23 @@ def salva_sessao():
     with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
         sessao = (Prancha.pranchas, Prancha.path_sessao)
         pickle.dump(sessao, file)
-    print('Salvo em: ' + Prancha.path_sessao)
+    Prancha.avisos("sessão salva em …" + str(Prancha.path_sessao)[-40:])
+
 
 def carrega_sessao():
-    from categorias import find_super_cats
-    with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
-        Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
-        Area.categorias = Prancha.pranchas[0].areas[0].categorias
-        Area.tags = Prancha.pranchas[0].areas[0].tags
-        Area.super_cats = find_super_cats(Area.categorias)
+    from categorias import find_super_cats    
+    try:
+        with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
+            Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
+            Area.categorias = Prancha.pranchas[0].areas[0].categorias
+            Area.tags = Prancha.pranchas[0].areas[0].tags
+            Area.super_cats = find_super_cats(Area.categorias)
+            Prancha.avisos("sessão carregada")
+
+    except Exception as e:
+        Prancha.avisos("sessão não encontrada")
+        print("Erro ({0}): {1}".format(e.errno, e.strerror))
+    
 
     
 
