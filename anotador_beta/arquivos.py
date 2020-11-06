@@ -63,7 +63,7 @@ def salva_sessao():
     with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
         sessao = (Prancha.pranchas, Prancha.path_sessao)
         pickle.dump(sessao, file)
-    Prancha.avisos("sessão salva em …" + str(Prancha.path_sessao)[-40:])
+    Prancha.avisos("sessão salva em …" + unicode(Prancha.path_sessao)[-40:])
 
 
 def carrega_sessao():

@@ -24,8 +24,8 @@ class Prancha:
         sep_pos = nome.find("_")
         if sep_pos > 0:
             self.ida = nome[:sep_pos]    # AAA ou AAAA
-            self.idb = nome[sep_pos:sep_pos + 3]   # BBB
-            self.idc = nome[sep_pos + 3:sep_pos + 6]  # CCC
+            self.idb = nome[sep_pos + 1:sep_pos + 4]   # BBB
+            self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
             self.ida = self.idb = self.idc = nome
 
