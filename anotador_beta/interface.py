@@ -11,21 +11,21 @@ OX, OY = 200, 50
 rodape = 100
 MIN_SIZE = 20
 # menu
-LOAD_PRANCHAS = "i", "carregar (i)magens"
-SALVA_SESSAO = "s", "(s)alvar sessão"
-LOAD_SESSAO = "c", "(c)arregar sessão"
-GERA_CSV = "g", "(g)erar CSV"
+LOAD_PRANCHAS = "i", "carregar [i]magens"
+SALVA_SESSAO = "s", "[s]alvar sessão"
+LOAD_SESSAO = "c", "[c]arregar sessão"
+GERA_CSV = "g", "[g]erar CSV"
 
-VOLTA_PRANCHA = LEFT, "(←) volta prancha"
-PROX_PRANCHA = RIGHT, "(→) prox. prancha"
-ROT_PRANCHA = "r", "(r) girar prancha 90°"
+VOLTA_PRANCHA = LEFT, "[←] volta prancha"
+PROX_PRANCHA = RIGHT, "[→] prox. prancha"
+ROT_PRANCHA = "p", "girar [p]rancha 90°"
 
 
 # modos / estados de operação da ferramenta
-CRIAR = "a", "(a)dicionar"
-EDITA = "e", "(e)ditar"
-REMOV = "r", "(r)emover"
-ZOOM = "z", "(z)oom"  # não implementado
+CRIAR = "a", "[a]dicionar"
+EDITA = "e", "[e]ditar"
+REMOV = "r", "[r]emover"
+ZOOM = "z", "[z]oom"  # não implementado
 
 modos = (EDITA, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
