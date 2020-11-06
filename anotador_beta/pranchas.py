@@ -71,10 +71,11 @@ class Prancha:
         if nome != '000':  # prancha "home" teste
             fill(200, 0, 0)
             texto = "({:03}/{:03}) {}".format(cls.atual, total, nome)
-            text(texto, width / 2, 30)
         else:
             fill(0)
-            text("({}) pranchas carregadas".format(total), width / 2, 30)
+            texto = "pranchas carregadas: {}".format(total)
+        text(texto, 780, 30)
+
 
     @classmethod
     def nome_prancha_atual(cls):
@@ -82,10 +83,10 @@ class Prancha:
 
     @classmethod
     def display_imagem_atual(cls, imagens):
-        rot =  cls.pranchas[cls.atual].nome
+        rot =  cls.pranchas[cls.atual].rot
         img = imagens.get(cls.nome_prancha_atual().lower())
         if img is not None:
-            fator = cls.calc_fator(img, rot == 1)
+            fator = cls.calc_fator(img, rot == 1 or rot == 3)
             image_rot(img, rot, interface.OX, interface.OY,
                 img.width * fator, img.height * fator)
         else:
@@ -98,8 +99,6 @@ class Prancha:
         else:
             return float(height - (interface.OY + interface.rodape)) / img.width
             
-
-
     @classmethod
     def display_areas_atual(cls, mp):
         cls.pranchas[cls.atual].display_areas(mp)
