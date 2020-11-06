@@ -31,27 +31,28 @@ modos = (EDITA, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
 
 def setup_interface():
+    cf, tf = "categorias.txt", "tags.txt"
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
-    Area.categorias = setup_terms("categorias.txt", 20, 350, OX - 10, 16)
+    Area.categorias = setup_terms(cf, 20, 350, OX - 10, 16)
     Area.super_cats = find_super_cats(Area.categorias)
-    Area.tags = setup_terms("tags.txt", 20 + OX, 20 + height - rodape, width, 16)
+    Area.tags = setup_terms(tf, 20 + OX, 20 + height - rodape, width, 16)
     global botoes, comandos, categorias, tags
     botoes = {
-              ("", "ARQUIVOS"): (20, 40, 140, 20),
-              LOAD_PRANCHAS: (20, 70, 140, 20),
-              SALVA_SESSAO: (20, 100, 140, 20),
-              LOAD_SESSAO: (20, 130, 140, 20),
-              GERA_CSV: (20, 160, 140, 20),
-              # modos / estados de operação da ferramenta
-              ("", "ÁREAS"): (20, 210, 140, 20),
-              CRIAR: (20, 240, 140, 20),
-              EDITA: (20, 270, 140, 20),
-              REMOV: (20, 300, 140, 20),
-              # ZOOM :(20, 330, 100, 40),# não implementado
-              VOLTA_PRANCHA: (200, 20, 140, 20),
-              PROX_PRANCHA: (390, 20, 140, 20),
-              ROT_PRANCHA: (580, 20, 140, 20),
-              }
+        ("", "ARQUIVOS"): (20, 40, 140, 20),
+        LOAD_PRANCHAS: (20, 70, 140, 20),
+        SALVA_SESSAO: (20, 100, 140, 20),
+        LOAD_SESSAO: (20, 130, 140, 20),
+        GERA_CSV: (20, 160, 140, 20),
+        # modos / estados de operação da ferramenta
+        ("", "ÁREAS"): (20, 210, 140, 20),
+        CRIAR: (20, 240, 140, 20),
+        EDITA: (20, 270, 140, 20),
+        REMOV: (20, 300, 140, 20),
+        # ZOOM :(20, 330, 100, 40),# não implementado
+        VOLTA_PRANCHA: (200, 20, 140, 20),
+        PROX_PRANCHA: (390, 20, 140, 20),
+        ROT_PRANCHA: (580, 20, 140, 20),
+    }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
                 SALVA_SESSAO: salva_sessao,
@@ -118,11 +119,11 @@ def mouse_pressed(mb):
                 modo_ativo = b
             if b in comandos:
                 comandos[b]()
-            return # evita que qualquer outra ação seja realizada        
-        
+            return  # evita que qualquer outra ação seja realizada
+
     areas = Prancha.get_areas_atual()
     # tratamento dos tags e categorias
-    if modo_ativo in (EDITA, CRIAR):  
+    if modo_ativo in (EDITA, CRIAR):
         for a in areas:
             if a.selected:
                 a.cat_and_tag_selection()
@@ -132,7 +133,7 @@ def mouse_pressed(mb):
             if a.mouse_over():
                 Prancha.desselect_all()
                 a.selected = True
-                break      
+                break
     elif modo_ativo == REMOV:  # remover
         for a in reversed(areas[1:]):
             if a.mouse_over():
@@ -146,7 +147,7 @@ def mouse_pressed(mb):
             areas.append(a)
 
 def mouse_dragged(mb):
-    areas = Prancha.get_areas_atual()    
+    areas = Prancha.get_areas_atual()
     for r in reversed(areas):
         if r.selected:
             dx = mouseX - pmouseX
@@ -167,24 +168,20 @@ def mouse_dragged(mb):
                 if mouseX - r.x > MIN_SIZE:
                     r.w = mouseX - r.x
                 if mouseY - r.y > MIN_SIZE:
-
-                                        r.h = mouseY - r.y
+                    r.h = mouseY - r.y
 
 def prox_prancha():
     Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
 
 def volta_prancha():
     Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
-    
+
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
     img, rot, fator = Prancha.imagem_rot_fator_atual(imagens)
     if img and (rot == 1 or rot == 3):
-        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator)  # INVERTED
+        pa.areas[0] = Area(
+            OX, OY, img.height * fator, img.width * fator)  # INVERTED
     elif img:
         pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
-
-    
-    
-    
