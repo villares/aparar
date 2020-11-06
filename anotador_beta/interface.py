@@ -13,11 +13,13 @@ MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar (i)magens"
 SALVA_SESSAO = "s", "(s)alvar sessão"
-LOAD_SESSAO = "c", "(c)carregar sessão"
+LOAD_SESSAO = "c", "(c)arregar sessão"
 GERA_CSV = "g", "(g)erar CSV"
 
 VOLTA_PRANCHA = LEFT, "(←) volta prancha"
 PROX_PRANCHA = RIGHT, "(→) prox. prancha"
+ROT_PRANCHA = "r", "(r) girar prancha 90°"
+
 
 # modos / estados de operação da ferramenta
 CRIAR = "a", "(a)dicionar"
@@ -48,6 +50,7 @@ def setup_interface():
               # ZOOM :(20, 330, 100, 40),# não implementado
               VOLTA_PRANCHA: (200, 20, 140, 20),
               PROX_PRANCHA: (390, 20, 140, 20),
+              ROT_PRANCHA: (580, 20, 140, 20),
               }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
@@ -56,6 +59,7 @@ def setup_interface():
                 GERA_CSV: gera_csv,
                 PROX_PRANCHA: prox_prancha,
                 VOLTA_PRANCHA: volta_prancha,
+                ROT_PRANCHA: rot_prancha,
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -163,10 +167,18 @@ def mouse_dragged(mb):
                 if mouseX - r.x > MIN_SIZE:
                     r.w = mouseX - r.x
                 if mouseY - r.y > MIN_SIZE:
-                    r.h = mouseY - r.y
+
+                                        r.h = mouseY - r.y
 
 def prox_prancha():
     Prancha.atual = (Prancha.atual + 1) % len(Prancha.pranchas)
 
 def volta_prancha():
     Prancha.atual = (Prancha.atual - 1) % len(Prancha.pranchas)
+    
+def rot_prancha():
+    pa = Prancha.pranchas[Prancha.atual]
+    pa.rot = (pa.rot + 1) % 4
+    
+    
+    
