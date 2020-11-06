@@ -14,6 +14,11 @@ class Prancha:
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
+        self.init_ids()
+        self.rot = 0
+        
+    def init_ids(self):
+        nome = self.nome    
         sep_pos = nome.find("_")
         if sep_pos > 0:
                self.ida = nome[:sep_pos]    # AAA ou AAAA
@@ -77,17 +82,22 @@ class Prancha:
 
     @classmethod
     def display_imagem_atual(cls, imagens):
+        rot =  cls.pranchas[cls.atual].nome
         img = imagens.get(cls.nome_prancha_atual().lower())
         if img is not None:
-            fator = cls.calc_fator(img)
-            image(img, interface.OX, interface.OY,
+            fator = cls.calc_fator(img, rot == 1)
+            image_rot(img, rot, interface.OX, interface.OY,
                 img.width * fator, img.height * fator)
         else:
             cls.avisos("IMAGEM NÃO CARREGADA")
             
     @classmethod
-    def calc_fator(cls, img):
-        return float(height - (interface.OY + interface.rodape)) / img.height
+    def calc_fator(cls, img, rotated=False):
+        if not rotated:
+            return float(height - (interface.OY + interface.rodape)) / img.height
+        else:
+            return float(height - (interface.OY + interface.rodape)) / img.width
+            
 
 
     @classmethod
@@ -113,3 +123,24 @@ class Prancha:
             textSize(24)
             text(t, width / 2, height / 2)
             pop()
+            
+            
+def image_rot(img, rot, x, y, w=None, h=None):
+    w = w or img.width
+    h = h or img.height
+    pushMatrix()
+    if rot == 1:
+        translate(x + h, y)
+        rotate(HALF_PI)
+        image(img, 0, 0, w, h)
+    elif rot == 2:
+        translate(x + w, y + h)
+        rotate(PI)
+        image(img, 0, 0, w, h)    
+    elif rot == 3:
+        translate(x, y + w)
+        rotate(HALF_PI + PI)
+        image(img, 0, 0, w, h)
+    else:
+        image(img, x, y, w, h)    
+    popMatrix()     
