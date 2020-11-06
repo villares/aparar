@@ -8,7 +8,7 @@ from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, ge
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 50
-rodape = 100
+rodape = 50
 MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar [i]magens"
@@ -171,14 +171,20 @@ def mouse_dragged(mb):
                                         r.h = mouseY - r.y
 
 def prox_prancha():
-    Prancha.atual = (Prancha.atual + 1) % len(Prancha.pranchas)
+    Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
 
 def volta_prancha():
-    Prancha.atual = (Prancha.atual - 1) % len(Prancha.pranchas)
+    Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
     
 def rot_prancha():
-    pa = Prancha.pranchas[Prancha.atual]
+    pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
+    img, rot, fator = Prancha.imagem_rot_fator_atual(imagens)
+    if img and (rot == 1 or rot == 3):
+        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator)  # INVERTED
+    elif img:
+        pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
+
     
     
     
