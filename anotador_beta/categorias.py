@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def setup_terms(arquivo, x, y, width_, lh):
+def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
     lines = loadStrings(arquivo)
     term_names = [term for term in lines
                  if term and not '(' in term
@@ -8,7 +8,7 @@ def setup_terms(arquivo, x, y, width_, lh):
     pos.x = pos.xo = x
     pos.y = y  # initial x and y
     terms =  {term: {'state': False,
-                  'x': pos(i, term, width_, lh),
+                  'x': pos(i, term, width_, lh, wgap, hgap),
                   'y': pos.y,
                   'w': pos.tw,
                   'h': lh,

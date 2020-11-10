@@ -35,7 +35,7 @@ def setup_interface():
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Area.categorias = setup_terms(cf, 20, 350, OX - 10, 16)
     Area.super_cats = find_super_cats(Area.categorias)
-    Area.tags = setup_terms(tf, 20 + OX, 20 + height - rodape, width, 16)
+    Area.tags = setup_terms(tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
     global botoes, comandos, categorias, tags
     botoes = {
         ("", "ARQUIVOS"): (20, 40, 140, 20),
