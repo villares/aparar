@@ -15,7 +15,7 @@ LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
-SALVA_PNG = "p", "salvar imagem.[p]ng"
+SALVA_PNG = "p", "salvar [p]ng"
 TOGGLE_DIAGRAMA = "d", "modo [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
@@ -30,6 +30,7 @@ ZOOM = "z", "[z]oom"  # não implementado
 
 modos = (EDITA, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
+Prancha.DIAGRAMA = False
 
 def setup_interface():
     cf, tf = "categorias.txt", "tags.txt"
@@ -40,19 +41,18 @@ def setup_interface():
         tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
     global botoes, comandos, categorias, tags
     botoes = {
-        ("", "ARQUIVOS"): (20, 40, 140, 20),
-        LOAD_PRANCHAS: (20, 70, 140, 20),
-        SALVA_SESSAO: (20, 100, 140, 20),
-        LOAD_SESSAO: (20, 130, 140, 20),
-        GERA_CSV: (20, 160, 140, 20),
-        SALVA_PNG: (20, 190, 140, 20),
-
+        ("", "ARQUIVOS"): (20, 20, 140, 20),
+        LOAD_PRANCHAS: (20, 50, 140, 20),
+        SALVA_SESSAO: (20, 80, 140, 20),
+        LOAD_SESSAO: (20, 110, 140, 20),
+        GERA_CSV: (20, 140, 140, 20),
+        SALVA_PNG: (20, 170, 140, 20),
+        TOGGLE_DIAGRAMA: (20, 200, 140, 20),
         # modos / estados de operação da ferramenta
         ("", "ÁREAS"): (20, 240, 140, 20),
         CRIAR: (20, 270, 140, 20),
         EDITA: (20, 300, 140, 20),
         REMOV: (20, 330, 140, 20),
-        TOGGLE_DIAGRAMA: (20, 360, 140, 20),
         # ZOOM :(20, 330, 100, 40),# não implementado
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
@@ -113,6 +113,8 @@ def key_pressed(k, kc):
     global modo_ativo
     if k == CODED:
         k = kc
+        
+    print(k)    
     for b in botoes:
         x, y, w, h = botoes[b]
         tecla, nome = b

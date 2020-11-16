@@ -81,8 +81,6 @@ def carrega_sessao():
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
     
 
-    
-
 def imgext(file_name):
     ext = file_name.split('.')[-1]
     # extensões dos formatos de imagem que o Processing aceita!
@@ -96,7 +94,16 @@ def imgext(file_name):
     return ext.lower() in valid_ext
 
 def salva_png():
-    saveFrame(Prancha.nome_prancha_atual() + ".png")
+    # precisa salvar só a área da prancha!
+    # Prancha_atual, área 0
+    # png = createGraphics(w, h)
+    # png.beginDraw()
+    # png.image(g,-interface.OX, -inteface.OY)
+    diagrama = "diagrama-" if Prancha.DIAGRAMA else "imagem-"
+    nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
+    file = join(Prancha.path_sessao, nome_arquivo)
+    saveFrame(file)
+    Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
 def gera_csv():
     from processing.data import Table
