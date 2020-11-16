@@ -12,7 +12,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 
 # [ ] Melhorar display de nomes longos de categoria...
 # [X] Categorias com prefixo NNN-MMM são somadas em NNN
-
+# [ ] Somar em uma linha resultados de prnachas AAA-BBB (e diversos CCC)
 # [WIP] Separar estado das cateogrias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 
 from __future__ import unicode_literals
