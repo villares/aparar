@@ -67,7 +67,7 @@ def salva_sessao():
 
 
 def carrega_sessao():
-    from categorias import find_super_cats    
+    from categorias import find_super_cats
     try:
         with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
             Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
@@ -79,7 +79,7 @@ def carrega_sessao():
     except Exception as e:
         Prancha.avisos("sessão não encontrada")
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
-    
+
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
@@ -106,14 +106,23 @@ def salva_png():
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100 % da prancha
     saveFrame("temp.png")  # salva arquivo temporário da tela toda
-    temp = loadImage("temp.png") 
+    temp = loadImage("temp.png")
     png = createGraphics(w, h)
     png.beginDraw()
     png.background(255)
     png.copy(temp, x + 1, y + 1, w, h, 0, 0, w, h)
-    png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%   
+    png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%
     png.endDraw()
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
+
+def set_acumulador():
+    global t_cat_count, t_scat_count, t_tag_count, t_cobertura, t_scobertura
+    t_cat_count = Counter()
+    t_scat_count = Counter()
+    t_tag_count = Counter()
+    t_cobertura = defaultdict(lambda: 0)
+    t_scobertura = defaultdict(lambda: 0)
+
 
 def gera_csv():
     from processing.data import Table
@@ -122,32 +131,45 @@ def gera_csv():
     table.addColumn("AAA")
     table.addColumn("BBB")
     table.addColumn("CCC")
-   
+
     categorias = sorted(Area.categorias.keys())
     super_cats = Area.super_cats
-    print(super_cats)
-    for scat in super_cats:    
+    # print(super_cats)
+
+    for scat in super_cats:
         table.addColumn(scat + "_num")
         table.addColumn(scat + "_area")
-    for cat in categorias:    
+    for cat in categorias:
         table.addColumn(cat + "_num")
         table.addColumn(cat + "_area")
-    
+
     tags = sorted(Area.tags.keys())
-    for tag in tags:    
+    for tag in tags:
         table.addColumn(tag)
-        
+    prancha_atual, contar_a_b = "000", False
     for prancha in Prancha.pranchas:
+        # if prancha_atual != prancha.id_a_b():
+        #     if prancha_atual != "000":
+        #         t_nova_linha = table.addRow()
+        #         t_nova_linha.setString("AAA", prancha.ida)
+        #         t_nova_linha.setString("BBB", prancha.idb)
+        #         t_nova_linha.setString("TOTAL", prancha.idc)
+        #         write_linha(t_nova_linha, super_cats, scat_count, scobertura,
+        #         categorias, cat_count, cobertura,
+        #         tags, tag_count)
+        #     prancha_atual = prancha.id_a_b()
+        #     set_acumulador()
+
         cat_count = Counter()
         scat_count = Counter()
         tag_count = Counter()
-        cobertura = defaultdict(lambda: 0) 
-        scobertura = defaultdict(lambda: 0) 
+        cobertura = defaultdict(lambda: 0)
+        scobertura = defaultdict(lambda: 0)
         nova_linha = table.addRow()
         nova_linha.setString("AAA", prancha.ida)
         nova_linha.setString("BBB", prancha.idb)
         nova_linha.setString("CCC", prancha.idc)
-        
+
         for area in prancha.areas[1:]:  # pula o primeiro obj. Area
             if area.scat_selected:
                 scat_count[area.scat_selected] += 1
@@ -156,15 +178,21 @@ def gera_csv():
             cobertura[area.cat_selected] += area.cobertura
             tag_count.update(area.tags_selected)
 
-        for scat in super_cats:
-            nova_linha.setInt(scat + "_num", scat_count[scat])
-            nova_linha.setFloat(scat + "_area", scobertura[scat])            
-        for cat in categorias:
-            nova_linha.setInt(cat + "_num", cat_count[cat])
-            nova_linha.setFloat(cat + "_area", cobertura[cat])
+        write_linha(nova_linha, super_cats, scat_count, scobertura,
+                categorias, cat_count, cobertura,
+                tags, tag_count)
 
-        for tag in tags:
-            nova_linha.setInt(tag, tag_count[tag])
-    
     file = join(Prancha.path_sessao, "tabela_aparar.csv")
     saveTable(table, file)
+
+def write_linha(nova_linha, super_cats, scat_count, scobertura,
+                categorias, cat_count, cobertura,
+                tags, tag_count):
+    for scat in super_cats:
+        nova_linha.setInt(scat + "_num", scat_count[scat])
+        nova_linha.setFloat(scat + "_area", scobertura[scat])
+    for cat in categorias:
+        nova_linha.setInt(cat + "_num", cat_count[cat])
+        nova_linha.setFloat(cat + "_area", cobertura[cat])
+    for tag in tags:
+        nova_linha.setInt(tag, tag_count[tag])
