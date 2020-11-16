@@ -29,6 +29,9 @@ class Prancha:
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
             self.ida = self.idb = self.idc = nome
+            
+    def id_a_b(self):
+        return self.ida + "_" + self.idb
 
     def display_areas(self, mp):
         ma = interface.modo_ativo
