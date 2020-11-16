@@ -70,7 +70,12 @@ class Area:
                  self.y + 20)
         textAlign(CENTER, CENTER)
         textSize(AREA_FONT_SIZE)
-        text("{:2.0%}".format(self.cobertura),
+        if self.cobertura == 1 and Prancha.DIAGRAMA:
+            text(Prancha.nome_prancha_atual(),
+                 self.x + self.w / 2,
+                 + self.h - 20)
+        else:
+            text("{:2.0%}".format(self.cobertura),
              self.x + self.w / 2,
              self.y + self.h - 20)
         popStyle()
