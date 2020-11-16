@@ -11,8 +11,8 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # arquivos categorias.txt e tags.txt na pasta /data/
 # [ ] Somar em uma linha resultados de prnachas AAA-BBB (e diversos CCC)
 # [WIP] Modo diagrama
-#   [WIP] salvar diagrama de uma prancha
-#      [ ] salvara só a àrea da prancha
+#   [X] salvar diagrama de uma prancha
+#   [X] salvara só a àrea da prancha
 #   [ ] salvar legenda cores -> categorias
 #   [ ] salvar diagrama de todas as pranchas...
 # [ ] Melhorar display de nomes longos de categoria...

@@ -94,15 +94,25 @@ def imgext(file_name):
     return ext.lower() in valid_ext
 
 def salva_png():
-    # precisa salvar só a área da prancha!
-    # Prancha_atual, área 0
-    # png = createGraphics(w, h)
-    # png.beginDraw()
-    # png.image(g,-interface.OX, -inteface.OY)
+    """
+    Inicialmente salva apenas imagem da "Prancha atual,
+    no modo normal de edição ou modo diagrama.
+    """
     diagrama = "diagrama-" if Prancha.DIAGRAMA else "imagem-"
     nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
-    file = join(Prancha.path_sessao, nome_arquivo)
-    saveFrame(file)
+    path_arquivo = join(Prancha.path_sessao, nome_arquivo)
+    area = Prancha.get_areas_atual()[0]
+    x, y = area.x, area.y
+    w, h = int(area.w), int(area.h)
+    # Para salvar só a área 100 % da prancha
+    saveFrame("temp.png")  # salva arquivo temporário da tela toda
+    temp = loadImage("temp.png") 
+    png = createGraphics(w, h)
+    png.beginDraw()
+    png.background(255)
+    png.copy(temp, x + 1, y + 1, w, h, 0, 0, w, h)
+    png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%   
+    png.endDraw()
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
 def gera_csv():
