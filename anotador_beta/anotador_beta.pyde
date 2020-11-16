@@ -11,6 +11,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # arquivos categorias.txt e tags.txt na pasta /data/
 # [ ] Melhorar display de nomes longos de categoria...
 # [X] Categorias com prefixo NNN-MMM são somadas em NNN
+# [WIP] Separar estado das cateogrias/tags (terms_state) dos botões (terms)
 
 from __future__ import unicode_literals
 
