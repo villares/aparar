@@ -13,6 +13,7 @@ class Prancha:
     avisos_timer = 0
     avisos_texto = ""
 
+    __slots__ = ['areas', 'ida', 'idb', 'idc', 'rot']
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
