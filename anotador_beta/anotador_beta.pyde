@@ -9,9 +9,11 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 # arquivos categorias.txt e tags.txt na pasta /data/
+
 # [ ] Melhorar display de nomes longos de categoria...
 # [X] Categorias com prefixo NNN-MMM são somadas em NNN
-# [WIP] Separar estado das cateogrias/tags (terms_state) dos botões (terms)
+
+# [WIP] Separar estado das cateogrias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 
 from __future__ import unicode_literals
 
