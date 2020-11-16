@@ -95,6 +95,9 @@ def imgext(file_name):
                  )
     return ext.lower() in valid_ext
 
+def salva_png():
+    saveFrame(Prancha.nome_prancha_atual() + ".png")
+
 def gera_csv():
     from processing.data import Table
     from collections import Counter, defaultdict

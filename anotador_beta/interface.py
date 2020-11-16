@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from pranchas import Prancha
 from areas import Area
 from categorias import setup_terms, draw_terms, select_cat, select_tag, find_super_cats
-from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv
+from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv, salva_png
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 50
@@ -15,11 +15,12 @@ LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
+SALVA_PNG = "p", "salvar imagem.[p]ng"
+TOGGLE_DIAGRAMA = "d", "modo [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
-ROT_PRANCHA = "p", "girar [p]rancha 90°"
-
+ROT_PRANCHA = "9", "girar [p]rancha 90°"
 
 # modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar"
@@ -33,9 +34,10 @@ modo_ativo = CRIAR
 def setup_interface():
     cf, tf = "categorias.txt", "tags.txt"
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
-    Area.categorias = setup_terms(cf, 20, 350, OX - 10, 16)
+    Area.categorias = setup_terms(cf, 20, 380, OX - 10, 16)
     Area.super_cats = find_super_cats(Area.categorias)
-    Area.tags = setup_terms(tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
+    Area.tags = setup_terms(
+        tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
     global botoes, comandos, categorias, tags
     botoes = {
         ("", "ARQUIVOS"): (20, 40, 140, 20),
@@ -43,11 +45,14 @@ def setup_interface():
         SALVA_SESSAO: (20, 100, 140, 20),
         LOAD_SESSAO: (20, 130, 140, 20),
         GERA_CSV: (20, 160, 140, 20),
+        SALVA_PNG: (20, 190, 140, 20),
+
         # modos / estados de operação da ferramenta
-        ("", "ÁREAS"): (20, 210, 140, 20),
-        CRIAR: (20, 240, 140, 20),
-        EDITA: (20, 270, 140, 20),
-        REMOV: (20, 300, 140, 20),
+        ("", "ÁREAS"): (20, 240, 140, 20),
+        CRIAR: (20, 270, 140, 20),
+        EDITA: (20, 300, 140, 20),
+        REMOV: (20, 330, 140, 20),
+        TOGGLE_DIAGRAMA: (20, 360, 140, 20),
         # ZOOM :(20, 330, 100, 40),# não implementado
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
@@ -61,6 +66,8 @@ def setup_interface():
                 PROX_PRANCHA: prox_prancha,
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
+                SALVA_PNG: salva_png,
+                TOGGLE_DIAGRAMA: toggle_diagrama,
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -72,6 +79,9 @@ def setup_interface():
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
+def toggle_diagrama():
+    Prancha.DIAGRAMA = not Prancha.DIAGRAMA
+
 def mouse_over(b):
     x, y, w, h = botoes[b]
     return (x < mouseX < x + w and y < mouseY < y + h)
@@ -82,9 +92,12 @@ def display_botoes(DEBUG=False):
         x, y, w, h = botoes[b]
         tecla, nome = b
         if b == modo_ativo:
-            fill(200, 0, 0)
+            fill(0, 0, 200)
         else:
-            if mouse_over(b) and tecla != "":
+            m_over = mouse_over(b)
+            if b == TOGGLE_DIAGRAMA and Prancha.DIAGRAMA:
+                fill(200, 128 * m_over, 128 * m_over)
+            elif m_over and tecla != "":
                 fill(255)
             else:
                 fill(0)

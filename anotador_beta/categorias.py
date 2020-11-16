@@ -12,6 +12,7 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
                     'y': pos.y,
                     'w': pos.tw,
                     'h': lh,
+                    'cor' : int(255.0 / len(term_names) * i)  # possibly add second number
                     }
              for i, term in enumerate(term_names)}
     return terms
