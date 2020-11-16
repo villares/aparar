@@ -55,7 +55,7 @@ def draw_terms(terms, terms_state=None):
 def select_tag(terms, terms_state=None):
     for term in terms:
         if mouse_over_term(term, terms):
-            if tems_stare:
+            if terms_state:
                 terms_state[term] ^= 1
             else:
                 terms[term]['state'] ^= 1
@@ -76,20 +76,24 @@ def select_cat(terms, terms_state=None):
                     for other in terms:
                         terms_state[term] = False
                     terms_state[term] = True
-    
-def active_term(terms, terms_state=None, all=False):
+
+def active_term(terms, all=False):
     if not all:
         for term in terms:
-            if terms_state and terms_state[term]:
-                return term
             if terms[term]['state']:
                 return term
         return ""
-    elif terms_state:
-         return [term for term in terms if terms_state[term]]
+    else:
+        return [term for term in terms if terms[term]['state']]
 
-    return [term for term in terms if terms[term]['state']]
-
+def active_terms_state(terms_state, all=False):
+    if not all:
+        for term in terms:
+            if terms_state[term]:
+                return term
+        return ""
+    else:
+        return [term for term in terms if terms_state[term]]
 
 def mouse_over_term(term, terms):
     x, y = terms[term]['x'], terms[term]['y']

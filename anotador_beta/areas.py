@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from copy import deepcopy
-from categorias import draw_terms, select_cat, select_tag, active_term
+from categorias import  * #draw_terms, select_cat, select_tag, active_term
 import interface
 
 class Area:
@@ -17,7 +17,9 @@ class Area:
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
         self.tags = deepcopy(Area.tags)
+        self.tags_state = setup_terms_state(Area.tags) #*
         self.categorias = deepcopy(Area.categorias)
+        self.categorias_state = setup_terms_state(Area.categorias) #*
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
