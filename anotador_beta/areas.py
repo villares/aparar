@@ -73,11 +73,11 @@ class Area:
         if self.cobertura == 1 and Prancha.DIAGRAMA:
             text(Prancha.nome_prancha_atual(),
                  self.x + self.w / 2,
-                 + self.h - 20)
+                 self.y + self.h - 20)
         else:
             text("{:2.0%}".format(self.cobertura),
-             self.x + self.w / 2,
-             self.y + self.h - 20)
+                 self.x + self.w / 2,
+                 self.y + self.h - 20)
         popStyle()
 
     def cat_and_tag_selection(self):
