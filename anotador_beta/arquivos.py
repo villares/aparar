@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from processing.data import Table
+from collections import Counter, defaultdict
 import pickle
 from os import listdir
 from os.path import isfile, join
@@ -125,8 +127,6 @@ def set_acumulador():
 
 
 def gera_csv():
-    from processing.data import Table
-    from collections import Counter, defaultdict
     table = Table()
     table.addColumn("AAA")
     table.addColumn("BBB")
@@ -147,18 +147,20 @@ def gera_csv():
     for tag in tags:
         table.addColumn(tag)
     prancha_atual, contar_a_b = "000", False
+    set_acumulador()
+    
     for prancha in Prancha.pranchas:
-        # if prancha_atual != prancha.id_a_b():
-        #     if prancha_atual != "000":
-        #         t_nova_linha = table.addRow()
-        #         t_nova_linha.setString("AAA", prancha.ida)
-        #         t_nova_linha.setString("BBB", prancha.idb)
-        #         t_nova_linha.setString("TOTAL", prancha.idc)
-        #         write_linha(t_nova_linha, super_cats, scat_count, scobertura,
-        #         categorias, cat_count, cobertura,
-        #         tags, tag_count)
-        #     prancha_atual = prancha.id_a_b()
-        #     set_acumulador()
+        if prancha_atual != prancha.id_a_b():
+            if prancha_atual != "000":
+                t_nova_linha = table.addRow()
+                t_nova_linha.setString("AAA", prancha.ida)
+                t_nova_linha.setString("BBB", prancha.idb)
+                t_nova_linha.setString("TOTAL", prancha.idc)
+                write_linha(t_nova_linha, super_cats, t_scount, t_scobertura,
+                categorias, t_cat_count, t_cobertura,
+                tags, t_tag_count)
+            prancha_atual = prancha.id_a_b()
+            set_acumulador()
 
         cat_count = Counter()
         scat_count = Counter()
@@ -173,10 +175,15 @@ def gera_csv():
         for area in prancha.areas[1:]:  # pula o primeiro obj. Area
             if area.scat_selected:
                 scat_count[area.scat_selected] += 1
+                t_scat_count[area.scat_selected] += 1
                 scobertura[area.scat_selected] += area.cobertura
+                t_scobertura[area.scat_selected] += area.cobertura
             cat_count[area.cat_selected] += 1
+            t_cat_count[area.cat_selected] += 1
             cobertura[area.cat_selected] += area.cobertura
+            t_cobertura[area.cat_selected] += area.cobertura
             tag_count.update(area.tags_selected)
+            t_tag_count.update(area.tags_selected)
 
         write_linha(nova_linha, super_cats, scat_count, scobertura,
                 categorias, cat_count, cobertura,
@@ -184,6 +191,8 @@ def gera_csv():
 
     file = join(Prancha.path_sessao, "tabela_aparar.csv")
     saveTable(table, file)
+    Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
+
 
 def write_linha(nova_linha, super_cats, scat_count, scobertura,
                 categorias, cat_count, cobertura,
