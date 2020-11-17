@@ -125,27 +125,23 @@ def reset_acumulador():
     t_cobertura = defaultdict(lambda: 0)
     t_scobertura = defaultdict(lambda: 0)
 
-
 def gera_csv():
     table = Table()
     table.addColumn("AAA")
     table.addColumn("BBB")
     table.addColumn("CCC")
-
     categorias = sorted(Area.categorias.keys())
-    super_cats = Area.super_cats
-    # print(super_cats)
-
-    for scat in super_cats:
-        table.addColumn(scat + "_num")
-        table.addColumn(scat + "_area")
     for cat in categorias:
         table.addColumn(cat + "_num")
         table.addColumn(cat + "_area")
-
+    super_cats = Area.super_cats
+    for scat in super_cats:
+        table.addColumn(scat + "_num")
+        table.addColumn(scat + "_area")
     tags = sorted(Area.tags.keys())
     for tag in tags:
         table.addColumn(tag)
+        
     prancha_atual = "000"
     linhas_iguais = 0
     reset_acumulador()
@@ -166,7 +162,6 @@ def gera_csv():
         else:
             linhas_iguais +=1
             
-
         cat_count = Counter()
         scat_count = Counter()
         tag_count = Counter()
