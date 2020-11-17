@@ -156,7 +156,7 @@ def gera_csv():
                 t_nova_linha.setString("AAA", prancha.ida)
                 t_nova_linha.setString("BBB", prancha.idb)
                 t_nova_linha.setString("TOTAL", prancha.idc)
-                write_linha(t_nova_linha, super_cats, t_scount, t_scobertura,
+                write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
                 categorias, t_cat_count, t_cobertura,
                 tags, t_tag_count)
             prancha_atual = prancha.id_a_b()
