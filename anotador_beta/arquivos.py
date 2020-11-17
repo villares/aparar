@@ -155,7 +155,7 @@ def gera_csv():
                 t_nova_linha = table.addRow()
                 t_nova_linha.setString("AAA", prancha.ida)
                 t_nova_linha.setString("BBB", prancha.idb)
-                t_nova_linha.setString("TOTAL", prancha.idc)
+                t_nova_linha.setString("CCC", "TOTAL")
                 write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
                 categorias, t_cat_count, t_cobertura,
                 tags, t_tag_count)
