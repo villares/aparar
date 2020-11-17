@@ -52,21 +52,19 @@ def adicionar_imagens(selection):
             # imagens[img_name.lower()] = img  #file_path
             imagens[img_name.lower()] = file_path
 
-        if carrega_sessao():
-            pass
-        else:
+        if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
             for file_name, file_path in lista_imagens(dir_path):
                 img = loadImage(file_path)
                 img_name = file_name.split('.')[0]
                 # imagens[img_name.lower()] = img  #file_path
                 imagens[img_name.lower()] = file_path
-
                 fator = Prancha.calc_fator(img)
                 if not Prancha.in_pranchas(img_name):
                     p = Prancha(img_name)
                     p.areas.append(Area(interface.OX, interface.OY,
                                         img.width * fator, img.height * fator))
                     Prancha.pranchas.append(p)
+            salva_sessao()
 
         print len(Prancha.pranchas)
         print('Número de imagens: ' + str(len(imagens)))
@@ -115,7 +113,8 @@ def salva_png():
     """
     diagrama = "diagrama-" if Prancha.DIAGRAMA else "imagem-"
     nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
-    path_arquivo = join(Prancha.path_sessao, nome_arquivo)
+    path = join(Prancha.path_sessao, 'imagens-diagramas')
+    path_arquivo = join(path, nome_arquivo)
     area = Prancha.get_areas_atual()[0]
     x, y = area.x, area.y
     w, h = int(area.w), int(area.h)

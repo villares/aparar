@@ -40,12 +40,12 @@ def setup_interface():
     Area.super_cats = find_super_cats(Area.categorias)
     Area.tags = setup_terms(
         tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
-    global botoes, comandos, categorias, tags
+    global botoes, comandos, categorias, tags, imagem_prancha_atual
     botoes = {
         ("", "ARQUIVOS"): (20, 20, 140, 20),
         LOAD_PRANCHAS: (20, 50, 140, 20),
         SALVA_SESSAO: (20, 80, 140, 20),
-        LOAD_SESSAO: (20, 110, 140, 20),
+        # LOAD_SESSAO: (20, 110, 140, 20),
         GERA_CSV: (20, 140, 140, 20),
         SALVA_PNG: (20, 170, 140, 20),
         TOGGLE_DIAGRAMA: (20, 200, 140, 20),
@@ -74,9 +74,7 @@ def setup_interface():
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
     imagem_prancha_atual = img = loadImage(splash_img_file)
     fator = Prancha.calc_fator(img)
-    # imagens["000"] = img
     imagens["000"] = splash_img_file
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
     p = Prancha("000")
     Prancha.path = sketchPath('data')
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
@@ -197,7 +195,7 @@ def volta_prancha():
     global imagem_prancha_atual
     Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
     imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
-
+    
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
