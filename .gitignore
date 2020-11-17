@@ -10,3 +10,4 @@ application.macosx
 out
 *.class
 *.zip
+*.png
