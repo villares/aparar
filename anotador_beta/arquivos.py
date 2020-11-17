@@ -117,7 +117,7 @@ def salva_png():
     png.endDraw()
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
-def set_acumulador():
+def reset_acumulador():
     global t_cat_count, t_scat_count, t_tag_count, t_cobertura, t_scobertura
     t_cat_count = Counter()
     t_scat_count = Counter()
@@ -146,21 +146,26 @@ def gera_csv():
     tags = sorted(Area.tags.keys())
     for tag in tags:
         table.addColumn(tag)
-    prancha_atual, contar_a_b = "000", False
-    set_acumulador()
+    prancha_atual = "000"
+    linhas_iguais = 0
+    reset_acumulador()
     
     for prancha in Prancha.pranchas:
-        if prancha_atual != prancha.id_a_b():
-            if prancha_atual != "000":
+        if prancha_atual != (prancha.ida, prancha.idb):
+            if  prancha_atual != "000" and linhas_iguais > 1:
                 t_nova_linha = table.addRow()
-                t_nova_linha.setString("AAA", prancha.ida)
-                t_nova_linha.setString("BBB", prancha.idb)
+                t_nova_linha.setString("AAA", prancha_atual[0])
+                t_nova_linha.setString("BBB", prancha_atual[1])
                 t_nova_linha.setString("CCC", "TOTAL")
                 write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
                 categorias, t_cat_count, t_cobertura,
                 tags, t_tag_count)
-            prancha_atual = prancha.id_a_b()
-            set_acumulador()
+            prancha_atual = (prancha.ida, prancha.idb)
+            linhas_iguais = 1
+            reset_acumulador()
+        else:
+            linhas_iguais +=1
+            
 
         cat_count = Counter()
         scat_count = Counter()
