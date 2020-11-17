@@ -58,7 +58,8 @@ class Area:
         if Prancha.DIAGRAMA and cat:
             c = cat['cor']
             colorMode(HSB)
-            fill(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3))
+            fill(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
+            noStroke()
         else:
             colorMode(RGB)
             fill(0, 20)

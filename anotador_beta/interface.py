@@ -31,6 +31,7 @@ ZOOM = "z", "[z]oom"  # não implementado
 modos = (EDITA, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
 Prancha.DIAGRAMA = False
+imagem_prancha_atual = None
 
 def setup_interface():
     cf, tf = "categorias.txt", "tags.txt"
@@ -71,9 +72,11 @@ def setup_interface():
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
-    img = loadImage(splash_img_file)
+    imagem_prancha_atual = img = loadImage(splash_img_file)
     fator = Prancha.calc_fator(img)
-    imagens["000"] = img
+    # imagens["000"] = img
+    imagens["000"] = splash_img_file
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
     p = Prancha("000")
     Prancha.path = sketchPath('data')
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
@@ -186,10 +189,14 @@ def mouse_dragged(mb):
                     r.h = mouseY - r.y
 
 def prox_prancha():
+    global imagem_prancha_atual
     Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
 
 def volta_prancha():
+    global imagem_prancha_atual
     Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
 
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]

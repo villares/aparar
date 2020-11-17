@@ -36,6 +36,7 @@ def carrega_pranchas():
     # Essencial para o debug usar "chamada direta" de adicionar_imagens()
     # adicionar_imagens(File("/home/villares/Área de Trabalho"))
 
+
 def adicionar_imagens(selection):
     if selection == None:
         Prancha.avisos("seleção cancelada da pasta cancelada")
@@ -45,17 +46,27 @@ def adicionar_imagens(selection):
         Prancha.path_sessao = dir_path
         Prancha.nome_sessao = unicode(selection)
         print("Pasta selecionada: " + dir_path)
+
         for file_name, file_path in lista_imagens(dir_path):
-            img = loadImage(file_path)
             img_name = file_name.split('.')[0]
-            print("imagem " + img_name + " carregada.")
-            imagens[img_name.lower()] = img
-            fator = Prancha.calc_fator(img)
-            if not Prancha.in_pranchas(img_name):
-                p = Prancha(img_name)
-                p.areas.append(Area(interface.OX, interface.OY,
-                                    img.width * fator, img.height * fator))
-                Prancha.pranchas.append(p)
+            # imagens[img_name.lower()] = img  #file_path
+            imagens[img_name.lower()] = file_path
+
+        if carrega_sessao():
+            pass
+        else:
+            for file_name, file_path in lista_imagens(dir_path):
+                img = loadImage(file_path)
+                img_name = file_name.split('.')[0]
+                # imagens[img_name.lower()] = img  #file_path
+                imagens[img_name.lower()] = file_path
+
+                fator = Prancha.calc_fator(img)
+                if not Prancha.in_pranchas(img_name):
+                    p = Prancha(img_name)
+                    p.areas.append(Area(interface.OX, interface.OY,
+                                        img.width * fator, img.height * fator))
+                    Prancha.pranchas.append(p)
 
         print len(Prancha.pranchas)
         print('Número de imagens: ' + str(len(imagens)))
@@ -77,10 +88,12 @@ def carrega_sessao():
             Area.tags = Prancha.pranchas[0].areas[0].tags
             Area.super_cats = find_super_cats(Area.categorias)
             Prancha.avisos("sessão carregada")
+            return True
 
     except Exception as e:
-        Prancha.avisos("sessão não encontrada")
+        Prancha.avisos("não encontrados dados de sessão salva")
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
+        return False
 
 
 def imgext(file_name):
@@ -141,27 +154,27 @@ def gera_csv():
     tags = sorted(Area.tags.keys())
     for tag in tags:
         table.addColumn(tag)
-        
+
     prancha_atual = "000"
     linhas_iguais = 0
     reset_acumulador()
-    
+
     for prancha in Prancha.pranchas:
         if prancha_atual != (prancha.ida, prancha.idb):
-            if  prancha_atual != "000" and linhas_iguais > 1:
+            if prancha_atual != "000" and linhas_iguais > 1:
                 t_nova_linha = table.addRow()
                 t_nova_linha.setString("AAA", prancha_atual[0])
                 t_nova_linha.setString("BBB", prancha_atual[1])
                 t_nova_linha.setString("CCC", "TOTAL")
                 write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
-                categorias, t_cat_count, t_cobertura,
-                tags, t_tag_count)
+                            categorias, t_cat_count, t_cobertura,
+                            tags, t_tag_count)
             prancha_atual = (prancha.ida, prancha.idb)
             linhas_iguais = 1
             reset_acumulador()
         else:
-            linhas_iguais +=1
-            
+            linhas_iguais += 1
+
         cat_count = Counter()
         scat_count = Counter()
         tag_count = Counter()
@@ -186,8 +199,8 @@ def gera_csv():
             t_tag_count.update(area.tags_selected)
 
         write_linha(nova_linha, super_cats, scat_count, scobertura,
-                categorias, cat_count, cobertura,
-                tags, tag_count)
+                    categorias, cat_count, cobertura,
+                    tags, tag_count)
 
     file = join(Prancha.path_sessao, "tabela_aparar.csv")
     saveTable(table, file)
