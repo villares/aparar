@@ -1,5 +1,0 @@
-Texto
-Desenho-perspectiva
-Desenho-planta
-Desenho-corte
-Desenho-elevação
