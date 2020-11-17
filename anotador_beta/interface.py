@@ -44,7 +44,7 @@ def setup_interface():
         ("", "ARQUIVOS"): (20, 20, 140, 20),
         LOAD_PRANCHAS: (20, 50, 140, 20),
         SALVA_SESSAO: (20, 80, 140, 20),
-        LOAD_SESSAO: (20, 110, 140, 20),
+        # LOAD_SESSAO: (20, 110, 140, 20),
         GERA_CSV: (20, 140, 140, 20),
         SALVA_PNG: (20, 170, 140, 20),
         TOGGLE_DIAGRAMA: (20, 200, 140, 20),

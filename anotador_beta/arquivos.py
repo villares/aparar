@@ -57,9 +57,9 @@ def adicionar_imagens(selection):
                                     img.width * fator, img.height * fator))
                 Prancha.pranchas.append(p)
 
-        print len(Prancha.pranchas)
         print('Número de imagens: ' + str(len(imagens)))
         Prancha.carregando = False
+        carrega_sessao()
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
@@ -77,10 +77,12 @@ def carrega_sessao():
             Area.tags = Prancha.pranchas[0].areas[0].tags
             Area.super_cats = find_super_cats(Area.categorias)
             Prancha.avisos("sessão carregada")
+            return True
 
     except Exception as e:
-        Prancha.avisos("sessão não encontrada")
+        Prancha.avisos("dados da sessão não encontrados")
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
+        return False
 
 
 def imgext(file_name):
