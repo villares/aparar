@@ -89,7 +89,18 @@ class Prancha:
     @classmethod
     def img_prancha_atual(cls, imagens):
         """devolve imagem na prancha atual ou None"""
-        return imagens.get(cls.nome_prancha_atual().lower())
+        # return imagens.get(cls.nome_prancha_atual().lower())
+        return interface.imagem_prancha_atual
+
+    @classmethod
+    def load_img_prancha_atual(cls, imagens):
+        """devolve imagem na prancha atual ou None"""
+        path_img = imagens.get(cls.nome_prancha_atual().lower())
+        if path_img:
+            return loadImage(path_img)
+        else:
+            return createGraphics(10, 10)
+
 
     @classmethod
     def display_imagem_atual(cls, imagens):

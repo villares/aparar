@@ -36,6 +36,7 @@ def carrega_pranchas():
     # Essencial para o debug usar "chamada direta" de adicionar_imagens()
     # adicionar_imagens(File("/home/villares/Área de Trabalho"))
 
+
 def adicionar_imagens(selection):
     if selection == None:
         Prancha.avisos("seleção cancelada da pasta cancelada")
@@ -45,17 +46,27 @@ def adicionar_imagens(selection):
         Prancha.path_sessao = dir_path
         Prancha.nome_sessao = unicode(selection)
         print("Pasta selecionada: " + dir_path)
+
         for file_name, file_path in lista_imagens(dir_path):
-            img = loadImage(file_path)
             img_name = file_name.split('.')[0]
-            print("imagem " + img_name + " carregada.")
-            imagens[img_name.lower()] = img
-            fator = Prancha.calc_fator(img)
-            if not Prancha.in_pranchas(img_name):
-                p = Prancha(img_name)
-                p.areas.append(Area(interface.OX, interface.OY,
-                                    img.width * fator, img.height * fator))
-                Prancha.pranchas.append(p)
+            # imagens[img_name.lower()] = img  #file_path
+            imagens[img_name.lower()] = file_path
+
+        if carrega_sessao():
+            pass
+        else:
+            for file_name, file_path in lista_imagens(dir_path):
+                img = loadImage(file_path)
+                img_name = file_name.split('.')[0]
+                # imagens[img_name.lower()] = img  #file_path
+                imagens[img_name.lower()] = file_path
+
+                fator = Prancha.calc_fator(img)
+                if not Prancha.in_pranchas(img_name):
+                    p = Prancha(img_name)
+                    p.areas.append(Area(interface.OX, interface.OY,
+                                        img.width * fator, img.height * fator))
+                    Prancha.pranchas.append(p)
 
         print('Número de imagens: ' + str(len(imagens)))
         Prancha.carregando = False
@@ -83,7 +94,6 @@ def carrega_sessao():
         Prancha.avisos("dados da sessão não encontrados")
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return False
-
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
