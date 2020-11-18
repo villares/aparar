@@ -89,7 +89,7 @@ def carrega_sessao():
             return True
 
     except Exception as e:
-        Prancha.avisos("dados da sessão não encontrados")
+        Prancha.avisos("não encontrados dados de sessão salva")
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return False
 
