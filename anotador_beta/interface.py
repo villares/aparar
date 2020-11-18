@@ -24,11 +24,12 @@ ROT_PRANCHA = "9", "girar [p]rancha 90°"
 
 # modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar"
-EDITA = "e", "[e]ditar"
+EDITA = "e", "[e]ditar/mover"
+ED100 = "t", "ajus[t]ar 100%"
 REMOV = "r", "[r]emover"
 ZOOM = "z", "[z]oom"  # não implementado
 
-modos = (EDITA, REMOV, CRIAR, ZOOM)
+modos = (EDITA, ED100, REMOV, CRIAR, ZOOM)
 modo_ativo = CRIAR
 Prancha.DIAGRAMA = False
 
@@ -52,8 +53,9 @@ def setup_interface():
         ("", "ÁREAS"): (20, 240, 140, 20),
         CRIAR: (20, 270, 140, 20),
         EDITA: (20, 300, 140, 20),
-        REMOV: (20, 330, 140, 20),
-        # ZOOM :(20, 330, 100, 40),# não implementado
+        ED100: (20, 330, 140, 20),
+        REMOV: (20, 360, 140, 20),
+        # ZOOM :(20, 390, 100, 40),# não implementado
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
         ROT_PRANCHA: (580, 20, 140, 20),
@@ -113,8 +115,8 @@ def key_pressed(k, kc):
     global modo_ativo
     if k == CODED:
         k = kc
-        
-    print(k)    
+
+    print(k)
     for b in botoes:
         x, y, w, h = botoes[b]
         tecla, nome = b
@@ -163,10 +165,23 @@ def mouse_pressed(mb):
 
 def mouse_dragged(mb):
     areas = Prancha.get_areas_atual()
-    for r in reversed(areas):
+    dx, dy = mouseX - pmouseX, mouseY - pmouseY
+    a0 = areas[0]
+    if modo_ativo == ED100:
+        if mb == LEFT:
+            x = a0.x + dx
+            y = a0.y + dy
+            na_tela = 0 < x < width - a0.w and 0 < y < height - a0.h
+            if na_tela:
+                a0.x = x
+                a0.y = y
+        else:
+            if a0.w + dx > MIN_SIZE:
+                a0.w += dx
+            if a0.h + dy > MIN_SIZE:
+                a0.h += dy
+    for r in reversed(areas[1:]):
         if r.selected:
-            dx = mouseX - pmouseX
-            dy = mouseY - pmouseY
             if modo_ativo == EDITA and mb == LEFT:
                 x = r.x + dx
                 y = r.y + dy

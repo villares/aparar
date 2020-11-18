@@ -42,11 +42,11 @@ class Area:
         pushStyle()
         textSize(CAT_FONT_SIZE)
         stroke(0)
-        if self.selected:
+        if self.selected and self.cobertura != 1:
             stroke(200, 0, 0)
             strokeWeight(3)
-            not_remove_mode = interface.modo_ativo != interface.REMOV
-            if (self.cobertura != 1 and not_remove_mode):
+            valid_mode = interface.modo_ativo in (interface.EDITA, interface.CRIAR)
+            if (self.cobertura != 1 and valid_mode):
                 draw_terms(self.categorias)
                 draw_terms(self.tags)
         elif self.over and not mp:
@@ -63,6 +63,13 @@ class Area:
         else:
             colorMode(RGB)
             fill(0, 20)
+        if interface.modo_ativo ==interface.ED100:
+            if self.cobertura == 1:
+                stroke(200, 0, 0)
+                strokeWeight(5)
+            else:
+                stroke(0)
+                strokeWeight(3)
         rect(self.x, self.y, self.w, self.h)
         fill(0)
         if not Prancha.DIAGRAMA:
