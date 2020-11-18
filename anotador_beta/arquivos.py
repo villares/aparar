@@ -39,7 +39,7 @@ def carrega_pranchas():
 
 def adicionar_imagens(selection):
     if selection == None:
-        Prancha.avisos("seleção cancelada da pasta cancelada")
+        Prancha.avisos("seleção da pasta cancelada")
     else:
         Prancha.carregando = True
         dir_path = selection.getAbsolutePath()
