@@ -21,7 +21,6 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [-] Modo ZOOM - não sei se vou fazer
 # [ ] Melhor suporte a fullScreen() 
 
-
 from __future__ import unicode_literals
 
 import interface
@@ -32,7 +31,7 @@ from arquivos import imagens, adicionar_imagens
 DEBUG = False
 
 def setup():
-    size(1200, 700)
+    size(1200, 740)
     # fullScreen()
     interface.setup_interface()
 
