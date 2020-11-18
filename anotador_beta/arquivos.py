@@ -167,7 +167,7 @@ def gera_csv():
                 t_nova_linha.setString("CCC", "TOTAL")
                 write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
                             categorias, t_cat_count, t_cobertura,
-                            tags, t_tag_count)
+                            tags, t_tag_count, linhas_iguais)
             prancha_atual = (prancha.ida, prancha.idb)
             linhas_iguais = 1
             reset_acumulador()
@@ -208,12 +208,12 @@ def gera_csv():
 
 def write_linha(nova_linha, super_cats, scat_count, scobertura,
                 categorias, cat_count, cobertura,
-                tags, tag_count):
+                tags, tag_count, num_pranchas=1):
     for scat in super_cats:
         nova_linha.setInt(scat + "_num", scat_count[scat])
-        nova_linha.setFloat(scat + "_area", scobertura[scat])
+        nova_linha.setFloat(scat + "_area", scobertura[scat] / num_pranchas)
     for cat in categorias:
         nova_linha.setInt(cat + "_num", cat_count[cat])
-        nova_linha.setFloat(cat + "_area", cobertura[cat])
+        nova_linha.setFloat(cat + "_area", cobertura[cat] / num_pranchas)
     for tag in tags:
         nova_linha.setInt(tag, tag_count[tag])
