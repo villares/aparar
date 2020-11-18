@@ -31,7 +31,7 @@ from arquivos import imagens, adicionar_imagens
 DEBUG = False
 
 def setup():
-    size(1200, 700)
+    size(1200, 740)
     # fullScreen()
     interface.setup_interface()
 

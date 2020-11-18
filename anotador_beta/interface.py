@@ -36,6 +36,8 @@ Prancha.DIAGRAMA = False
 def setup_interface():
     cf, tf = "categorias.txt", "tags.txt"
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
+    Prancha.screen_height = height - (OY + rodape)
+
     Area.categorias = setup_terms(cf, 20, 380, OX - 10, 16)
     Area.super_cats = find_super_cats(Area.categorias)
     Area.tags = setup_terms(

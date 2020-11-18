@@ -31,10 +31,10 @@ def lista_imagens(dir=None):
     return f_list
 
 def carrega_pranchas():
-    # Operação normal, via callback (que silencia erros!)
+    # Operação normal, via callback (cuidado que silencia erros, vide opção para debug!)
     selectFolder("Selecione uma pasta", "adicionar_imagens")
-    # Essencial para o debug usar "chamada direta" de adicionar_imagens()
-    # adicionar_imagens(File("/home/villares/Área de Trabalho"))
+    # Essencial para o debug usar "chamada direta" de adicionar_imagens() 
+    # adicionar_imagens(File("/Users/villares/Documents/aparar/anotador_beta/data"))
 
 def adicionar_imagens(selection):
     if selection == None:
@@ -63,7 +63,7 @@ def adicionar_imagens(selection):
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
-        sessao = (Prancha.pranchas, Prancha.path_sessao)
+        sessao = (Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height)
         pickle.dump(sessao, file)
     Prancha.avisos("sessão salva em …" + unicode(Prancha.path_sessao)[-40:])
 
@@ -72,17 +72,22 @@ def carrega_sessao():
     from categorias import find_super_cats
     try:
         with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
-            Prancha.pranchas, Prancha.path_sessao = pickle.load(file)
-            Area.categorias = Prancha.pranchas[0].areas[0].categorias
-            Area.tags = Prancha.pranchas[0].areas[0].tags
-            Area.super_cats = find_super_cats(Area.categorias)
+            Prancha.pranchas, Prancha.path_sessao,Prancha.screen_height = pickle.load(file)
+            # para compatibilidade com sessões antigas precisaria isto (mas zoa com tamanhos de tela diferentes)
+            # Area.categorias = Prancha.pranchas[0].areas[0].categorias
+            # Area.tags = Prancha.pranchas[0].areas[0].tags
+            # Area.super_cats = find_super_cats(Area.categorias)
+            Prancha.update_for_screen_change()
             Prancha.avisos("sessão carregada")
             return True
 
     except Exception as e:
-        Prancha.avisos("não encontrados dados de sessão salva")
+        Prancha.avisos("não foi carregada uma sessão salva") # pode ser que nãp havia
+        print "Se não imprimir 'Erro N:', pode ser bug (não é File IO) tende debug sem call-back"
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return False
+    
+
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
