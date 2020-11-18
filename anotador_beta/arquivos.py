@@ -143,27 +143,27 @@ def gera_csv():
     tags = sorted(Area.tags.keys())
     for tag in tags:
         table.addColumn(tag)
-        
+
     prancha_atual = "000"
     linhas_iguais = 0
     reset_acumulador()
-    
+
     for prancha in Prancha.pranchas:
         if prancha_atual != (prancha.ida, prancha.idb):
-            if  prancha_atual != "000" and linhas_iguais > 1:
+            if prancha_atual != "000" and linhas_iguais > 1:
                 t_nova_linha = table.addRow()
                 t_nova_linha.setString("AAA", prancha_atual[0])
                 t_nova_linha.setString("BBB", prancha_atual[1])
                 t_nova_linha.setString("CCC", "TOTAL")
                 write_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
-                categorias, t_cat_count, t_cobertura,
-                tags, t_tag_count, linhas_iguais)
+                            categorias, t_cat_count, t_cobertura,
+                            tags, t_tag_count, linhas_iguais)
             prancha_atual = (prancha.ida, prancha.idb)
             linhas_iguais = 1
             reset_acumulador()
         else:
-            linhas_iguais +=1
-            
+            linhas_iguais += 1
+
         cat_count = Counter()
         scat_count = Counter()
         tag_count = Counter()
@@ -188,8 +188,8 @@ def gera_csv():
             t_tag_count.update(area.tags_selected)
 
         write_linha(nova_linha, super_cats, scat_count, scobertura,
-                categorias, cat_count, cobertura,
-                tags, tag_count)
+                    categorias, cat_count, cobertura,
+                    tags, tag_count)
 
     file = join(Prancha.path_sessao, "tabela_aparar.csv")
     saveTable(table, file)
