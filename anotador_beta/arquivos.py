@@ -103,7 +103,8 @@ def salva_png():
     """
     diagrama = "diagrama-" if Prancha.DIAGRAMA else "imagem-"
     nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
-    path_arquivo = join(Prancha.path_sessao, nome_arquivo)
+    path = join(Prancha.path_sessao, 'imagens-diagramas')
+    path_arquivo = join(path, nome_arquivo)
     area = Prancha.get_areas_atual()[0]
     x, y = area.x, area.y
     w, h = int(area.w), int(area.h)
