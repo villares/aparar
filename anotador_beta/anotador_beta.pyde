@@ -8,19 +8,18 @@ Colaboradores: Carolina Celete, Raissa Rodrigues, Larissa Negris de Souza e Alex
 Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
-# arquivos categorias.txt e tags.txt na pasta /data/
-# [WIP] Somar em uma linha resultados de prnachas AAAA-BBB (e diversos CCC)
 # [WIP] Modo diagrama
 #   [X] salvar diagrama de uma prancha
 #   [X] salvara só a àrea da prancha
-#   [ ] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
+#   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
 #   [ ] salvar legenda cores -> categorias
 #   [ ] salvar diagrama de todas as pranchas...
-# [X] Categorias com prefixo NNN-MMM são somadas em NNN
-# [WIP] Separar estado das cateogrias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
-# [ ] Modo ZOOM 
-# [ ] Mostrar tags por categoria
-# [ ] travar ediçao do 100%
+# [ ] CSV especial com tags por categoria
+# [X] Travar ediçao do 100%
+# [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
+# [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
+# [-] Modo ZOOM - não sei se vou fazer
+# [ ] Melhor suporte a fullScreen() 
 
 from __future__ import unicode_literals
 
