@@ -29,12 +29,15 @@ class Area:
         self.tags_selected = []
 
     def update(self):
+        # atualiza qual categoria desta área
         self.cat_selected = active_term(self.categorias)
+        # atualiza, se tiver, supercategoria (categoria-prefixo)
         sep_pos = self.cat_selected.find("-")
         if sep_pos > 0:
             self.scat_selected = self.cat_selected[:sep_pos]
         else:
             self.scat_selected = None
+        # atualiza lista de tags que estão selecionados
         self.tags_selected = active_term(self.tags, all=True)
 
     def display(self, mp):
@@ -54,15 +57,17 @@ class Area:
             self.over = False
         else:
             strokeWeight(2)
+        # pega dados da categoria que está selecionada (se houver)    
         cat = Area.categorias.get(self.cat_selected)
-        if Prancha.DIAGRAMA and cat:
+        if cat and Prancha.DIAGRAMA:
             c = cat['cor']
             colorMode(HSB)
             fill(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
             noStroke()
-        else:
+        else:  # senão usa cinza translúcido padrão
             colorMode(RGB)
             fill(0, 20)
+        # caso especial do modo de editar área de referência 100%    
         if interface.modo_ativo ==interface.ED100:
             if self.cobertura == 1:
                 stroke(200, 0, 0)
@@ -70,14 +75,16 @@ class Area:
             else:
                 stroke(0)
                 strokeWeight(3)
+        # desenha o retângulo da área
         rect(self.x, self.y, self.w, self.h)
-        fill(0)
+        fill(0) # textos da área em preto
         if not Prancha.DIAGRAMA:
             text(self.cat_selected,
                  self.x + 10,
                  self.y + 20)
         textAlign(CENTER, CENTER)
         textSize(AREA_FONT_SIZE)
+        # caso da área de referência 100% (cobertura == 1)
         if self.cobertura == 1 and Prancha.DIAGRAMA:
             text(Prancha.nome_prancha_atual(),
                  self.x + self.w / 2,
@@ -89,7 +96,7 @@ class Area:
         popStyle()
 
     def cat_and_tag_selection(self):
-        if self.cobertura != 1:
+        if self.cobertura != 1:  # menos para a àrea de ref. 100%
             select_cat(self.categorias)
             select_tag(self.tags)
 
