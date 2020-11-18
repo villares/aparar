@@ -23,10 +23,10 @@ PROX_PRANCHA = RIGHT, "[→] prox. prancha"
 ROT_PRANCHA = "9", "girar [p]rancha 90°"
 
 # modos / estados de operação da ferramenta
-CRIAR = "a", "[a]dicionar"
-EDITA = "e", "[e]ditar/mover"
-ED100 = "t", "ajus[t]ar 100%"
-REMOV = "r", "[r]emover"
+CRIAR = "a", "[a]dicionar área"
+EDITA = "e", "[e]ditar área"
+ED100 = "t", "edi[t]ar 100%"
+REMOV = "r", "[r]emover área"
 ZOOM = "z", "[z]oom"  # não implementado
 
 modos = (EDITA, ED100, REMOV, CRIAR, ZOOM)
