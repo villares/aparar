@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, division
 
 import interface
 
@@ -14,6 +14,7 @@ class Prancha:
     avisos_texto = ""
 
     __slots__ = ['areas', 'ida', 'idb', 'idc', 'rot']
+
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
@@ -29,7 +30,7 @@ class Prancha:
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
             self.ida = self.idb = self.idc = nome
-            
+
     def id_a_b(self):
         return self.ida + "_" + self.idb
 
@@ -118,6 +119,33 @@ class Prancha:
             return float(height - (interface.OY + interface.rodape)) / img.width
 
     @classmethod
+    def calc_correction_factor(self):
+        """para ajustar no caso de mudança de tela"""
+        current_height = height - (interface.OY + interface.rodape)
+        return current_height / self.screen_height
+
+    @classmethod
+    def update_for_screen_change(cls):
+        current_height = height - (interface.OY + interface.rodape)
+        recorded_height = Prancha.screen_height
+        if current_height != recorded_height:
+            print("update for screen change")
+            dy = current_height - recorded_height
+            cf = Prancha.calc_correction_factor()
+            print int(recorded_height) * cf, current_height
+            Prancha.screen_height = current_height
+            for prancha in cls.pranchas:
+                for area in prancha.areas:
+                    area.x = (area.x - interface.OX) * cf + interface.OX
+                    area.y = (area.y - interface.OY) * cf + interface.OY
+                    area.w *= cf
+                    area.h *= cf
+                    for tag in area.tags:
+                        area.tags[tag]['y'] += dy
+        else:
+            print "no change"
+
+    @classmethod
     def display_areas_atual(cls, mp):
         cls.pranchas[cls.i_atual].display_areas(mp)
 
@@ -132,11 +160,11 @@ class Prancha:
 
     @classmethod
     def avisos(cls, t=None):
-        
+
         if t and cls.avisos_timer == 0:
             cls.avisos_texto = t
             cls.avisos_timer = millis()
-        
+
         if millis() - cls.avisos_timer > 1200:
             cls.avisos_texto = t = ""
             cls.avisos_timer = 0
@@ -144,8 +172,8 @@ class Prancha:
         if cls.carregando:
             t = "CARREGANDO IMAGENS"
         else:
-            t = cls.avisos_texto       
-                 
+            t = cls.avisos_texto
+
         if t:
             push()
             fill(200, 0, 0)
