@@ -16,7 +16,7 @@ SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng"
-TOGGLE_DIAGRAMA = "d", "modo [d]iagrama"
+DIAGR = "d", "mostra [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
@@ -26,10 +26,10 @@ ROT_PRANCHA = "9", "girar [p]rancha 90°"
 CRIAR = "a", "[a]dicionar áreas"
 EDITA = "e", "[e]ditar áreas"
 ED100 = "t", "edi[t]ar 100%"
-REMOV = "r", "[r]emover áreas"
+REMOV = "r", "[r]emover áreas" # desabilitado
 ZOOM = "z", "[z]oom"  # não implementado
 
-modos = (EDITA, ED100, REMOV, CRIAR, ZOOM)
+modos = (EDITA, ED100, REMOV, CRIAR, ZOOM, DIAGR)
 modo_ativo = CRIAR
 Prancha.DIAGRAMA = False
 imagem_prancha_atual = None
@@ -51,13 +51,13 @@ def setup_interface():
         # LOAD_SESSAO: (20, 110, 140, 20),
         GERA_CSV: (20, 140, 140, 20),
         SALVA_PNG: (20, 170, 140, 20),
-        TOGGLE_DIAGRAMA: (20, 200, 140, 20),
         # modos / estados de operação da ferramenta
         ("", "ÁREAS"): (20, 240, 140, 20),
         CRIAR: (20, 270, 140, 20),
         EDITA: (20, 300, 140, 20),
         ED100: (20, 330, 140, 20),
-        REMOV: (20, 360, 140, 20),
+        DIAGR: (20, 360, 140, 20),
+        # REMOV: (20, 360, 140, 20),
         # ZOOM :(20, 390, 100, 40),# não implementado
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
@@ -72,7 +72,7 @@ def setup_interface():
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
                 SALVA_PNG: salva_png,
-                TOGGLE_DIAGRAMA: toggle_diagrama,
+                DIAGR: diagrama_on,
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -84,8 +84,8 @@ def setup_interface():
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
-def toggle_diagrama():
-    Prancha.DIAGRAMA = not Prancha.DIAGRAMA
+def diagrama_on():
+    Prancha.DIAGRAMA = True
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
@@ -99,10 +99,7 @@ def display_botoes(DEBUG=False):
         if b == modo_ativo:
             fill(0, 0, 200)
         else:
-            m_over = mouse_over(b)
-            if b == TOGGLE_DIAGRAMA and Prancha.DIAGRAMA:
-                fill(200, 128 * m_over, 128 * m_over)
-            elif m_over and tecla != "":
+            if mouse_over(b) and tecla != "":
                 fill(255)
             else:
                 fill(0)
@@ -119,6 +116,13 @@ def key_pressed(k, kc):
     if k == CODED:
         k = kc
 
+    if k == DELETE or k == BACKSPACE:
+       areas = Prancha.get_areas_atual()
+       for a in areas[1:]:
+         if a.selected:
+            areas.remove(a) 
+            break
+
     print(k)
     for b in botoes:
         x, y, w, h = botoes[b]
@@ -127,6 +131,8 @@ def key_pressed(k, kc):
         if tecla == k or str(tecla).upper() == k:
             if b in modos:
                 modo_ativo = b
+                if modo_ativo != DIAGR:
+                    Prancha.DIAGRAMA = False
             if b in comandos:
                 comandos[b]()
 
@@ -137,6 +143,8 @@ def mouse_pressed(mb):
         if mouse_over(b):
             if b in modos:
                 modo_ativo = b
+                if modo_ativo != DIAGR:
+                    Prancha.DIAGRAMA = False
             if b in comandos:
                 comandos[b]()
             return  # evita que qualquer outra ação seja realizada
