@@ -25,13 +25,13 @@ from __future__ import unicode_literals
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import imagens, adicionar_imagens
+from arquivos import imagens, adicionar_imagens, salva_sessao
 
 DEBUG = False
 
 def setup():
-    size(1200, 740)
-    # fullScreen()
+    # size(1200, 740)
+    fullScreen()
     interface.setup_interface()
 
 def draw():
@@ -52,3 +52,8 @@ def mouseDragged():
 def keyPressed():
     interface.key_pressed(key, keyCode)
     print key
+    
+def stop():
+    r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
+    if r == 0:
+        salva_sessao()

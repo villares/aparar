@@ -225,3 +225,11 @@ def rot_prancha():
             OX, OY, img.height * fator, img.width * fator)  # INVERTED
     elif img:
         pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
+        
+def yes_no_pane(title, message):
+    # Sim é 0, Não é 1, fechar a janela é -1
+    from javax.swing import JOptionPane
+    return JOptionPane.showConfirmDialog(None,
+                                         message,
+                                         title,
+                                         JOptionPane.YES_NO_OPTION)
