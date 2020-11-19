@@ -17,7 +17,7 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
              for i, term in enumerate(term_names)}
     return terms
 
-def calc_cat_color(i, num_terms, transparencia=128):
+def calc_cat_color(i, num_terms, transparencia=155):
     m = int(255.0 / num_terms * i)
     colorMode(HSB)
     c = color(m, 128 + 128 * (m % 2), 255 - 128 * (m % 3), transparencia)

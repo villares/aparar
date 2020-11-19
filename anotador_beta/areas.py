@@ -52,7 +52,7 @@ class Area:
             if (self.cobertura != 1 and valid_mode):
                 draw_terms(self.categorias)
                 draw_terms(self.tags)
-        elif self.over and not mp:
+        elif self.over and self.cobertura != 1: # not mp: # and :
             strokeWeight(5)
             self.over = False
         else:
@@ -60,12 +60,9 @@ class Area:
         # pega dados da categoria que está selecionada (se houver)    
         cat = Area.categorias.get(self.cat_selected)
         if cat and Prancha.DIAGRAMA:
-            c = cat['cor']
-            colorMode(HSB)
-            fill(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
+            fill(cat['cor'])
             noStroke()
         else:  # senão usa cinza translúcido padrão
-            colorMode(RGB)
             fill(0, 20)
         # caso especial do modo de editar área de referência 100%    
         if interface.modo_ativo ==interface.ED100:
