@@ -122,7 +122,6 @@ def key_pressed(k, kc):
             areas.remove(a) 
             break
 
-    print(k)
     for b in botoes:
         x, y, w, h = botoes[b]
         tecla, nome = b

@@ -18,7 +18,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [B] NÃO CARREGA IMAGENS TODAS NA MEMORIA - tá num branch
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 # [-] Modo ZOOM - não sei se vou fazer
-# [ ] Melhor suporte a fullScreen() 
+# [X] Melhor suporte a fullScreen() 
 
 from __future__ import unicode_literals
 
