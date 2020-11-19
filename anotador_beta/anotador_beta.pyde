@@ -9,10 +9,9 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 # [WIP] Modo diagrama
-#   [X] salvar diagrama de uma prancha
-#   [X] salvara só a àrea da prancha
 #   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
-#   [ ] salvar legenda cores -> categorias
+#   [X] salvar legenda cores -> categorias
+#   [ ] patterns PB para legenda de categorias
 #   [ ] salvar diagrama de todas as pranchas...
 # [ ] CSV especial com tags por categoria
 # [X] Travar ediçao do 100%
