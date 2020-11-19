@@ -103,3 +103,10 @@ class Area:
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
                 and self.y < mouseY < self.y + self.h)
+        
+    @classmethod    
+    def calc_color(cat_name)
+        cls.categorias.get(cat_name)
+        
+        
+        
