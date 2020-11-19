@@ -130,7 +130,24 @@ def salva_png():
     png.copy(temp, x + 1, y + 1, w, h, 0, 0, w, h)
     png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%
     png.endDraw()
+    if Prancha.DIAGRAMA:
+        salva_legenda_diagrama(path)
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
+
+
+def salva_legenda_diagrama(path):
+    png = createGraphics(300, 700)
+    png.beginDraw()
+    png.background(200)
+    categorias = sorted(Area.categorias.keys())
+    for i, cat in enumerate(categorias):
+        png.fill(Area.categorias[cat]['cor'])
+        png.rect(20, i * 25, 40, 20)
+        png.fill(0)
+        png.text(cat, 70, 15 + i * 25)    
+    png.save(join(path, "legenda.png"))
+    png.endDraw()
+
 
 def reset_acumulador():
     global t_cat_count, t_scat_count, t_tag_count, t_cobertura, t_scobertura

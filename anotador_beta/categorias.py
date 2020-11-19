@@ -20,7 +20,8 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
 def calc_cat_color(i, num_terms, transparencia=155):
     m = int(255.0 / num_terms * i)
     colorMode(HSB)
-    c = color(m, 128 + 128 * (m % 2), 255 - 128 * (m % 3), transparencia)
+    # c = color(m, 128 + 128 * (m % 2), 255 - 128 * (m % 3), transparencia)
+    c = color(m, 255 - (i % 2) * 64 , 255 - (i % 3) * 64, transparencia)
     colorMode(RGB)
     return c 
 
