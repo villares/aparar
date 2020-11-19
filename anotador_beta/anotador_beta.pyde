@@ -18,20 +18,20 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 # [-] Modo ZOOM - não sei se vou fazer
-# [ ] Melhor suporte a fullScreen() 
+# [X] Melhor suporte a fullScreen() 
 
 from __future__ import unicode_literals
 
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import imagens, adicionar_imagens
+from arquivos import imagens, adicionar_imagens, salva_sessao
 
 DEBUG = False
 
 def setup():
-    size(1200, 740)
-    # fullScreen()
+    # size(1200, 740)
+    fullScreen()
     interface.setup_interface()
 
 def draw():
@@ -52,3 +52,8 @@ def mouseDragged():
 def keyPressed():
     interface.key_pressed(key, keyCode)
     print key
+    
+def stop():
+    r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
+    if r == 0:
+        salva_sessao()

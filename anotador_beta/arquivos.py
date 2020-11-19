@@ -15,6 +15,8 @@ import interface
 
 imagens = {}  # dicionário contendo as imagens carregadas
 
+nome_arquivo_sessao = "sessao_aparar_v1119.pickle"
+
 def lista_imagens(dir=None):
     """
     Devolve uma a lista de tuplas com os nomes dos arquivos de imagem e os caminhos
@@ -31,9 +33,10 @@ def lista_imagens(dir=None):
     return f_list
 
 def carrega_pranchas():
-    # Operação normal, via callback (cuidado que silencia erros, vide opção para debug!)
+    # Operação normal, via callback (cuidado que silencia erros, vide opção
+    # para debug!)
     selectFolder("Selecione uma pasta", "adicionar_imagens")
-    # Essencial para o debug usar "chamada direta" de adicionar_imagens() 
+    # Essencial para o debug usar "chamada direta" de adicionar_imagens()
     # adicionar_imagens(File("/Users/villares/Documents/aparar/anotador_beta/data"))
 
 
@@ -71,17 +74,19 @@ def adicionar_imagens(selection):
         carrega_sessao()
 
 def salva_sessao():
-    with open(join(Prancha.path_sessao, "dados.aparar"), "wb") as file:
+    with open(join(Prancha.path_sessao, nome_arquivo_sessao), "wb") as file:
         sessao = (Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height)
         pickle.dump(sessao, file)
-    Prancha.avisos("sessão salva em …" + unicode(Prancha.path_sessao)[-40:])
-
+    mensagem = "sessão salva em …" + unicode(Prancha.path_sessao)[-40:]
+    Prancha.avisos(mensagem)
+    print(mensagem)
 
 def carrega_sessao():
     from categorias import find_super_cats
     try:
-        with open(join(Prancha.path_sessao, "dados.aparar"), "rb") as file:
-            Prancha.pranchas, Prancha.path_sessao,Prancha.screen_height = pickle.load(file)
+        with open(join(Prancha.path_sessao, nome_arquivo_sessao), "rb") as file:
+            Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height = pickle.load(
+                file)
             # para compatibilidade com sessões antigas precisaria isto (mas zoa com tamanhos de tela diferentes)
             # Area.categorias = Prancha.pranchas[0].areas[0].categorias
             # Area.tags = Prancha.pranchas[0].areas[0].tags
@@ -91,11 +96,11 @@ def carrega_sessao():
             return True
 
     except Exception as e:
-        Prancha.avisos("não foi carregada uma sessão salva") # pode ser que nãp havia
+        # pode ser que nãp havia
+        Prancha.avisos("não foi carregada uma sessão salva")
         print "Se não imprimir 'Erro N:', pode ser bug (não é File IO) tende debug sem call-back"
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return False
-    
 
 def imgext(file_name):
     ext = file_name.split('.')[-1]
@@ -121,9 +126,10 @@ def salva_png():
     area = Prancha.get_areas_atual()[0]
     x, y = area.x, area.y
     w, h = int(area.w), int(area.h)
-    # Para salvar só a área 100 % da prancha
-    saveFrame("temp.png")  # salva arquivo temporário da tela toda
+    # Para salvar só a área 100% da prancha
+    # Salva img temporária da tela toda, não queria ter que usar isso :(
     temp = loadImage("temp.png")
+    saveFrame(join("data", "temp.png"))
     png = createGraphics(w, h)
     png.beginDraw()
     png.background(255)
@@ -144,10 +150,9 @@ def salva_legenda_diagrama(path):
         png.fill(Area.categorias[cat]['cor'])
         png.rect(20, i * 25, 40, 20)
         png.fill(0)
-        png.text(cat, 70, 15 + i * 25)    
+        png.text(cat, 70, 15 + i * 25)
     png.save(join(path, "legenda.png"))
     png.endDraw()
-
 
 def reset_acumulador():
     global t_cat_count, t_scat_count, t_tag_count, t_cobertura, t_scobertura
