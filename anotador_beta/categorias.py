@@ -12,10 +12,17 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
                     'y': pos.y,
                     'w': pos.tw,
                     'h': lh,
-                    'cor' : int(255.0 / len(term_names) * i)  # possibly add second number
+                    'cor' : calc_cat_color(i, len(term_names)) 
                     }
              for i, term in enumerate(term_names)}
     return terms
+
+def calc_cat_color(i, num_terms, transparencia=128):
+    m = int(255.0 / num_terms * i)
+    colorMode(HSB)
+    c = color(m, 128 + 128 * (m % 2), 255 - 128 * (m % 3), transparencia)
+    colorMode(RGB)
+    return c 
 
 def setup_terms_state(terms):
     return {term: False for term in terms.keys()}

@@ -105,8 +105,12 @@ class Area:
                 and self.y < mouseY < self.y + self.h)
         
     @classmethod    
-    def calc_color(cat_name)
-        cls.categorias.get(cat_name)
+    def calc_color(cat_name):
+        cat = cls.categorias.get(cat_name)
+        if cat:
+            c = cat['cor'] 
+            return color(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
+            
         
         
         
