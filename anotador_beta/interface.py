@@ -7,8 +7,8 @@ from categorias import setup_terms, draw_terms, select_cat, select_tag, find_sup
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv, salva_png
 
 # offset da área que mostra a imagem da prancha
-OX, OY = 200, 50
-rodape = 50
+OX, OY = 200, 40
+rodape = 55
 MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar [i]magens"
