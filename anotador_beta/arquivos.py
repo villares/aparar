@@ -46,22 +46,25 @@ def adicionar_imagens(selection):
         Prancha.path_sessao = dir_path
         Prancha.nome_sessao = unicode(selection)
         print("Pasta selecionada: " + dir_path)
+        # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
         for file_name, file_path in lista_imagens(dir_path):
-            img = loadImage(file_path)
             img_name = file_name.split('.')[0]
-            print("imagem " + img_name + " carregada.")
-            imagens[img_name.lower()] = img
-            fator = Prancha.calc_fator(img)
-            if not Prancha.in_pranchas(img_name):
-                p = Prancha(img_name)
-                p.areas.append(Area(interface.OX, interface.OY,
-                                    img.width * fator, img.height * fator))
-                Prancha.pranchas.append(p)
+            imagens[img_name.lower()] = file_path
 
-        print('Número de imagens: ' + str(len(imagens)))
-        Prancha.carregando = False
-        if not carrega_sessao():
+        if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
+            for file_name, file_path in lista_imagens(dir_path):
+                img = loadImage(file_path)
+                img_name = file_name.split('.')[0]
+                # imagens[img_name.lower()] = img  #file_path
+                imagens[img_name.lower()] = file_path
+                fator = Prancha.calc_fator(img)
+                if not Prancha.in_pranchas(img_name):
+                    p = Prancha(img_name)
+                    p.areas.append(Area(interface.OX, interface.OY,
+                                        img.width * fator, img.height * fator))
+                    Prancha.pranchas.append(p)
             salva_sessao()
+
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
