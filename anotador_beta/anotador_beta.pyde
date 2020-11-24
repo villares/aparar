@@ -13,7 +13,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #   [X] salvar legenda cores -> categorias
 #   [ ] patterns PB para legenda de categorias
 #   [ ] salvar diagrama de todas as pranchas...
-# [ ] CSV especial com tags por categoria
+# [WIP] CSV especial com tags por categoria
 # [X] Travar ediçao do 100%
 # [B] NÃO CARREGA IMAGENS TODAS NA MEMORIA - tá num branch
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
@@ -52,7 +52,6 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
-    print key
     
 def stop():
     r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")

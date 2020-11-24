@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 from pranchas import Prancha
 from areas import Area
 from categorias import setup_terms, draw_terms, select_cat, select_tag, find_super_cats
-from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv, salva_png
+from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, salva_png
+from planilhas import gera_csv, gera_csv2
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
@@ -66,7 +67,7 @@ def setup_interface():
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
                 SALVA_SESSAO: ask_salva_sessao,
                 LOAD_SESSAO: ask_carrega_sessao,
-                GERA_CSV: gera_csv,
+                GERA_CSV: gera_planilhas,
                 PROX_PRANCHA: prox_prancha,
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
@@ -95,6 +96,10 @@ def ask_salva_sessao():
     r = yes_no_pane("Atenção!", "Quer salvar o estado da sessão atual?")
     if r == 0:
         salva_sessao()
+
+def gera_planilhas():
+    gera_csv()
+    gera_csv2()
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
