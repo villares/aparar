@@ -62,7 +62,8 @@ def adicionar_imagens(selection):
 
         print('Número de imagens: ' + str(len(imagens)))
         Prancha.carregando = False
-        carrega_sessao()
+        if not carrega_sessao():
+            salva_sessao()
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, nome_arquivo_sessao), "wb") as file:
