@@ -7,8 +7,8 @@ from categorias import setup_terms, draw_terms, select_cat, select_tag, find_sup
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, gera_csv, salva_png
 
 # offset da área que mostra a imagem da prancha
-OX, OY = 200, 50
-rodape = 50
+OX, OY = 200, 40
+rodape = 55
 MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar [i]magens"
@@ -48,7 +48,7 @@ def setup_interface():
         ("", "ARQUIVOS"): (20, 20, 140, 20),
         LOAD_PRANCHAS: (20, 50, 140, 20),
         SALVA_SESSAO: (20, 80, 140, 20),
-        # LOAD_SESSAO: (20, 110, 140, 20),
+        LOAD_SESSAO: (20, 110, 140, 20),
         GERA_CSV: (20, 140, 140, 20),
         SALVA_PNG: (20, 170, 140, 20),
         # modos / estados de operação da ferramenta
@@ -65,8 +65,8 @@ def setup_interface():
     }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
-                SALVA_SESSAO: salva_sessao,
-                LOAD_SESSAO: carrega_sessao,
+                SALVA_SESSAO: ask_salva_sessao,
+                LOAD_SESSAO: ask_carrega_sessao,
                 GERA_CSV: gera_csv,
                 PROX_PRANCHA: prox_prancha,
                 VOLTA_PRANCHA: volta_prancha,
@@ -86,6 +86,16 @@ def setup_interface():
 
 def diagrama_on():
     Prancha.DIAGRAMA = True
+
+def ask_carrega_sessao():
+    r = yes_no_pane("Atenção!", "Quer carregar o último estado salvo desta sessão?\n(descarta dados atuais não salvos)")
+    if r == 0:
+        carrega_sessao()
+
+def ask_salva_sessao():
+    r = yes_no_pane("Atenção!", "Quer salvar o estado da sessão atual?")
+    if r == 0:
+        salva_sessao()
 
 def mouse_over(b):
     x, y, w, h = botoes[b]

@@ -19,6 +19,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 # [-] Modo ZOOM - não sei se vou fazer
 # [X] Melhor suporte a fullScreen() 
+# [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
 
 from __future__ import unicode_literals
 
