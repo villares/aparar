@@ -15,7 +15,7 @@ import interface
 
 imagens = {}  # dicionário contendo as imagens carregadas
 
-nome_arquivo_sessao = "sessao_aparar_v1119.pickle"
+NOME_ARQ_SESSAO = "sessao_aparar_v1119.pickle"
 
 def lista_imagens(dir=None):
     """
@@ -66,7 +66,7 @@ def adicionar_imagens(selection):
             salva_sessao()
 
 def salva_sessao():
-    with open(join(Prancha.path_sessao, nome_arquivo_sessao), "wb") as file:
+    with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
         sessao = (Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height)
         pickle.dump(sessao, file)
     mensagem = "sessão salva em …" + unicode(Prancha.path_sessao)[-40:]
@@ -76,7 +76,7 @@ def salva_sessao():
 def carrega_sessao():
     from categorias import find_super_cats
     try:
-        with open(join(Prancha.path_sessao, nome_arquivo_sessao), "rb") as file:
+        with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "rb") as file:
             Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height = pickle.load(
                 file)
             # para compatibilidade com sessões antigas precisaria isto (mas zoa com tamanhos de tela diferentes)
