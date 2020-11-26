@@ -131,8 +131,10 @@ def gera_csv2():
             nova_linha_area.setString("BBB", prancha.idb)
             nova_linha_area.setString("CCC", prancha.idc)
             nova_linha_area.setInt("AREA", i)
-            nova_linha_area.setInt(area.cat_selected + "_num", 1)
-            nova_linha_area.setInt(area.scat_selected + "_num", 1)
+            if area.cat_selected:
+                nova_linha_area.setInt(area.cat_selected + "_num", 1)
+            if area.scat_selected:
+                nova_linha_area.setInt(area.scat_selected + "_num", 1)
             for tag in tags:
                 nova_linha_area.setInt(tag, (tag in area.tags_selected))
             # for scat in super_cats:
