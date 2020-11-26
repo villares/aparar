@@ -13,7 +13,7 @@ import interface
 
 imagens = {}  # dicionário contendo as imagens carregadas
 
-NOME_ARQ_SESSAO = "sessao_aparar_v1119.pickle"
+NOME_ARQ_SESSAO = "sessao_aparar_v1126.pickle"
 
 def lista_imagens(dir=None):
     """
