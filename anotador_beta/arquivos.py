@@ -118,7 +118,7 @@ def salva_png():
     path = join(Prancha.path_sessao, 'imagens-diagramas')
     path_arquivo = join(path, nome_arquivo)
     area = Prancha.get_areas_atual()[0]
-    x, y = area.x, area.y
+    x, y = int(area.x), int(area.y)
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100% da prancha
     # Salva img temporária da tela toda, não queria ter que usar isso :(
