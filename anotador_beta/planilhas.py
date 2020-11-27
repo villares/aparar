@@ -134,10 +134,9 @@ def gera_csv2():
             if area.cat_selected:
                 nova_linha_area.setInt(area.cat_selected + "_num", 1)
                 nova_linha.setFloat(area.cat_selected + "_area", area.cobertura)
-
             if area.scat_selected:
                 nova_linha_area.setInt(area.scat_selected + "_num", 1)
-                nova_linha.setFloat(scat_selected + "_area", area.cobertura)
+                nova_linha.setFloat(area.scat_selected + "_area", area.cobertura)
             for tag in tags:
                 nova_linha_area.setInt(tag, (tag in area.tags_selected))
             # for scat in super_cats:
