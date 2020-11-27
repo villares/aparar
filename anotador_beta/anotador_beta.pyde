@@ -13,7 +13,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #   [X] salvar legenda cores -> categorias
 #   [ ] patterns PB para legenda de categorias
 #   [ ] salvar diagrama de todas as pranchas...
-# [WIP] CSV especial com tags por categoria
+# [X] CSV especial com tags por categoria
 # [X] Travar ediçao do 100%
 # [B] NÃO CARREGA IMAGENS TODAS NA MEMORIA - tá num branch
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
