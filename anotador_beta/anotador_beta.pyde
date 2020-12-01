@@ -9,6 +9,7 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 
+# [WIP] RETÂNGULOS GIRADOS
 # [WIP] Modo diagrama
 #   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
 #   [X] salvar legenda cores -> categorias
@@ -54,6 +55,9 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
+    
+def mouseWheel(e):
+    interface.mouse_wheel(e)    
     
 def stop():
     r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")

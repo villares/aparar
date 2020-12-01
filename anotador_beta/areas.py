@@ -27,6 +27,7 @@ class Area:
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
+        self.rotation = 0
 
     def update(self):
         # atualiza qual categoria desta área
@@ -48,24 +49,25 @@ class Area:
         if self.selected and self.cobertura != 1:
             stroke(200, 0, 0)
             strokeWeight(3)
-            valid_mode = interface.modo_ativo in (interface.EDITA, interface.CRIAR)
+            valid_mode = interface.modo_ativo in (
+                interface.EDITA, interface.CRIAR)
             if (self.cobertura != 1 and valid_mode):
                 draw_terms(self.categorias)
                 draw_terms(self.tags)
-        elif self.over and self.cobertura != 1: # not mp: # and :
+        elif self.over and self.cobertura != 1:  # not mp: # and :
             strokeWeight(5)
             self.over = False
         else:
             strokeWeight(2)
-        # pega dados da categoria que está selecionada (se houver)    
+        # pega dados da categoria que está selecionada (se houver)
         cat = Area.categorias.get(self.cat_selected)
         if cat and Prancha.DIAGRAMA:
             fill(cat['cor'])
             noStroke()
         else:  # senão usa cinza translúcido padrão
             fill(0, 20)
-        # caso especial do modo de editar área de referência 100%    
-        if interface.modo_ativo ==interface.ED100:
+        # caso especial do modo de editar área de referência 100%
+        if interface.modo_ativo == interface.ED100:
             if self.cobertura == 1:
                 stroke(200, 0, 0)
                 strokeWeight(5)
@@ -73,8 +75,12 @@ class Area:
                 stroke(0)
                 strokeWeight(3)
         # desenha o retângulo da área
-        rect(self.x, self.y, self.w, self.h)
-        fill(0) # textos da área em preto
+        push()
+        translate(self.x + self.w / 2, self.y + self.h / 2)
+        rotate(self.rotation)
+        rect(-self.w / 2, -self.h / 2, self.w, self.h)
+        pop()
+        fill(0)  # textos da área em preto
         if not Prancha.DIAGRAMA:
             text(self.cat_selected,
                  self.x + 10,
@@ -100,14 +106,10 @@ class Area:
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
                 and self.y < mouseY < self.y + self.h)
-        
-    @classmethod    
+
+    @classmethod
     def calc_color(cat_name):
         cat = cls.categorias.get(cat_name)
         if cat:
-            c = cat['cor'] 
+            c = cat['cor']
             return color(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
-            
-        
-        
-        

@@ -176,11 +176,6 @@ def mouse_pressed(mb):
                 Prancha.desselect_all()
                 a.selected = True
                 break
-    elif modo_ativo == REMOV:  # remover
-        for a in reversed(areas[1:]):
-            if a.mouse_over():
-                areas.remove(a)
-                break
     elif modo_ativo == CRIAR and mb == LEFT:  # criar
         if areas[0].mouse_over():
             Prancha.desselect_all()
@@ -224,6 +219,17 @@ def mouse_dragged(mb):
                     r.w = mouseX - r.x
                 if mouseY - r.y > MIN_SIZE:
                     r.h = mouseY - r.y
+
+def mouse_wheel(e):
+    # tratamento dos botões
+    global modo_ativo
+    areas = Prancha.get_areas_atual()
+    # tratamento dos objetos Area
+    if modo_ativo in (EDITA, CRIAR):  # editar ou criar
+        for a in reversed(areas[1:]):  # pula a primeira
+            if a.mouse_over():
+                a.rotation += radians(e.getCount())
+                break
 
 def prox_prancha():
     global imagem_prancha_atual
