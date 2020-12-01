@@ -76,13 +76,14 @@ def carrega_sessao():
     from categorias import find_super_cats
     try:
         with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "rb") as file:
-            Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height = pickle.load(
+            Prancha.pranchas, _, Prancha.screen_height = pickle.load(
                 file)
             # para compatibilidade com sessões antigas precisaria isto (mas zoa com tamanhos de tela diferentes)
             # Area.categorias = Prancha.pranchas[0].areas[0].categorias
             # Area.tags = Prancha.pranchas[0].areas[0].tags
             # Area.super_cats = find_super_cats(Area.categorias)
             Prancha.update_for_screen_change()
+            Prancha.update_for_name_change()
             Prancha.avisos("sessão carregada")
             return True
 

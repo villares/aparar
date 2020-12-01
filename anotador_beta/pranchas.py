@@ -9,7 +9,7 @@ class Prancha:
     pranchas = []
     path_sessao = ""
     nome_sessao = ""
-    carregando = False # remover na próxima mudança de formato de arquivo
+    carregando = False  # remover na próxima mudança de formato de arquivo
     avisos_timer = 0
     avisos_texto = ""
 
@@ -30,7 +30,7 @@ class Prancha:
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
             if nome != "000":
-                 prinln(nome + " (nome da imagem não está no padrão)")
+                prinln(nome + " (nome da imagem não está no padrão)")
             self.ida = self.idb = self.idc = nome
 
     def id_a_b(self):
@@ -137,6 +137,12 @@ class Prancha:
         return current_height / self.screen_height
 
     @classmethod
+    def update_for_name_change(cls):
+        for prancha in cls.pranchas:
+            # para o caso da sessão salva com nomes com hifens
+            prancha.init_ids()
+
+    @classmethod
     def update_for_screen_change(cls):
         current_height = height - (interface.OY + interface.rodape)
         recorded_height = Prancha.screen_height
@@ -178,8 +184,8 @@ class Prancha:
             cls.avisos_timer = millis()
         # elif cls.carregando:
         #     cls.avisos_texto = "CARREGANDO IMAGENS"
-        #     # cls.avisos_timer = millis()
-        #     # cls.carregando = False
+        # cls.avisos_timer = millis()
+        # cls.carregando = False
 
         if millis() - cls.avisos_timer > 1200:
             cls.avisos_texto = t = ""

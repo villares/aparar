@@ -8,6 +8,7 @@ Colaboradores: Carolina Celete, Raissa Rodrigues, Larissa Negris de Souza e Alex
 Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
+
 # [WIP] Modo diagrama
 #   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
 #   [X] salvar legenda cores -> categorias
@@ -20,6 +21,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [-] Modo ZOOM - não sei se vou fazer
 # [X] Melhor suporte a fullScreen() 
 # [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
+# [X] Não salva sessão, depois de carregar imagens, muda aviso de imagens carregando, arruma epxort PNG
 
 from __future__ import unicode_literals
 
