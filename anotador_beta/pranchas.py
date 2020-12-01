@@ -9,7 +9,7 @@ class Prancha:
     pranchas = []
     path_sessao = ""
     nome_sessao = ""
-    carregando = False
+    carregando = False # remover na próxima mudança de formato de arquivo
     avisos_timer = 0
     avisos_texto = ""
 
@@ -171,20 +171,21 @@ class Prancha:
             r.selected = False
 
     @classmethod
-    def avisos(cls, t=None):
+    def avisos(cls, message=None):
 
-        if t and cls.avisos_timer == 0:
-            cls.avisos_texto = t
+        if message and cls.avisos_timer == 0:
+            cls.avisos_texto = message
             cls.avisos_timer = millis()
+        # elif cls.carregando:
+        #     cls.avisos_texto = "CARREGANDO IMAGENS"
+        #     # cls.avisos_timer = millis()
+        #     # cls.carregando = False
 
         if millis() - cls.avisos_timer > 1200:
             cls.avisos_texto = t = ""
             cls.avisos_timer = 0
 
-        if cls.carregando:
-            t = "CARREGANDO IMAGENS"
-        else:
-            t = cls.avisos_texto
+        t = cls.avisos_texto
 
         if t:
             push()
