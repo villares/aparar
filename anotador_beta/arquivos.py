@@ -122,8 +122,8 @@ def salva_png():
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100% da prancha
     # Salva img temporária da tela toda, não queria ter que usar isso :(
-    temp = loadImage("temp.png")
     saveFrame(join("data", "temp.png"))
+    temp = loadImage("temp.png")
     png = createGraphics(w, h)
     png.beginDraw()
     png.background(255)
