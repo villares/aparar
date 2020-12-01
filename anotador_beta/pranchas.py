@@ -22,13 +22,15 @@ class Prancha:
         self.rot = 0
 
     def init_ids(self):
-        nome = self.nome
+        nome = self.nome.replace("-", "_")
         sep_pos = nome.find("_")
         if sep_pos > 0:
             self.ida = nome[:sep_pos]    # AAA ou AAAA
             self.idb = nome[sep_pos + 1:sep_pos + 4]   # BBB
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
+            if nome != "000":
+                 prinln(nome + " (nome da imagem não está no padrão)")
             self.ida = self.idb = self.idc = nome
 
     def id_a_b(self):
@@ -101,7 +103,6 @@ class Prancha:
             return loadImage(path_img)
         else:
             return createGraphics(10, 10)
-
 
     @classmethod
     def display_imagem_atual(cls, imagens):
