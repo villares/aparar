@@ -9,7 +9,7 @@ class Prancha:
     pranchas = []
     path_sessao = ""
     nome_sessao = ""
-    carregando = False
+    carregando = False # remover na próxima mudança de formato de arquivo
     avisos_timer = 0
     avisos_texto = ""
 
@@ -22,13 +22,15 @@ class Prancha:
         self.rot = 0
 
     def init_ids(self):
-        nome = self.nome
+        nome = self.nome.replace("-", "_")
         sep_pos = nome.find("_")
         if sep_pos > 0:
             self.ida = nome[:sep_pos]    # AAA ou AAAA
             self.idb = nome[sep_pos + 1:sep_pos + 4]   # BBB
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
+            if nome != "000":
+                 prinln(nome + " (nome da imagem não está no padrão)")
             self.ida = self.idb = self.idc = nome
 
     def id_a_b(self):
@@ -90,7 +92,17 @@ class Prancha:
     @classmethod
     def img_prancha_atual(cls, imagens):
         """devolve imagem na prancha atual ou None"""
-        return imagens.get(cls.nome_prancha_atual().lower())
+        # return imagens.get(cls.nome_prancha_atual().lower())
+        return interface.imagem_prancha_atual
+
+    @classmethod
+    def load_img_prancha_atual(cls, imagens):
+        """devolve imagem na prancha atual ou None"""
+        path_img = imagens.get(cls.nome_prancha_atual().lower())
+        if path_img:
+            return loadImage(path_img)
+        else:
+            return createGraphics(10, 10)
 
     @classmethod
     def display_imagem_atual(cls, imagens):
@@ -159,20 +171,21 @@ class Prancha:
             r.selected = False
 
     @classmethod
-    def avisos(cls, t=None):
+    def avisos(cls, message=None):
 
-        if t and cls.avisos_timer == 0:
-            cls.avisos_texto = t
+        if message and cls.avisos_timer == 0:
+            cls.avisos_texto = message
             cls.avisos_timer = millis()
+        # elif cls.carregando:
+        #     cls.avisos_texto = "CARREGANDO IMAGENS"
+        #     # cls.avisos_timer = millis()
+        #     # cls.carregando = False
 
         if millis() - cls.avisos_timer > 1200:
             cls.avisos_texto = t = ""
             cls.avisos_timer = 0
 
-        if cls.carregando:
-            t = "CARREGANDO IMAGENS"
-        else:
-            t = cls.avisos_texto
+        t = cls.avisos_texto
 
         if t:
             push()

@@ -15,7 +15,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #   [ ] salvar diagrama de todas as pranchas...
 # [X] CSV especial com tags por categoria
 # [X] Travar ediçao do 100%
-# [B] NÃO CARREGA IMAGENS TODAS NA MEMORIA - tá num branch
+# [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 # [-] Modo ZOOM - não sei se vou fazer
 # [X] Melhor suporte a fullScreen() 
