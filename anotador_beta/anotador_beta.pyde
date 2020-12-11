@@ -9,20 +9,13 @@ Embrião do código de retângulos reconfiguráveis aproveitado do projeto
 co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_criar_co_mover
 """
 
-# [WIP] RETÂNGULOS GIRADOS
 # [WIP] Modo diagrama
-#   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
 #   [X] salvar legenda cores -> categorias
 #   [ ] patterns PB para legenda de categorias
-#   [ ] salvar diagrama de todas as pranchas...
-# [X] CSV especial com tags por categoria
-# [X] Travar ediçao do 100%
-# [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
+#   [X] salvar diagrama de todas as pranchas...
+# [WIP] Retângulos rotacionados ***AQUI****
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
-# [-] Modo ZOOM - não sei se vou fazer
-# [X] Melhor suporte a fullScreen() 
 # [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
-# [X] Não salva sessão, depois de carregar imagens, muda aviso de imagens carregando, arruma epxort PNG
 
 from __future__ import unicode_literals
 
