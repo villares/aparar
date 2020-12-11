@@ -45,15 +45,13 @@ def draw():
     if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
     Prancha.display_areas_atual(mousePressed)
-    if interface.exportar_tudo:
+    if interface.exportar_tudo:   
         salva_png()
-        interface.prox_prancha()
-        if Prancha.i_atual == 0:
+        interface.prox_prancha()  # next from last is 0
+        if Prancha.i_atual == 0:  # it will not be exported
             interface.exportar_tudo = False
-    
     Prancha.avisos()
     
-
 def mousePressed():
     interface.mouse_pressed(mouseButton)
 
