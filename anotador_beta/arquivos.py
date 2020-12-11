@@ -113,9 +113,10 @@ def salva_png():
     no modo normal de edição ou modo diagrama.
     """
     modo_diagrama = interface.modo_ativo == interface.DIAGR
-    diagrama = "diagrama-" if modo_diagrama else "imagem-"
-    nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
-    path = join(Prancha.path_sessao, 'imagens-diagramas')
+    prefixo = "diagrama" if modo_diagrama else "imagem"
+    nome_arquivo = "{}-{}.png".format(prefixo, Prancha.nome_prancha_atual())
+    sub_folder = "diagramas" if modo_diagrama else "imagens"
+    path = join(Prancha.path_sessao, sub_folder) # pasta diagramas ou imagens
     path_arquivo = join(path, nome_arquivo)
     area = Prancha.get_areas_atual()[0]
     x, y = int(area.x), int(area.y)
