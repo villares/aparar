@@ -22,7 +22,7 @@ DIAGR = "d", "mostra [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
-ROT_PRANCHA = "9", "girar [p]rancha 90°"
+ROT_PRANCHA = "9", "girar prancha [9]0°"
 
 # modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar áreas"
@@ -229,16 +229,13 @@ def mouse_dragged(mb):
                     r.h = mouseY - r.y
 
 def mouse_wheel(e):
-    # tratamento dos botões
-    global modo_ativo
     areas = Prancha.get_areas_atual()
-    # tratamento dos objetos Area
     if modo_ativo in (EDITA, CRIAR):  # editar ou criar
         for a in reversed(areas[1:]):  # pula a primeira
             if a.mouse_over():
                 a.rotation += radians(e.getCount())
                 break
-
+    
 def prox_prancha():
     global imagem_prancha_atual
     Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
