@@ -40,11 +40,22 @@ def setup():
 
 def draw():
     background(200)
+    # Elementos de interface/menu
     interface.display_botoes(DEBUG)
+    # Nome da prancha atual
     Prancha.display_nome_atual()
-    if not Prancha.DIAGRAMA:
+    # Mostra imagem da prancha (se não estiver no modo digagrama)
+    if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
+    # Desenha as áreas anotadas        
     Prancha.display_areas_atual(mousePressed)
+    # Tratamento do flag de exportar todas as pranchas
+    if interface.exportar_tudo:   
+        salva_png()
+        interface.prox_prancha()  # next from last is 0
+        if Prancha.i_atual == 0:  # it will not be exported
+            interface.exportar_tudo = False
+    # Textos de aviso
     Prancha.avisos()
 
 def mousePressed():
