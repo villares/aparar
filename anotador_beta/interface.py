@@ -16,13 +16,13 @@ LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
-SALVA_PNG = "p", "salvar [p]ng t[o]das"
+SALVA_PNG = "p", "salvar [p]ng/t[o]das"
 SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 DIAGR = "d", "mostra [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
-ROT_PRANCHA = "9", "girar [p]rancha 90°"
+ROT_PRANCHA = "9", "girar prancha [9]0°"
 
 # modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar áreas"
