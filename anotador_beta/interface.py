@@ -9,14 +9,15 @@ from planilhas import gera_csv, gera_csv2
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
-rodape = 55
+rodape = 100
 MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
-SALVA_PNG = "p", "salvar [p]ng"
+SALVA_PNG = "p", "salvar [p]ng t[o]das"
+SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 DIAGR = "d", "mostra [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
@@ -32,7 +33,7 @@ ZOOM = "z", "[z]oom"  # não implementado
 
 modos = (EDITA, ED100, REMOV, CRIAR, ZOOM, DIAGR)
 modo_ativo = CRIAR
-Prancha.DIAGRAMA = False
+exportar_tudo = False
 imagem_prancha_atual = None
 
 def setup_interface():
@@ -58,8 +59,6 @@ def setup_interface():
         EDITA: (20, 300, 140, 20),
         ED100: (20, 330, 140, 20),
         DIAGR: (20, 360, 140, 20),
-        # REMOV: (20, 360, 140, 20),
-        # ZOOM :(20, 390, 100, 40),# não implementado
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
         ROT_PRANCHA: (580, 20, 140, 20),
@@ -69,11 +68,12 @@ def setup_interface():
                 SALVA_SESSAO: ask_salva_sessao,
                 LOAD_SESSAO: ask_carrega_sessao,
                 GERA_CSV: gera_planilhas,
+                SALVA_PNG: salva_png,
+                SALVA_TODAS_PNG: salva_todas_png,
                 PROX_PRANCHA: prox_prancha,
+                
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
-                SALVA_PNG: salva_png,
-                DIAGR: diagrama_on,
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -85,8 +85,6 @@ def setup_interface():
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
-def diagrama_on():
-    Prancha.DIAGRAMA = True
 
 def ask_carrega_sessao():
     r = yes_no_pane("Atenção!", "Quer carregar o último estado salvo desta sessão?\n(descarta dados atuais não salvos)")
@@ -101,6 +99,16 @@ def ask_salva_sessao():
 def gera_planilhas():
     gera_csv()
     gera_csv2()
+    
+def salva_todas_png():
+    global imagem_prancha_atual, exportar_tudo
+    if len(Prancha.pranchas) > 1:
+        Prancha.i_atual = 1
+        imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens) 
+        exportar_tudo = True
+    else:
+        Prancha.avisos("Não há pranchas para exportar.")
+
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
@@ -109,7 +117,6 @@ def mouse_over(b):
 def display_botoes(DEBUG=False):
     textSize(18)
     for b in botoes:
-        x, y, w, h = botoes[b]
         tecla, nome = b
         if b == modo_ativo:
             fill(0, 0, 200)
@@ -118,6 +125,8 @@ def display_botoes(DEBUG=False):
                 fill(255)
             else:
                 fill(0)
+        # desenha botão (texto)
+        x, y, w, h = botoes[b]
         if DEBUG:
             push()
             noFill()
@@ -138,17 +147,16 @@ def key_pressed(k, kc):
             areas.remove(a) 
             break
 
-    for b in botoes:
-        x, y, w, h = botoes[b]
-        tecla, nome = b
-        # primeira letra do nome do botao atalho pro modo
+    for c in comandos:
+        tecla, nome = c
         if tecla == k or str(tecla).upper() == k:
-            if b in modos:
-                modo_ativo = b
-                if modo_ativo != DIAGR:
-                    Prancha.DIAGRAMA = False
-            if b in comandos:
-                comandos[b]()
+            comandos[c]()
+
+    for m in modos:    
+        tecla, nome = m   
+        if tecla == k or str(tecla).upper() == k:
+            modo_ativo = m
+
 
 def mouse_pressed(mb):
     # tratamento dos botões

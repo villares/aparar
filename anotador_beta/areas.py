@@ -43,15 +43,16 @@ class Area:
 
     def display(self, mp):
         self.update()
+        modo_anotativo = interface.modo_ativo in (
+            interface.EDITA, interface.CRIAR)
+        modo_diagrama = interface.modo_ativo == interface.DIAGR
         pushStyle()
         textSize(CAT_FONT_SIZE)
         stroke(0)
         if self.selected and self.cobertura != 1:
             stroke(200, 0, 0)
             strokeWeight(3)
-            valid_mode = interface.modo_ativo in (
-                interface.EDITA, interface.CRIAR)
-            if (self.cobertura != 1 and valid_mode):
+            if modo_anotativo:
                 draw_terms(self.categorias)
                 draw_terms(self.tags)
         elif self.over and self.cobertura != 1:  # not mp: # and :
@@ -61,7 +62,7 @@ class Area:
             strokeWeight(2)
         # pega dados da categoria que está selecionada (se houver)
         cat = Area.categorias.get(self.cat_selected)
-        if cat and Prancha.DIAGRAMA:
+        if cat and modo_diagrama:
             fill(cat['cor'])
             noStroke()
         else:  # senão usa cinza translúcido padrão
@@ -81,14 +82,14 @@ class Area:
         rect(-self.w / 2, -self.h / 2, self.w, self.h)
         pop()
         fill(0)  # textos da área em preto
-        if not Prancha.DIAGRAMA:
+        if not modo_diagrama:
             text(self.cat_selected,
                  self.x + 10,
                  self.y + 20)
         textAlign(CENTER, CENTER)
         textSize(AREA_FONT_SIZE)
         # caso da área de referência 100% (cobertura == 1)
-        if self.cobertura == 1 and Prancha.DIAGRAMA:
+        if self.cobertura == 1 and modo_diagrama:
             text(Prancha.nome_prancha_atual(),
                  self.x + self.w / 2,
                  self.y + self.h - 20)
