@@ -130,7 +130,7 @@ def salva_png():
     png.copy(temp, x + 1, y + 1, w, h, 0, 0, w, h)
     png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%
     png.endDraw()
-    if Prancha.DIAGRAMA:
+    if modo_diagrama:
         salva_legenda_diagrama(path)
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
