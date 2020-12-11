@@ -10,18 +10,12 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 """
 
 # [WIP] Modo diagrama
-#   [X] SALVAR DIAGRAMA COM ÁREA TRANSLÚCIDA
 #   [X] salvar legenda cores -> categorias
 #   [ ] patterns PB para legenda de categorias
-#   [ ] salvar diagrama de todas as pranchas...
-# [X] CSV especial com tags por categoria
-# [X] Travar ediçao do 100%
-# [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
+#   [X] salvar diagrama de todas as pranchas...
+# [WIP] Retângulos rotacionados (em outro branch)
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
-# [-] Modo ZOOM - não sei se vou fazer
-# [X] Melhor suporte a fullScreen()
 # [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
-# [X] Não salva sessão, depois de carregar imagens, muda aviso de imagens carregando, arruma epxort PNG
 
 from __future__ import unicode_literals
 
@@ -40,16 +34,22 @@ def setup():
 
 def draw():
     background(200)
+    # Elementos de interface/menu
     interface.display_botoes(DEBUG)
+    # Nome da prancha atual
     Prancha.display_nome_atual()
+    # Mostra imagem da prancha (se não estiver no modo digagrama)
     if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
+    # Desenha as áreas anotadas        
     Prancha.display_areas_atual(mousePressed)
+    # Tratamento do flag de exportar todas as pranchas
     if interface.exportar_tudo:   
         salva_png()
         interface.prox_prancha()  # next from last is 0
         if Prancha.i_atual == 0:  # it will not be exported
             interface.exportar_tudo = False
+    # Textos de aviso
     Prancha.avisos()
     
 def mousePressed():
