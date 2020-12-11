@@ -19,7 +19,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [X] NÃO CARREGA IMAGENS TODAS NA MEMORIA
 # [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 # [-] Modo ZOOM - não sei se vou fazer
-# [X] Melhor suporte a fullScreen() 
+# [X] Melhor suporte a fullScreen()
 # [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
 # [X] Não salva sessão, depois de carregar imagens, muda aviso de imagens carregando, arruma epxort PNG
 
@@ -41,7 +41,7 @@ def draw():
     background(200)
     interface.display_botoes(DEBUG)
     Prancha.display_nome_atual()
-    if not Prancha.DIAGRAMA:
+    if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
     Prancha.display_areas_atual(mousePressed)
     Prancha.avisos()
@@ -54,8 +54,9 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
-    
+
 def stop():
-    r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
+    r = interface.yes_no_pane(
+        "Fechando a ferramenta!", "Quer salvar a sessão?")
     if r == 0:
         salva_sessao()

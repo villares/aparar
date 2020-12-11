@@ -112,7 +112,8 @@ def salva_png():
     Inicialmente salva apenas imagem da "Prancha atual,
     no modo normal de edição ou modo diagrama.
     """
-    diagrama = "diagrama-" if Prancha.DIAGRAMA else "imagem-"
+    modo_diagrama = interface.modo_ativo == interface.DIAGR
+    diagrama = "diagrama-" if modo_diagrama else "imagem-"
     nome_arquivo = diagrama + Prancha.nome_prancha_atual() + ".png"
     path = join(Prancha.path_sessao, 'imagens-diagramas')
     path_arquivo = join(path, nome_arquivo)
