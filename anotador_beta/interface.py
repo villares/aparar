@@ -17,7 +17,7 @@ SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng t[o]das"
-SALVA_TODAS_PNG = "o", "salvar todas png"
+SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 DIAGR = "d", "mostra [d]iagrama"
 
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"

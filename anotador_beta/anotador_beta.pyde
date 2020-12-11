@@ -28,7 +28,8 @@ from __future__ import unicode_literals
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import imagens, adicionar_imagens, salva_sessao
+from arquivos import adicionar_imagens, salva_sessao # necessário para callbacks!
+from arquivos import imagens, salva_png
 
 DEBUG = False
 
@@ -44,7 +45,14 @@ def draw():
     if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
     Prancha.display_areas_atual(mousePressed)
+    if interface.exportar_tudo:
+        salva_png()
+        interface.prox_prancha()
+        if Prancha.i_atual == 0:
+            interface.exportar_tudo = False
+    
     Prancha.avisos()
+    
 
 def mousePressed():
     interface.mouse_pressed(mouseButton)
