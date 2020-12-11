@@ -61,6 +61,10 @@ def mouseDragged():
 def keyPressed():
     interface.key_pressed(key, keyCode)
 
+def mouseWheel(e):
+    interface.mouse_wheel(e)    
+
+
 def stop():
     r = interface.yes_no_pane(
         "Fechando a ferramenta!", "Quer salvar a sessão?")
