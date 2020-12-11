@@ -20,9 +20,7 @@ class Area:
         self.over = False
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
-        self.tags = deepcopy(Area.tags)
         self.tags_state = setup_terms_state(Area.tags)  # *
-        self.categorias = deepcopy(Area.categorias)
         self.categorias_state = setup_terms_state(Area.categorias)  # *
         self.cat_selected = ""
         self.scat_selected = None
@@ -30,7 +28,7 @@ class Area:
 
     def update(self):
         # atualiza qual categoria desta área
-        self.cat_selected = active_term(self.categorias)
+        self.cat_selected = active_term_state(self.categorias_state)
         # atualiza, se tiver, supercategoria (categoria-prefixo)
         sep_pos = self.cat_selected.find("-")
         if sep_pos > 0:
@@ -38,7 +36,7 @@ class Area:
         else:
             self.scat_selected = None
         # atualiza lista de tags que estão selecionados
-        self.tags_selected = active_term(self.tags, all=True)
+        self.tags_selected = active_term_state(self.tags_state, all=True)
 
     def display(self, mp):
         self.update()
@@ -52,8 +50,8 @@ class Area:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
-                draw_terms(self.categorias)
-                draw_terms(self.tags)
+                draw_terms(Area.categorias, self.categorias_state)
+                draw_terms(Area.tags, self.tags_state)
         elif self.over and self.cobertura != 1:  # not mp: # and :
             strokeWeight(5)
             self.over = False
@@ -102,8 +100,8 @@ class Area:
 
     def cat_and_tag_selection(self):
         if self.cobertura != 1:  # menos para a àrea de ref. 100%
-            select_cat(self.categorias)
-            select_tag(self.tags)
+            select_cat(Area.categorias, self.categorias_state)
+            select_tag(Area.tags, self.tags_state)
 
     def mouse_over(self):
         return (self.x < mouseX < self.x + self.w
