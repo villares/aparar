@@ -9,7 +9,7 @@ from planilhas import gera_csv, gera_csv2
 
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
-rodape = 55
+rodape = 100
 MIN_SIZE = 20
 # menu
 LOAD_PRANCHAS = "i", "carregar [i]magens"
