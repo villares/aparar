@@ -76,15 +76,6 @@ def select_cat(terms, terms_state):
                         terms_state[other] = False
                     terms_state[term] = True
 
-# def active_term(terms, all=False):
-    # if not all:
-    #     for term in terms:
-    #         if terms[term]['state']:
-    #             return term
-    #     return ""
-    # else:
-    #     return [term for term in terms if terms[term]['state']]
-
 def active_term_state(terms_state, all=False):
     if not all:
         for term in terms_state.keys():
