@@ -22,7 +22,7 @@ from __future__ import unicode_literals
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import imagens, adicionar_imagens, salva_sessao
+from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
 
 DEBUG = False
 
