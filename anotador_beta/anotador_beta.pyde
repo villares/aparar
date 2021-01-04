@@ -14,7 +14,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #   [ ] patterns PB para legenda de categorias
 #   [X] salvar diagrama de todas as pranchas...
 #   [X] Retângulos rotacionados 
-#   [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
+#   [] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
 #   [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
 
 from __future__ import unicode_literals
