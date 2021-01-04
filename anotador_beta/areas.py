@@ -41,8 +41,8 @@ class Area:
 
     def display(self, mp):
         self.update()
-        modo_anotativo = interface.modo_ativo in (
-            interface.EDITA, interface.CRIAR)
+        modo_anotativo = (interface.modo_ativo == interface.EDITA or
+                          interface.modo_ativo == interface.CRIAR)
         modo_diagrama = interface.modo_ativo == interface.DIAGR
         pushStyle()
         textSize(CAT_FONT_SIZE)
@@ -61,7 +61,7 @@ class Area:
         # pega dados da categoria que está selecionada (se houver)
         cat = Area.categorias.get(self.cat_selected)
         if cat and modo_diagrama:
-            fill(cat['cor'])
+            fill(Area.calc_color(self.cat_selected))
             noStroke()
         else:  # senão usa cinza translúcido padrão
             fill(0, 20)
@@ -112,12 +112,13 @@ class Area:
         return point_inside_poly(mouseX, mouseY, rp)
 
     @classmethod
-    def calc_color(cat_name):
+    def calc_color(cls, cat_name):
         cat = cls.categorias.get(cat_name)
         if cat:
-            c = cat['cor']
-            return color(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
-
+            h = cat['id_cor']
+            with push():
+                colorMode(HSB)
+                return color(h, 128 + 128 * (h % 2), 255 - 128 * (h % 3), 155)
 
 def point_inside_poly(x, y, points):
     # ray-casting algorithm based on

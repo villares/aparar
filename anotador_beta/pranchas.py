@@ -13,8 +13,6 @@ class Prancha:
     avisos_timer = 0
     avisos_texto = ""
 
-    __slots__ = ['areas', 'ida', 'idb', 'idc', 'rot']
-
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
@@ -25,12 +23,12 @@ class Prancha:
         nome = self.nome.replace("-", "_")
         sep_pos = nome.find("_")
         if sep_pos > 0:
-            self.ida = nome[:sep_pos]    # AAA ou AAAA
-            self.idb = nome[sep_pos + 1:sep_pos + 4]   # BBB
+            self.ida = nome[:sep_pos]                 # AAA ou AAAA
+            self.idb = nome[sep_pos + 1:sep_pos + 4]  # BBB
             self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
         else:
             if nome != "000":
-                prinln(nome + " (nome da imagem não está no padrão)")
+                println(nome + " (nome da imagem não está no padrão)")
             self.ida = self.idb = self.idc = nome
 
     def id_a_b(self):
@@ -90,12 +88,6 @@ class Prancha:
         return cls.pranchas[cls.i_atual].nome
 
     @classmethod
-    def img_prancha_atual(cls, imagens):
-        """devolve imagem na prancha atual ou None"""
-        # return imagens.get(cls.nome_prancha_atual().lower())
-        return interface.imagem_prancha_atual
-
-    @classmethod
     def load_img_prancha_atual(cls, imagens):
         """devolve imagem na prancha atual ou None"""
         path_img = imagens.get(cls.nome_prancha_atual().lower())
@@ -106,7 +98,7 @@ class Prancha:
 
     @classmethod
     def display_imagem_atual(cls, imagens):
-        img, rot, fator = cls.imagem_rot_fator_atual(imagens)
+        img, rot, fator = cls.imagem_rot_fator_atual()
         if img:
             image_rot(img, rot, interface.OX, interface.OY,
                       img.width * fator, img.height * fator)
@@ -114,8 +106,8 @@ class Prancha:
             cls.avisos("IMAGEM NÃO CARREGADA")
 
     @classmethod
-    def imagem_rot_fator_atual(cls, imagens):
-        img = cls.img_prancha_atual(imagens)
+    def imagem_rot_fator_atual(cls):
+        img = interface.imagem_prancha_atual
         if img:
             rot = cls.pranchas[cls.i_atual].rot
             fator = cls.calc_fator(img, rot == 1 or rot == 3)

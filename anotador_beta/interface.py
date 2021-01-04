@@ -109,7 +109,6 @@ def salva_todas_png():
     else:
         Prancha.avisos("Não há pranchas para exportar.")
 
-
 def mouse_over(b):
     x, y, w, h = botoes[b]
     return (x < mouseX < x + w and y < mouseY < y + h)
@@ -249,7 +248,7 @@ def volta_prancha():
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
-    img, rot, fator = Prancha.imagem_rot_fator_atual(imagens)
+    img, rot, fator = Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
         pa.areas[0] = Area(
             OX, OY, img.height * fator, img.width * fator)  # INVERTED
