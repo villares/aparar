@@ -27,6 +27,7 @@ class Area:
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
+        self.rotation = 0
 
     def update(self):
         # atualiza qual categoria desta área
@@ -75,14 +76,12 @@ class Area:
                 stroke(0)
                 strokeWeight(3)
         # desenha o retângulo da área
-        rect(self.x, self.y, self.w, self.h)
+        push()
+        translate(self.x + self.w / 2, self.y + self.h / 2)
+        rotate(self.rotation)
+        rect(-self.w / 2, -self.h / 2, self.w, self.h)
+        pop()
         fill(0)  # textos da área em preto
-        # push()
-        # translate(self.x + self.w / 2, self.y + self.h / 2)
-        # rotate(self.rotation)
-        # rect(-self.w / 2, -self.h / 2, self.w, self.h)
-        # pop()
-        # fill(0)  # textos da área em preto
         if not modo_diagrama:
             text(self.cat_selected,
                  self.x + 10,
@@ -106,8 +105,13 @@ class Area:
             select_tag(self.tags)
 
     def mouse_over(self):
-        return (self.x < mouseX < self.x + self.w
-                and self.y < mouseY < self.y + self.h)
+        rp = rect_points(self.x + self.w / 2,
+                         self.y + self.h / 2,
+                         self.w, self.h,
+                         mode=CENTER,
+                         angle=self.rotation
+                         )
+        return point_inside_poly(mouseX, mouseY, rp)
 
     @classmethod
     def calc_color(cat_name):
@@ -115,3 +119,37 @@ class Area:
         if cat:
             c = cat['cor']
             return color(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
+
+
+def point_inside_poly(x, y, points):
+    # ray-casting algorithm based on
+    # https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+    inside = False
+    for i, p in enumerate(points):
+        pp = points[i - 1]
+        xi, yi = p
+        xj, yj = pp
+        intersect = ((yi > y) != (yj > y)) and (
+            x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+        if intersect:
+            inside = not inside
+    return inside
+
+def rect_points(ox, oy, w, h, mode=CORNER, angle=None):
+    if mode == CENTER:
+        x, y = ox - w / 2.0, oy - h / 2.0
+    else:
+        x, y = ox, oy
+    points = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+    if angle is None:
+        return points
+    else:
+        return [rotate_point((x, y), angle, (ox, oy))
+                for x, y in points]
+
+def rotate_point(*args):
+    (xp, yp), angle, (x0, y0) = args
+    x, y = xp - x0, yp - y0  # translate to origin
+    xr = x * cos(angle) - y * sin(angle)
+    yr = y * cos(angle) + x * sin(angle)
+    return (xr + x0, yr + y0)

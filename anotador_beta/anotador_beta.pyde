@@ -13,17 +13,16 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #   [X] salvar legenda cores -> categorias
 #   [ ] patterns PB para legenda de categorias
 #   [X] salvar diagrama de todas as pranchas...
-# [WIP] Retângulos rotacionados (em outro branch)
-# [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
-# [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
+#   [X] Retângulos rotacionados 
+#   [WIP] Separar estado das categorias/tags (terms_state) dos botões (terms) de forma a reduzir consumo de memória
+#   [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
 
 from __future__ import unicode_literals
 
 import interface
 from areas import Area
 from pranchas import Prancha
-from arquivos import adicionar_imagens, salva_sessao # necessário para callbacks!
-from arquivos import imagens, salva_png
+from arquivos import imagens, adicionar_imagens, salva_sessao
 
 DEBUG = False
 
@@ -51,7 +50,7 @@ def draw():
             interface.exportar_tudo = False
     # Textos de aviso
     Prancha.avisos()
-    
+
 def mousePressed():
     interface.mouse_pressed(mouseButton)
 
@@ -60,13 +59,11 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
-
+    
 def mouseWheel(e):
     interface.mouse_wheel(e)    
-
-
+    
 def stop():
-    r = interface.yes_no_pane(
-        "Fechando a ferramenta!", "Quer salvar a sessão?")
+    r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
     if r == 0:
         salva_sessao()
