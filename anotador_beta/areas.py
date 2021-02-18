@@ -92,7 +92,7 @@ class Area:
                  self.x + self.w / 2,
                  self.y + self.h - 20)
         else:
-            text("{:2.0%}".format(self.cobertura),
+            text("{:2.1%}".format(self.cobertura),
                  self.x + self.w / 2,
                  self.y + self.h - 20)
         popStyle()

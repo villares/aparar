@@ -21,11 +21,12 @@ class Prancha:
 
     def init_ids(self):
         nome = self.nome.replace("-", "_")
-        sep_pos = nome.find("_")
-        if sep_pos > 0:
-            self.ida = nome[:sep_pos]                 # AAA ou AAAA
-            self.idb = nome[sep_pos + 1:sep_pos + 4]  # BBB
-            self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
+        count_sep = self.nome.count("_")        
+        if count_sep >= 2:
+            ids = nome.split("_")
+            self.ida = nome[0]      # AAA ou qualquer número de caracteres antes do primeiro _
+            self.idb = nome[1]      # BBB ou qualquer número de caracteres antes do segundo _
+            self.idc = nome[2][:3]  # CCC (3 caracteres)
         else:
             if nome != "000":
                 println(nome + " (nome da imagem não está no padrão)")
@@ -165,8 +166,14 @@ class Prancha:
 
     @classmethod
     def desselect_all(cls):
-        for r in cls.get_areas_atual():
-            r.selected = False
+        for a in cls.get_areas_atual():
+            a.selected = False
+
+    @classmethod
+    def desselect_all_in_all(cls):
+        for p in cls.pranchas:
+            for a in p.areas:
+                a.selected = False
 
     @classmethod
     def avisos(cls, message=None):

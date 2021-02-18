@@ -71,9 +71,9 @@ def setup_interface():
                 SALVA_PNG: salva_png,
                 SALVA_TODAS_PNG: salva_todas_png,
                 PROX_PRANCHA: prox_prancha,
-                
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
+                ZOOM: abre_imagem_prancha_atual, 
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -99,10 +99,17 @@ def ask_salva_sessao():
 def gera_planilhas():
     gera_csv()
     gera_csv2()
-    
+  
+def abre_imagem_prancha_atual():
+    path_img = imagens.get(Prancha.nome_prancha_atual().lower())
+    print(path_img)
+    if path_img:        
+        launch(path_img)
+
 def salva_todas_png():
     global imagem_prancha_atual, exportar_tudo
     if len(Prancha.pranchas) > 1:
+        Prancha.desselect_all_in_all()
         Prancha.i_atual = 1
         imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens) 
         exportar_tudo = True
