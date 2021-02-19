@@ -20,9 +20,7 @@ class Area:
         self.over = False
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
-        self.tags = deepcopy(Area.tags)
         self.tags_state = setup_terms_state(Area.tags)  # *
-        self.categorias = deepcopy(Area.categorias)
         self.categorias_state = setup_terms_state(Area.categorias)  # *
         self.cat_selected = ""
         self.scat_selected = None
@@ -31,7 +29,7 @@ class Area:
 
     def update(self):
         # atualiza qual categoria desta área
-        self.cat_selected = active_term(self.categorias)
+        self.cat_selected = active_term_state(self.categorias_state)
         # atualiza, se tiver, supercategoria (categoria-prefixo)
         sep_pos = self.cat_selected.find("-")
         if sep_pos > 0:
@@ -39,12 +37,12 @@ class Area:
         else:
             self.scat_selected = None
         # atualiza lista de tags que estão selecionados
-        self.tags_selected = active_term(self.tags, all=True)
+        self.tags_selected = active_term_state(self.tags_state, all=True)
 
     def display(self, mp):
         self.update()
-        modo_anotativo = interface.modo_ativo in (
-            interface.EDITA, interface.CRIAR)
+        modo_anotativo = (interface.modo_ativo == interface.EDITA or
+                          interface.modo_ativo == interface.CRIAR)
         modo_diagrama = interface.modo_ativo == interface.DIAGR
         pushStyle()
         textSize(CAT_FONT_SIZE)
@@ -53,8 +51,8 @@ class Area:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
-                draw_terms(self.categorias)
-                draw_terms(self.tags)
+                draw_terms(Area.categorias, self.categorias_state)
+                draw_terms(Area.tags, self.tags_state)
         elif self.over and self.cobertura != 1:  # not mp: # and :
             strokeWeight(5)
             self.over = False
@@ -63,7 +61,7 @@ class Area:
         # pega dados da categoria que está selecionada (se houver)
         cat = Area.categorias.get(self.cat_selected)
         if cat and modo_diagrama:
-            fill(cat['cor'])
+            fill(Area.calc_color(self.cat_selected))
             noStroke()
         else:  # senão usa cinza translúcido padrão
             fill(0, 20)
@@ -94,15 +92,15 @@ class Area:
                  self.x + self.w / 2,
                  self.y + self.h - 20)
         else:
-            text("{:2.0%}".format(self.cobertura),
+            text("{:2.1%}".format(self.cobertura),
                  self.x + self.w / 2,
                  self.y + self.h - 20)
         popStyle()
 
     def cat_and_tag_selection(self):
         if self.cobertura != 1:  # menos para a àrea de ref. 100%
-            select_cat(self.categorias)
-            select_tag(self.tags)
+            select_cat(Area.categorias, self.categorias_state)
+            select_tag(Area.tags, self.tags_state)
 
     def mouse_over(self):
         rp = rect_points(self.x + self.w / 2,
@@ -114,12 +112,13 @@ class Area:
         return point_inside_poly(mouseX, mouseY, rp)
 
     @classmethod
-    def calc_color(cat_name):
+    def calc_color(cls, cat_name):
         cat = cls.categorias.get(cat_name)
         if cat:
-            c = cat['cor']
-            return color(c, 128 + 128 * (c % 2), 255 - 128 * (c % 3), 155)
-
+            h = cat['id_cor']
+            with push():
+                colorMode(HSB)
+                return color(h, 128 + 128 * (h % 2), 255 - 128 * (h % 3), 155)
 
 def point_inside_poly(x, y, points):
     # ray-casting algorithm based on

@@ -13,8 +13,6 @@ class Prancha:
     avisos_timer = 0
     avisos_texto = ""
 
-    __slots__ = ['areas', 'ida', 'idb', 'idc', 'rot']
-
     def __init__(self, nome):
         self.areas = []
         self.nome = nome       # AAA_BBB_CCCxxxxxx
@@ -23,15 +21,17 @@ class Prancha:
 
     def init_ids(self):
         nome = self.nome.replace("-", "_")
-        sep_pos = nome.find("_")
-        if sep_pos > 0:
-            self.ida = nome[:sep_pos]    # AAA ou AAAA
-            self.idb = nome[sep_pos + 1:sep_pos + 4]   # BBB
-            self.idc = nome[sep_pos + 5:sep_pos + 8]  # CCC
+        count_sep = self.nome.count("_")        
+        if count_sep >= 2:
+            ids = nome.split("_")
+            self.ida = ids[0]      # AAA ou qualquer número de caracteres antes do primeiro _
+            self.idb = ids[1]      # BBB ou qualquer número de caracteres antes do segundo _
+            self.idc = ids[2][:3]  # CCC (3 caracteres)
         else:
             if nome != "000":
-                prinln(nome + " (nome da imagem não está no padrão)")
-            self.ida = self.idb = self.idc = nome
+                println(nome + " (nome da imagem não está no padrão)")
+            self.ida = nome
+            self.idb = self.idc = "---"
 
     def id_a_b(self):
         return self.ida + "_" + self.idb
@@ -90,12 +90,6 @@ class Prancha:
         return cls.pranchas[cls.i_atual].nome
 
     @classmethod
-    def img_prancha_atual(cls, imagens):
-        """devolve imagem na prancha atual ou None"""
-        # return imagens.get(cls.nome_prancha_atual().lower())
-        return interface.imagem_prancha_atual
-
-    @classmethod
     def load_img_prancha_atual(cls, imagens):
         """devolve imagem na prancha atual ou None"""
         path_img = imagens.get(cls.nome_prancha_atual().lower())
@@ -106,7 +100,7 @@ class Prancha:
 
     @classmethod
     def display_imagem_atual(cls, imagens):
-        img, rot, fator = cls.imagem_rot_fator_atual(imagens)
+        img, rot, fator = cls.imagem_rot_fator_atual()
         if img:
             image_rot(img, rot, interface.OX, interface.OY,
                       img.width * fator, img.height * fator)
@@ -114,8 +108,8 @@ class Prancha:
             cls.avisos("IMAGEM NÃO CARREGADA")
 
     @classmethod
-    def imagem_rot_fator_atual(cls, imagens):
-        img = cls.img_prancha_atual(imagens)
+    def imagem_rot_fator_atual(cls):
+        img = interface.imagem_prancha_atual
         if img:
             rot = cls.pranchas[cls.i_atual].rot
             fator = cls.calc_fator(img, rot == 1 or rot == 3)
@@ -173,8 +167,14 @@ class Prancha:
 
     @classmethod
     def desselect_all(cls):
-        for r in cls.get_areas_atual():
-            r.selected = False
+        for a in cls.get_areas_atual():
+            a.selected = False
+
+    @classmethod
+    def desselect_all_in_all(cls):
+        for p in cls.pranchas:
+            for a in p.areas:
+                a.selected = False
 
     @classmethod
     def avisos(cls, message=None):

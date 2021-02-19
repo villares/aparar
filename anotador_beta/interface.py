@@ -71,9 +71,9 @@ def setup_interface():
                 SALVA_PNG: salva_png,
                 SALVA_TODAS_PNG: salva_todas_png,
                 PROX_PRANCHA: prox_prancha,
-                
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
+                ZOOM: abre_imagem_prancha_atual, 
                 }
 
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -99,16 +99,22 @@ def ask_salva_sessao():
 def gera_planilhas():
     gera_csv()
     gera_csv2()
-    
+  
+def abre_imagem_prancha_atual():
+    path_img = imagens.get(Prancha.nome_prancha_atual().lower())
+    print(path_img)
+    if path_img:        
+        launch(path_img)
+
 def salva_todas_png():
     global imagem_prancha_atual, exportar_tudo
     if len(Prancha.pranchas) > 1:
+        Prancha.desselect_all_in_all()
         Prancha.i_atual = 1
         imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens) 
         exportar_tudo = True
     else:
         Prancha.avisos("Não há pranchas para exportar.")
-
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
@@ -249,7 +255,7 @@ def volta_prancha():
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
-    img, rot, fator = Prancha.imagem_rot_fator_atual(imagens)
+    img, rot, fator = Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
         pa.areas[0] = Area(
             OX, OY, img.height * fator, img.width * fator)  # INVERTED

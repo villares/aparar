@@ -35,8 +35,8 @@ def gera_csv():
                 t_nova_linha.setString("BBB", prancha_atual[1])
                 t_nova_linha.setString("CCC", "TOTAL")
                 escreve_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
-                            categorias, t_cat_count, t_cobertura,
-                            tags, t_tag_count, linhas_iguais)
+                              categorias, t_cat_count, t_cobertura,
+                              tags, t_tag_count, linhas_iguais)
             prancha_atual = (prancha.ida, prancha.idb)
             linhas_iguais = 1
             reset_acumulador()
@@ -67,9 +67,9 @@ def gera_csv():
             t_tag_count.update(area.tags_selected)
 
         escreve_linha(nova_linha, super_cats, scat_count, scobertura,
-                    categorias, cat_count, cobertura,
-                    tags, tag_count)
-    print Prancha.path_sessao    
+                      categorias, cat_count, cobertura,
+                      tags, tag_count)
+    print Prancha.path_sessao
     file = join(Prancha.path_sessao, NOME_PLANILHA)
     saveTable(table, file)
     Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
@@ -90,8 +90,8 @@ def gera_csv2():
                 t_nova_linha.setString("BBB", prancha_atual[1])
                 t_nova_linha.setString("CCC", "TOTAL")
                 escreve_linha(t_nova_linha, super_cats, t_scat_count, t_scobertura,
-                            categorias, t_cat_count, t_cobertura,
-                            tags, t_tag_count, linhas_iguais)
+                              categorias, t_cat_count, t_cobertura,
+                              tags, t_tag_count, linhas_iguais)
             prancha_atual = (prancha.ida, prancha.idb)
             linhas_iguais = 1
             reset_acumulador()
@@ -122,8 +122,8 @@ def gera_csv2():
             t_tag_count.update(area.tags_selected)
 
         escreve_linha(nova_linha, super_cats, scat_count, scobertura,
-                    categorias, cat_count, cobertura,
-                    tags, tag_count)
+                      categorias, cat_count, cobertura,
+                      tags, tag_count)
 
         for i, area in enumerate(prancha.areas[1:], 1):
             nova_linha_area = table.addRow()
@@ -133,10 +133,12 @@ def gera_csv2():
             nova_linha_area.setInt("AREA", i)
             if area.cat_selected:
                 nova_linha_area.setInt(area.cat_selected + "_num", 1)
-                nova_linha.setFloat(area.cat_selected + "_area", area.cobertura)
+                nova_linha.setFloat(
+                    area.cat_selected + "_area", area.cobertura)
             if area.scat_selected:
                 nova_linha_area.setInt(area.scat_selected + "_num", 1)
-                nova_linha.setFloat(area.scat_selected + "_area", area.cobertura)
+                nova_linha.setFloat(
+                    area.scat_selected + "_area", area.cobertura)
             for tag in tags:
                 nova_linha_area.setInt(tag, (tag in area.tags_selected))
             # for scat in super_cats:
@@ -151,13 +153,13 @@ def gera_csv2():
     file = join(Prancha.path_sessao, NOME_PLANILHA2)
     saveTable(table, file)
     Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
-    
-    
+
+
 def cria_colunas(table, expandida=False):
     table.addColumn("AAA")
     table.addColumn("BBB")
     table.addColumn("CCC")
-    if expandida:    
+    if expandida:
         table.addColumn("AREA")
 
     for cat in categorias:
@@ -168,10 +170,12 @@ def cria_colunas(table, expandida=False):
         table.addColumn(scat + "_area")
     for tag in tags:
         table.addColumn(tag)
-    
-def escreve_linha(nova_linha, super_cats, scat_count, scobertura,
-                categorias, cat_count, cobertura,
-                tags, tag_count, num_pranchas=1):
+
+def escreve_linha(nova_linha,
+                  super_cats, scat_count, scobertura,
+                  categorias, cat_count, cobertura,
+                  tags, tag_count,
+                  num_pranchas=1):
     for scat in super_cats:
         nova_linha.setInt(scat + "_num", scat_count[scat])
         nova_linha.setFloat(scat + "_area", scobertura[scat] / num_pranchas)
@@ -180,7 +184,7 @@ def escreve_linha(nova_linha, super_cats, scat_count, scobertura,
         nova_linha.setFloat(cat + "_area", cobertura[cat] / num_pranchas)
     for tag in tags:
         nova_linha.setInt(tag, tag_count[tag])
-        
+
 def reset_acumulador():
     global t_cat_count, t_scat_count, t_tag_count, t_cobertura, t_scobertura
     t_cat_count = Counter()
