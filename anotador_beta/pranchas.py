@@ -24,13 +24,14 @@ class Prancha:
         count_sep = self.nome.count("_")        
         if count_sep >= 2:
             ids = nome.split("_")
-            self.ida = nome[0]      # AAA ou qualquer número de caracteres antes do primeiro _
-            self.idb = nome[1]      # BBB ou qualquer número de caracteres antes do segundo _
-            self.idc = nome[2][:3]  # CCC (3 caracteres)
+            self.ida = ids[0]      # AAA ou qualquer número de caracteres antes do primeiro _
+            self.idb = ids[1]      # BBB ou qualquer número de caracteres antes do segundo _
+            self.idc = ids[2][:3]  # CCC (3 caracteres)
         else:
             if nome != "000":
                 println(nome + " (nome da imagem não está no padrão)")
-            self.ida = self.idb = self.idc = nome
+            self.ida = nome
+            self.idb = self.idc = "---"
 
     def id_a_b(self):
         return self.ida + "_" + self.idb
