@@ -10,31 +10,32 @@ from planilhas import gera_csv, gera_csv2
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
 rodape = 100
-MIN_SIZE = 20
-# menu
+
+MIN_SIZE = 20  # tamanho mínimo de uma área em pixels
+exportar_tudo = False
+imagem_prancha_atual = None
+
+# menu "ARQUIVO"
 LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng/t[o]das"
 SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
-DIAGR = "d", "mostra [d]iagrama"
 
+# menu "alto da prancha"
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
-ROT_PRANCHA = "9", "girar prancha [9]0°"
+ROT_PRANCHA = "9", "[9] girar prancha 90°"
+ZOOM = "z", "[z] abrir imagem original"  
 
-# modos / estados de operação da ferramenta
+# menu de modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar áreas"
 EDITA = "e", "[e]ditar áreas"
 ED100 = "t", "edi[t]ar 100%"
-REMOV = "r", "[r]emover áreas" # desabilitado
-ZOOM = "z", "[z]oom"  # não implementado
-
-modos = (EDITA, ED100, REMOV, CRIAR, ZOOM, DIAGR)
+DIAGR = "d", "mostra [d]iagrama"
+modos = (EDITA, ED100, CRIAR, DIAGR)
 modo_ativo = CRIAR
-exportar_tudo = False
-imagem_prancha_atual = None
 
 def setup_interface():
     cf, tf = "categorias.txt", "tags.txt"
@@ -62,6 +63,7 @@ def setup_interface():
         VOLTA_PRANCHA: (200, 20, 140, 20),
         PROX_PRANCHA: (390, 20, 140, 20),
         ROT_PRANCHA: (580, 20, 140, 20),
+        ZOOM: (780, 20, 140, 20)
     }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
@@ -102,7 +104,7 @@ def gera_planilhas():
   
 def abre_imagem_prancha_atual():
     path_img = imagens.get(Prancha.nome_prancha_atual().lower())
-    print(path_img)
+    # print(path_img)
     if path_img:        
         launch(path_img)
 
@@ -118,7 +120,7 @@ def salva_todas_png():
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
-    return (x < mouseX < x + w and y < mouseY < y + h)
+    return x < mouseX < x + w and y < mouseY < y + h
 
 def display_botoes(DEBUG=False):
     textSize(18)

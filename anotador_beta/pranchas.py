@@ -38,8 +38,6 @@ class Prancha:
 
     def display_areas(self, mp):
         ma = interface.modo_ativo
-        if ma == interface.REMOV:
-            Prancha.desselect_all()
         for i, a in reversed(list(enumerate(self.areas))):
             if a.mouse_over() and ma != interface.CRIAR:
             # mouse sobre, exceto no modo CRIAR
@@ -83,7 +81,7 @@ class Prancha:
         else:
             fill(0)
             texto = "pranchas carregadas: {}".format(total)
-        text(texto, 780, 30)
+        text(texto, 880, 30)
 
     @classmethod
     def nome_prancha_atual(cls):
