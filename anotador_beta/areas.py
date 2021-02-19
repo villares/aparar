@@ -41,7 +41,7 @@ class Area:
                           interface.modo_ativo == interface.CRIAR)
         modo_diagrama = interface.modo_ativo == interface.DIAGR
         pushStyle()
-        textSize(interface.CAT_FONT_SIZE)
+        textSize(interface.TERM_FONT_SIZE)
         stroke(0)
         if self.selected and self.cobertura != 1:
             stroke(200, 0, 0)

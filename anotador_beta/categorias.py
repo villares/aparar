@@ -11,7 +11,7 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
                   
     def pos(i, t, lw, lh=25, wgap=20, hgap=2):
         # set pos.x, pos.xo, pox.y before you call this
-        textSize(interface.CAT_FONT_SIZE)
+        textSize(interface.TERM_FONT_SIZE)
         pos.tw = textWidth(t)
         if pos.x + pos.tw > lw:
             pos.x = pos.xo

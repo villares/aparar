@@ -24,7 +24,7 @@ MENU_SELECT_W = 175
 MENU_SELECT_H = 20
 
 AREA_FONT_SIZE = 18
-CAT_FONT_SIZE = 14
+TERM_FONT_SIZE = 14
 
 # menu "ARQUIVO"
 LOAD_PRANCHAS = "i", "carregar [i]magens"
@@ -56,11 +56,11 @@ def setup_interface():
     Prancha.screen_height = height - (OY + rodape)
     Area.categorias = setup_terms(cf,                      # arquivo com nomes categorias
                                   MENU_OX, OY + MENU_V_SPACE * 13, # x_inicial, y_inicial
-                                  OX - 10, CAT_FONT_SIZE + 2)             # w, h
+                                  OX - 10, TERM_FONT_SIZE + 2)             # w, h
     Area.super_cats = find_super_cats(Area.categorias)
     Area.tags = setup_terms(tf,                            # arquivo com nomes dos tags
                             20 + OX, 4 + height - rodape,  # x_inicial, y_inicial
-                            width - 20, CAT_FONT_SIZE + 2, wgap=10)       # w, h, wgap: espaço entre tags 
+                            width - 20, TERM_FONT_SIZE + 2, wgap=10)       # w, h, wgap: espaço entre tags 
     
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
