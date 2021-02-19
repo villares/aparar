@@ -36,16 +36,13 @@ class Prancha:
     def id_a_b(self):
         return self.ida + "_" + self.idb
 
-    def display_areas(self, mp):
+    def display_areas(self, mp, DEBUG=False):
         ma = interface.modo_ativo
         for i, a in reversed(list(enumerate(self.areas))):
             if a.mouse_over() and ma != interface.CRIAR:
             # mouse sobre, exceto no modo CRIAR
                 if i != 0:  # exceto para 1° obj. Area
                     a.over = True
-                    if ma == interface.REMOV:
-                        a.selected = True  # destaque extra no REMOV
-                        break
                 elif ma == interface.EDITA:
                     # 1° obj. Area destaca com mouse over para MOVER
                     a.over = True
@@ -53,7 +50,7 @@ class Prancha:
 
         self.update()  # atualiza cálculo de áreas dos objetos Area
         for a in reversed(self.areas):
-            a.display(mp)
+            a.display(mp, DEBUG)
 
     def update(self):
         """Recalcule areas e % de cobertura dos obj. Area desta prancha."""
@@ -72,7 +69,7 @@ class Prancha:
         return [p.nome for p in cls.pranchas]
 
     @classmethod
-    def display_nome_atual(cls):
+    def display_nome_atual(cls, x, y):
         nome = cls.nome_prancha_atual()
         total = len(cls.pranchas) - 1  # home não conta!
         if nome != '000':  # prancha "home" teste
@@ -81,7 +78,7 @@ class Prancha:
         else:
             fill(0)
             texto = "pranchas carregadas: {}".format(total)
-        text(texto, 880, 30)
+        text(texto, x, y)
 
     @classmethod
     def nome_prancha_atual(cls):
@@ -156,8 +153,8 @@ class Prancha:
             print "no change"
 
     @classmethod
-    def display_areas_atual(cls, mp):
-        cls.pranchas[cls.i_atual].display_areas(mp)
+    def display_areas_atual(cls, mp, DEBUG):
+        cls.pranchas[cls.i_atual].display_areas(mp, DEBUG)
 
     @classmethod
     def get_areas_atual(cls):

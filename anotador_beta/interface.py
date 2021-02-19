@@ -15,6 +15,17 @@ MIN_SIZE = 20  # tamanho mínimo de uma área em pixels
 exportar_tudo = False
 imagem_prancha_atual = None
 
+MENU_OX = 20
+MENU_OY = 10
+MENU_V_SPACE = 30
+MENU_H_SPACE = 200
+MENU_TEXT_SIZE = 18
+MENU_SELECT_W = 175
+MENU_SELECT_H = 20
+
+AREA_FONT_SIZE = 18
+CAT_FONT_SIZE = 14
+
 # menu "ARQUIVO"
 LOAD_PRANCHAS = "i", "carregar [i]magens"
 SALVA_SESSAO = "s", "[s]alvar sessão"
@@ -26,7 +37,7 @@ SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 # menu "alto da prancha"
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
-ROT_PRANCHA = "9", "[9] girar prancha 90°"
+ROT_PRANCHA = "9", "[9] girar imagem 90°"
 ZOOM = "z", "[z] abrir imagem original"  
 
 # menu de modos / estados de operação da ferramenta
@@ -38,32 +49,37 @@ modos = (EDITA, ED100, CRIAR, DIAGR)
 modo_ativo = CRIAR
 
 def setup_interface():
+    global botoes, comandos, categorias, tags, imagem_prancha_atual
+    
     cf, tf = "categorias.txt", "tags.txt"
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Prancha.screen_height = height - (OY + rodape)
-
-    Area.categorias = setup_terms(cf, 20, 380, OX - 10, 16)
+    Area.categorias = setup_terms(cf,                      # arquivo com nomes categorias
+                                  MENU_OX, OY + MENU_V_SPACE * 13, # x_inicial, y_inicial
+                                  OX - 10, CAT_FONT_SIZE + 2)             # w, h
     Area.super_cats = find_super_cats(Area.categorias)
-    Area.tags = setup_terms(
-        tf, 20 + OX, 4 + height - rodape, width - 20, 14, wgap=10)
-    global botoes, comandos, categorias, tags, imagem_prancha_atual
+    Area.tags = setup_terms(tf,                            # arquivo com nomes dos tags
+                            20 + OX, 4 + height - rodape,  # x_inicial, y_inicial
+                            width - 20, CAT_FONT_SIZE + 2, wgap=10)       # w, h, wgap: espaço entre tags 
+    
     botoes = {
-        ("", "ARQUIVOS"): (20, 20, 140, 20),
-        LOAD_PRANCHAS: (20, 50, 140, 20),
-        SALVA_SESSAO: (20, 80, 140, 20),
-        LOAD_SESSAO: (20, 110, 140, 20),
-        GERA_CSV: (20, 140, 140, 20),
-        SALVA_PNG: (20, 170, 140, 20),
+        ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
+        LOAD_PRANCHAS:    (MENU_OX, OY + MENU_V_SPACE    , MENU_SELECT_W, MENU_SELECT_H),
+        SALVA_SESSAO:     (MENU_OX, OY + MENU_V_SPACE * 2, MENU_SELECT_W, MENU_SELECT_H),
+        LOAD_SESSAO:      (MENU_OX, OY + MENU_V_SPACE * 3, MENU_SELECT_W, MENU_SELECT_H),
+        GERA_CSV:         (MENU_OX, OY + MENU_V_SPACE * 4, MENU_SELECT_W, MENU_SELECT_H),
+        SALVA_PNG:        (MENU_OX, OY + MENU_V_SPACE * 5, MENU_SELECT_W, MENU_SELECT_H),
         # modos / estados de operação da ferramenta
-        ("", "ÁREAS"): (20, 240, 140, 20),
-        CRIAR: (20, 270, 140, 20),
-        EDITA: (20, 300, 140, 20),
-        ED100: (20, 330, 140, 20),
-        DIAGR: (20, 360, 140, 20),
-        VOLTA_PRANCHA: (200, 20, 140, 20),
-        PROX_PRANCHA: (390, 20, 140, 20),
-        ROT_PRANCHA: (580, 20, 140, 20),
-        ZOOM: (780, 20, 140, 20)
+        ("", "ÁREAS"):    (MENU_OX, OY + MENU_V_SPACE * 7, MENU_SELECT_W, MENU_SELECT_H),
+        CRIAR:            (MENU_OX, OY + MENU_V_SPACE * 8, MENU_SELECT_W, MENU_SELECT_H),
+        EDITA:            (MENU_OX, OY + MENU_V_SPACE * 9, MENU_SELECT_W, MENU_SELECT_H),
+        ED100:            (MENU_OX, OY + MENU_V_SPACE * 10, MENU_SELECT_W, MENU_SELECT_H),
+        DIAGR:            (MENU_OX, OY + MENU_V_SPACE * 11, MENU_SELECT_W, MENU_SELECT_H),
+        # menu superior ("menu da prancha")
+        VOLTA_PRANCHA: (OX,                    MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
+        PROX_PRANCHA:  (OX + MENU_H_SPACE,     MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
+        ROT_PRANCHA:   (OX + MENU_H_SPACE * 2, MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
+        ZOOM:          (OX + MENU_H_SPACE * 3, MENU_OY, MENU_SELECT_W, MENU_SELECT_H)
     }
     # dict de funções acionadas pelos botões
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
@@ -77,7 +93,7 @@ def setup_interface():
                 ROT_PRANCHA: rot_prancha,
                 ZOOM: abre_imagem_prancha_atual, 
                 }
-
+    # imagem da prancha "exemplo" ou "home"
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
     imagem_prancha_atual = img = loadImage(splash_img_file)
     fator = Prancha.calc_fator(img)
@@ -103,10 +119,14 @@ def gera_planilhas():
     gera_csv2()
   
 def abre_imagem_prancha_atual():
-    path_img = imagens.get(Prancha.nome_prancha_atual().lower())
-    # print(path_img)
-    if path_img:        
-        launch(path_img)
+    nome_prancha_lower = Prancha.nome_prancha_atual().lower()
+    if nome_prancha_lower != '000':
+        path_img = imagens.get(nome_prancha_lower)
+        # print(path_img)
+        if path_img:        
+            launch(path_img)
+    else:
+        Prancha.avisos("Só para pranchas de verdade!")
 
 def salva_todas_png():
     global imagem_prancha_atual, exportar_tudo
@@ -123,7 +143,9 @@ def mouse_over(b):
     return x < mouseX < x + w and y < mouseY < y + h
 
 def display_botoes(DEBUG=False):
-    textSize(18)
+    pushStyle()
+    textSize(MENU_TEXT_SIZE)
+    textAlign(LEFT, TOP)    
     for b in botoes:
         tecla, nome = b
         if b == modo_ativo:
@@ -136,47 +158,49 @@ def display_botoes(DEBUG=False):
         # desenha botão (texto)
         x, y, w, h = botoes[b]
         if DEBUG:
-            push()
+            pushStyle()
             noFill()
             rect(x, y, w, h)  # área clicável do texto dos botoes
-            pop()
-        # textAlign(LEFT, CENTER)
-        text(nome, x, y + h / 2)
+            popStyle()
+        text(nome, x, y)
+    # Nome da prancha atual
+    Prancha.display_nome_atual(OX + 4.5 * MENU_H_SPACE, MENU_OY)
+    pushStyle()
 
 def key_pressed(k, kc):
     global modo_ativo
     if k == CODED:
         k = kc
 
-    if k == DELETE or k == BACKSPACE:
+    if k in (DELETE, BACKSPACE):
        areas = Prancha.get_areas_atual()
        for a in areas[1:]:
          if a.selected:
             areas.remove(a) 
             break
 
-    for c in comandos:
-        tecla, nome = c
-        if tecla == k or str(tecla).upper() == k:
-            comandos[c]()
+    for comando in comandos.keys():
+        tecla, nome = comando
+        if k in (tecla, str(tecla).upper()):
+            comandos[comando]()
 
-    for m in modos:    
-        tecla, nome = m   
-        if tecla == k or str(tecla).upper() == k:
-            modo_ativo = m
+    for modo in modos:    
+        tecla, nome = modo   
+        if k in (tecla, str(tecla).upper()):
+            modo_ativo = modo
 
 
 def mouse_pressed(mb):
     # tratamento dos botões
     global modo_ativo
-    for b in botoes:
-        if mouse_over(b):
-            if b in modos:
-                modo_ativo = b
+    for botao in botoes:
+        if mouse_over(botao):
+            if botao in modos:
+                modo_ativo = botao
                 if modo_ativo != DIAGR:
                     Prancha.DIAGRAMA = False
-            if b in comandos:
-                comandos[b]()
+            if botao in comandos:
+                comandos[botao]()
             return  # evita que qualquer outra ação seja realizada
 
     areas = Prancha.get_areas_atual()

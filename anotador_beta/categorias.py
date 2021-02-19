@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import interface
+
 def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
 
     lines = loadStrings(arquivo)
@@ -9,6 +11,7 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
                   
     def pos(i, t, lw, lh=25, wgap=20, hgap=2):
         # set pos.x, pos.xo, pox.y before you call this
+        textSize(interface.CAT_FONT_SIZE)
         pos.tw = textWidth(t)
         if pos.x + pos.tw > lw:
             pos.x = pos.xo
@@ -41,14 +44,16 @@ def find_super_cats(cats):
             supers.add(cat[:sep_pos])
     return sorted(list(supers))
 
-
-
-def draw_terms(terms, terms_state=None):
+def draw_terms(terms, terms_state=None, DEBUG=False):
     for term in terms:
         x, y = terms[term]['x'], terms[term]['y']
         w, h = terms[term]['w'], terms[term]['h']
-        noFill()
-        # rect(x, y, w, h)
+        if DEBUG:
+            pushStyle()
+            noFill()
+            strokeWeight(1)
+            rect(x, y, w, h)
+            popStyle()
         selected = terms_state[term] # if terms_state else terms[term]['state']
         if selected:
             fill(200, 0, 0)
@@ -56,7 +61,7 @@ def draw_terms(terms, terms_state=None):
             fill(0)
         if mouse_over_term(term, terms):
             fill(200, 128 + 128 * selected, 128 + 128 * selected)
-        text(term, x, y + h * 0.75)
+        text(term, x, y)
 
 def select_tag(terms, terms_state):
     for term in terms:

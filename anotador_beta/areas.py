@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*
 from __future__ import unicode_literals
 
-from copy import deepcopy
 from categorias import *  # draw_terms, select_cat, select_tag, active_term
 from pranchas import Prancha
 import interface
-
-AREA_FONT_SIZE = 18
-CAT_FONT_SIZE = 11
 
 class Area:
 
@@ -39,20 +35,20 @@ class Area:
         # atualiza lista de tags que estão selecionados
         self.tags_selected = active_term_state(self.tags_state, all=True)
 
-    def display(self, mp):
+    def display(self, mp, DEBUG=False):
         self.update()
         modo_anotativo = (interface.modo_ativo == interface.EDITA or
                           interface.modo_ativo == interface.CRIAR)
         modo_diagrama = interface.modo_ativo == interface.DIAGR
         pushStyle()
-        textSize(CAT_FONT_SIZE)
+        textSize(interface.CAT_FONT_SIZE)
         stroke(0)
         if self.selected and self.cobertura != 1:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
-                draw_terms(Area.categorias, self.categorias_state)
-                draw_terms(Area.tags, self.tags_state)
+                draw_terms(Area.categorias, self.categorias_state, DEBUG)
+                draw_terms(Area.tags, self.tags_state, DEBUG)
         elif self.over and self.cobertura != 1:  # not mp: # and :
             strokeWeight(5)
             self.over = False
@@ -81,11 +77,12 @@ class Area:
         pop()
         fill(0)  # textos da área em preto
         if not modo_diagrama:
+            textAlign(LEFT, TOP)
             text(self.cat_selected,
                  self.x + 10,
-                 self.y + 20)
+                 self.y + 10)
         textAlign(CENTER, CENTER)
-        textSize(AREA_FONT_SIZE)
+        textSize(interface.AREA_FONT_SIZE)
         # caso da área de referência 100% (cobertura == 1)
         if self.cobertura == 1 and modo_diagrama:
             text(Prancha.nome_prancha_atual(),

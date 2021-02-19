@@ -17,7 +17,8 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #     o último campo vai ser truncado nos 3 caracteres iniciais  ..._CCCCXXXXX -> CCC
 # [X] Desselecionar todas as àreas em caso de exportação de todas as imagens ou diagramas 
 #     (Na exportação de um único PNG você continua precisando tirar manualmente a seleção)
-# [EXPERIMENTAL] tecla 'z' abre a imagem original da prancha (para dar zoom!)
+# [X] tecla 'z' abre a imagem original da prancha (para dar zoom!)
+# [ ] Conferir operação em telas menores com 1024 px de largura (talvez reduzir texto).
 
 from __future__ import unicode_literals
 
@@ -37,13 +38,11 @@ def draw():
     background(200)
     # Elementos de interface/menu
     interface.display_botoes(DEBUG)
-    # Nome da prancha atual
-    Prancha.display_nome_atual()
     # Mostra imagem da prancha (se não estiver no modo digagrama)
     if interface.modo_ativo != interface.DIAGR:
         Prancha.display_imagem_atual(imagens)
     # Desenha as áreas anotadas        
-    Prancha.display_areas_atual(mousePressed)
+    Prancha.display_areas_atual(mousePressed, DEBUG)
     # Tratamento do flag de exportar todas as pranchas
     if interface.exportar_tudo:   
         salva_png()
@@ -61,6 +60,8 @@ def mouseDragged():
 
 def keyPressed():
     interface.key_pressed(key, keyCode)
+    global DEBUG
+    if key == '!': DEBUG = not DEBUG
     
 def mouseWheel(e):
     interface.mouse_wheel(e)    
