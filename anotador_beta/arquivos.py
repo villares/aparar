@@ -5,7 +5,6 @@ import pickle
 from os import listdir
 from os.path import isfile, join
 from java.io import File
-from copy import deepcopy
 
 from pranchas import Prancha
 from areas import Area
