@@ -20,17 +20,17 @@ class Prancha:
         self.rot = 0
 
     def init_ids(self):
-        nome = self.nome.replace("-", "_")
-        count_sep = self.nome.count("_")        
+        nome_r = self.nome.replace("-", "_")
+        count_sep = nome_r.count("_")        
         if count_sep >= 2:
-            ids = nome.split("_")
+            ids = nome_r.split("_")
             self.ida = ids[0]      # AAA ou qualquer número de caracteres antes do primeiro _
             self.idb = ids[1]      # BBB ou qualquer número de caracteres antes do segundo _
             self.idc = ids[2][:3]  # CCC (3 caracteres)
         else:
             if nome != "000":
-                println(nome + " (nome da imagem não está no padrão)")
-            self.ida = nome
+                println(self.nome + " (nome da imagem não está no padrão)")
+            self.ida = self.nome
             self.idb = self.idc = "---"
 
     def id_a_b(self):
