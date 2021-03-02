@@ -197,8 +197,6 @@ def mouse_pressed(mb):
         if mouse_over(botao):
             if botao in modos:
                 modo_ativo = botao
-                if modo_ativo != DIAGR:
-                    Prancha.DIAGRAMA = False
             if botao in comandos:
                 comandos[botao]()
             return  # evita que qualquer outra ação seja realizada
