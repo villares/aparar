@@ -54,7 +54,7 @@ def draw_terms(terms, terms_state=None, DEBUG=False):
             strokeWeight(1)
             rect(x, y, w, h)
             popStyle()
-        selected = terms_state[term] # if terms_state else terms[term]['state']
+        selected = terms_state.get(term, False)
         if selected:
             fill(200, 0, 0)
         else:
@@ -66,12 +66,12 @@ def draw_terms(terms, terms_state=None, DEBUG=False):
 def select_tag(terms, terms_state):
     for term in terms:
         if mouse_over_term(term, terms):
-                terms_state[term] = not terms_state[term]
+                terms_state[term] = not terms_state.get(term, False)
 
 def select_cat(terms, terms_state):
     for term in terms:
         if mouse_over_term(term, terms):
-                if terms_state[term]:
+                if terms_state.get(term):
                     terms_state[term] = False
                 else:
                     for other in terms:
@@ -79,7 +79,7 @@ def select_cat(terms, terms_state):
                     terms_state[term] = True
 
 def active_term_state(terms_state, all=False):
-    all_active = [term for term in terms_state if terms_state[term]]
+    all_active = [term for term in terms_state if terms_state.get(term)]
     if all:
         return all_active
     else:
