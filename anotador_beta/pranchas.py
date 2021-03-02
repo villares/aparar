@@ -28,7 +28,7 @@ class Prancha:
             self.idb = ids[1]      # BBB ou qualquer número de caracteres antes do segundo _
             self.idc = ids[2][:3]  # CCC (3 caracteres)
         else:
-            if nome != "000":
+            if nome_r != "000":
                 println(self.nome + " (nome da imagem não está no padrão)")
             self.ida = self.nome
             self.idb = self.idc = "---"
