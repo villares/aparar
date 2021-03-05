@@ -37,7 +37,7 @@ GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng/t[o]das"
 SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 EDITA_CATS = ";", "editar categorias" # sem botão
-EDITA_TAGS = ":", "editar tagas" # sem botão
+EDITA_TAGS = ":", "editar tags" # sem botão
 
 
 # menu "alto da prancha"
@@ -132,14 +132,14 @@ def gera_planilhas():
     gera_csv2()
 
 def edita_categorias():
-    pass
-    # print Area.categorias
-    criar_categorias(Area.categorias)
+    nomes = '\n'.join(Area.categorias.keys())
+    resultado = multiline_pane(title=EDITA_CATS[1], default=nomes)
+    criar_categorias(resultado.split('\n'))
     
 def edita_tags():
-    pass
-    # print Area.tags
-    criar_tags(Area.tags)
+    nomes = '\n'.join(Area.tags.keys())
+    resultado = multiline_pane(title=EDITA_TAGS[1], default=nomes)
+    criar_tags(resultado.split('\n'))
 
 def salva_todas_png():
     """
