@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 import interface
 
-def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
-
-    lines = loadStrings(arquivo)
-    term_names = [term for term in lines
+def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
+    term_names = [term for term in strings
                   if term and not '(' in term
                   and not term.startswith('\t')]
                   
@@ -23,14 +22,14 @@ def setup_terms(arquivo, x, y, width_, lh, wgap=20, hgap=2):
     # x and y for first term             
     pos.x = pos.xo = x
     pos.y = y  
-    
-    terms = {term: {'x': pos(i, term, width_, lh, wgap, hgap),
-                    'y': pos.y,
-                    'w': pos.tw,
-                    'h': lh,
-                    'id_cor' : int(255.0 /  len(term_names) * i) 
-                    }
-             for i, term in enumerate(term_names)}
+    terms = OrderedDict()
+    for i, term in enumerate(term_names):
+        terms[term] =  {'x': pos(i, term, width_, lh, wgap, hgap),
+                        'y': pos.y,
+                        'w': pos.tw,
+                        'h': lh,
+                        'id_cor' : int(255.0 /  len(term_names) * i) 
+                       }
     return terms
 
 def setup_terms_state(terms):
