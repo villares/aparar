@@ -33,6 +33,9 @@ LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng/t[o]das"
 SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
+EDITA_CATS = ";", "editar categorias" # sem botão
+EDITA_TAGS = ":", "editar tagas" # sem botão
+
 
 # menu "alto da prancha"
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
@@ -81,7 +84,7 @@ def setup_interface():
         ROT_PRANCHA:   (OX + MENU_H_SPACE * 2, MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
         ZOOM:          (OX + MENU_H_SPACE * 3, MENU_OY, MENU_SELECT_W, MENU_SELECT_H)
     }
-    # dict de funções acionadas pelos botões
+    # dict de funções acionadas pelos botões ou pelo teclado
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
                 SALVA_SESSAO: ask_salva_sessao,
                 LOAD_SESSAO: ask_carrega_sessao,
@@ -92,6 +95,8 @@ def setup_interface():
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
                 ZOOM: abre_imagem_prancha_atual, 
+                EDITA_CATS: edita_cats,
+                EDITA_TAGS: edita_tags,
                 }
     # imagem da prancha "exemplo" ou "home"
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
@@ -117,18 +122,18 @@ def ask_salva_sessao():
 def gera_planilhas():
     gera_csv()
     gera_csv2()
-  
-def abre_imagem_prancha_atual():
-    nome_prancha_lower = Prancha.nome_prancha_atual().lower()
-    if nome_prancha_lower != '000':
-        path_img = imagens.get(nome_prancha_lower)
-        # print(path_img)
-        if path_img:        
-            launch(path_img)
-    else:
-        Prancha.avisos("Só para pranchas de verdade!")
+
+def edita_cats():
+    pass
+    
+def edita_tags():
+    pass
 
 def salva_todas_png():
+    """
+    Exporta em PNG todoas as pranhcas anotadas.
+    Em modo 'normal' ou em modo diagrama
+    """
     global imagem_prancha_atual, exportar_tudo
     if len(Prancha.pranchas) > 1:
         Prancha.desselect_all_in_all()
@@ -137,6 +142,37 @@ def salva_todas_png():
         exportar_tudo = True
     else:
         Prancha.avisos("Não há pranchas para exportar.")
+
+def prox_prancha():
+    global imagem_prancha_atual
+    Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+
+def volta_prancha():
+    global imagem_prancha_atual
+    Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+    
+def rot_prancha():
+    pa = Prancha.pranchas[Prancha.i_atual]
+    pa.rot = (pa.rot + 1) % 4
+    img, rot, fator = Prancha.imagem_rot_fator_atual()
+    if img and (rot == 1 or rot == 3):
+        pa.areas[0] = Area(
+            OX, OY, img.height * fator, img.width * fator)  # INVERTED
+    elif img:
+        pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
+
+def abre_imagem_prancha_atual():
+    """ comando Z: abre imagem original da prancha pelo sistema operacional ('launch()')"""
+    nome_prancha_lower = Prancha.nome_prancha_atual().lower()
+    if nome_prancha_lower != '000':
+        path_img = imagens.get(nome_prancha_lower)
+        # print(path_img)
+        if path_img:        
+            launch(path_img)
+    else:
+        Prancha.avisos("Só para pranchas de verdade!")
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
@@ -266,25 +302,7 @@ def mouse_wheel(e):
                 a.rotation += radians(e.getCount())
                 break
     
-def prox_prancha():
-    global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
 
-def volta_prancha():
-    global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
-    
-def rot_prancha():
-    pa = Prancha.pranchas[Prancha.i_atual]
-    pa.rot = (pa.rot + 1) % 4
-    img, rot, fator = Prancha.imagem_rot_fator_atual()
-    if img and (rot == 1 or rot == 3):
-        pa.areas[0] = Area(
-            OX, OY, img.height * fator, img.width * fator)  # INVERTED
-    elif img:
-        pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
         
 def yes_no_pane(title, message):
     # Sim é 0, Não é 1, fechar a janela é -1
@@ -293,3 +311,20 @@ def yes_no_pane(title, message):
                                          message,
                                          title,
                                          JOptionPane.YES_NO_OPTION)
+    
+    
+def multiline_pane(title='', default=''):
+    from javax.swing import JOptionPane, JScrollPane, JTextArea
+    ta = JTextArea(20, 20)
+    ta.setText(default)
+    result = JOptionPane.showConfirmDialog(None,
+                                           JScrollPane(ta),
+                                           title,
+                                           JOptionPane.OK_CANCEL_OPTION,
+                                           JOptionPane.PLAIN_MESSAGE,
+                                           # JOptionPane.QUESTION_MESSAGE
+                                           )
+    if result == JOptionPane.OK_OPTION:
+        return ta.getText()
+    else: 
+        return default
