@@ -79,7 +79,6 @@ def salva_sessao():
     print(mensagem)
 
 def carrega_sessao():
-    from categorias import find_super_cats
     try:
         with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "rb") as file:
             # TODO: Remover _ (Prancha.path_sessao) que ficou inútil
