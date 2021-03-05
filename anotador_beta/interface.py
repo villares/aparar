@@ -7,6 +7,9 @@ from categorias import setup_terms, draw_terms, select_cat, select_tag, find_sup
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, salva_png
 from planilhas import gera_csv, gera_csv2
 
+# arquivos com as categorias e tags iniciais
+CATEGORIAS_TXT, TAGS_TXT = "categorias.txt", "tags.txt"
+
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
 rodape = 100
@@ -53,18 +56,11 @@ modo_ativo = CRIAR
 
 def setup_interface():
     global botoes, comandos, categorias, tags, imagem_prancha_atual
-    
-    cf, tf = "categorias.txt", "tags.txt"
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Prancha.screen_height = height - (OY + rodape)
-    Area.categorias = setup_terms(cf,                      # arquivo com nomes categorias
-                                  MENU_OX, OY + MENU_V_SPACE * 13, # x_inicial, y_inicial
-                                  OX - 10, TERM_FONT_SIZE + 2)             # w, h
-    Area.super_cats = find_super_cats(Area.categorias)
-    Area.tags = setup_terms(tf,                            # arquivo com nomes dos tags
-                            20 + OX, 4 + height - rodape,  # x_inicial, y_inicial
-                            width - 20, TERM_FONT_SIZE + 2, wgap=10)       # w, h, wgap: espaço entre tags 
-    
+    criar_categorias()
+    criar_tags()
+        
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
         LOAD_PRANCHAS:    (MENU_OX, OY + MENU_V_SPACE    , MENU_SELECT_W, MENU_SELECT_H),
@@ -95,7 +91,7 @@ def setup_interface():
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
                 ZOOM: abre_imagem_prancha_atual, 
-                EDITA_CATS: edita_cats,
+                EDITA_CATS: edita_categorias,
                 EDITA_TAGS: edita_tags,
                 }
     # imagem da prancha "exemplo" ou "home"
@@ -108,6 +104,18 @@ def setup_interface():
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
+def criar_categorias(strings=None):
+    strings = strings or loadStrings(CATEGORIAS_TXT)
+    Area.categorias = setup_terms(strings,                  # nomes categorias
+                                  MENU_OX, OY + MENU_V_SPACE * 13, # x_inicial, y_inicial
+                                  OX - 10, TERM_FONT_SIZE + 2)             # w, h
+    Area.super_cats = find_super_cats(Area.categorias)
+    
+def criar_tags(strings=None):
+    strings = strings or loadStrings(TAGS_TXT)
+    Area.tags = setup_terms(strings,                    # nomes dos tags
+                            20 + OX, 4 + height - rodape,  # x_inicial, y_inicial
+                            width - 20, TERM_FONT_SIZE + 2, wgap=10)       # w, h, wgap: espaço entre tags 
 
 def ask_carrega_sessao():
     r = yes_no_pane("Atenção!", "Quer carregar o último estado salvo desta sessão?\n(descarta dados atuais não salvos)")
@@ -123,11 +131,15 @@ def gera_planilhas():
     gera_csv()
     gera_csv2()
 
-def edita_cats():
+def edita_categorias():
     pass
+    # print Area.categorias
+    criar_categorias(Area.categorias)
     
 def edita_tags():
     pass
+    # print Area.tags
+    criar_tags(Area.tags)
 
 def salva_todas_png():
     """
