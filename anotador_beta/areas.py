@@ -43,13 +43,13 @@ class Area:
         pushStyle()
         textSize(interface.TERM_FONT_SIZE)
         stroke(0)
-        if self.selected and self.cobertura != 1:
+        if self.selected and self.cobertura != 1 and not modo_diagrama:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
                 draw_terms(Area.categorias, self.categorias_state, DEBUG)
                 draw_terms(Area.tags, self.tags_state, DEBUG)
-        elif self.over and self.cobertura != 1:  # not mp: # and :
+        elif self.over and self.cobertura != 1 and not modo_diagrama:
             strokeWeight(5)
             self.over = False
         else:
