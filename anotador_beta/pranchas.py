@@ -150,7 +150,7 @@ class Prancha:
                     for tag in area.tags:
                         area.tags[tag]['y'] += dy
         else:
-            print "no change"
+            print("Não houve mudança no tamanho da tela")
 
     @classmethod
     def display_areas_atual(cls, mp, DEBUG):
