@@ -10,15 +10,14 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 """
 
 # [WIP] Modo diagrama
-#     [ ] patterns PB para legenda de categorias
-# [ ] opção de aumentar o rodapé para corrigir problema de pranchas longas!
-# [X] Aredondamento das áreas com 1 casa decimal: 0.5%  3.6% etc...
-# [X] Aceita códigos longos par IDs dos nomes de arquivo! AA...A_BB...B_CCC  
-#     o último campo vai ser truncado nos 3 caracteres iniciais  ..._CCCCXXXXX -> CCC
-# [X] Desselecionar todas as àreas em caso de exportação de todas as imagens ou diagramas 
-#     (Na exportação de um único PNG você continua precisando tirar manualmente a seleção)
-# [X] tecla 'z' abre a imagem original da prancha (para dar zoom!)
+#     [ ] Patterns PB para legenda de categorias
+# [ ] Opção de aumentar o rodapé para corrigir problema de pranchas longas!
 # [ ] Conferir operação em telas menores com 1024 px de largura (talvez reduzir texto).
+# [WIP] Editar tags e categorias ("termos")
+#     [X] Sessão agora salva tags e categorias
+#     [/] Interface com janela para editar nomes (já permite acrescentar termos)
+#     [ ] Renomear termo (procurar aplicações do termo nas Areas)
+#     [ ] Remover termo (remover aplicações)
 
 from __future__ import unicode_literals
 
