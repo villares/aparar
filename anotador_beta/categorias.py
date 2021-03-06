@@ -45,14 +45,13 @@ def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
     # x and y for first term             
     pos.x = pos.xo = x
     pos.y = y  
-    terms = OrderedDict()
-    for i, term in enumerate(term_names):
-        terms[term] =  {'x': pos(i, term, width_, lh, wgap, hgap),
-                        'y': pos.y,
-                        'w': pos.tw,
-                        'h': lh,
-                        'id_cor' : int(255.0 /  len(term_names) * i) 
-                       }
+    terms = OrderedDict((term, {'x': pos(i, term, width_, lh, wgap, hgap),
+                                'y': pos.y,
+                                'w': pos.tw,
+                                'h': lh,
+                                'id_cor': int(255.0 /  len(term_names) * i) 
+                               })
+                         for i, term in enumerate(term_names))
     return terms
 
 def setup_terms_state(terms):
