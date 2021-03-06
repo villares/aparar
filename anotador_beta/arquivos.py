@@ -12,7 +12,8 @@ import interface
 
 imagens = {}  # dicionário contendo as imagens carregadas
 
-NOME_ARQ_SESSAO = "sessao_aparar_v20210104ire.pickle"
+NOME_ARQ_SESSAO = "sessao_aparar_v20210305.pickle"
+NOME_ARQ_SESSAO_LEGADO = "sessao_aparar_v20210104ire.pickle"
 
 def lista_imagens(dir=None):
     """
@@ -59,7 +60,7 @@ def adicionar_imagens(selection):
                 Prancha.avisos("carregando imagens")
                 img = loadImage(file_path)
                 img_name = file_name.split('.')[0]
-                # imagens[img_name.lower()] = img  #file_path
+                # imagens[img_name.lower()] = img  # file_path
                 imagens[img_name.lower()] = file_path
                 fator = Prancha.calc_fator(img)
                 if not Prancha.in_pranchas(img_name):
@@ -71,27 +72,38 @@ def adicionar_imagens(selection):
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
-        # TODO: Remover Prancha.path_sessao que ficou inútil
-        sessao = (Prancha.pranchas, Prancha.path_sessao, Prancha.screen_height)
+        # Cats e tags entraram no antigo slot de Prancha.path_sessao no Pickle!
+        sessao = (Prancha.pranchas, (Area.categorias, Area.tags), Prancha.screen_height)
         pickle.dump(sessao, file)
     mensagem = "sessão salva em …" + unicode(Prancha.path_sessao)[-40:]
     Prancha.avisos(mensagem)
     print(mensagem)
 
 def carrega_sessao():
+    ARQ_SESSAO = NOME_ARQ_SESSAO 
+    if isfile(join(Prancha.path_sessao, NOME_ARQ_SESSAO)):
+        PATH_ARQ_SESSAO = join(Prancha.path_sessao, NOME_ARQ_SESSAO)
+    else:
+        PATH_ARQ_SESSAO = join(Prancha.path_sessao, NOME_ARQ_SESSAO_LEGADO)        
     try:
-        with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "rb") as file:
-            # TODO: Remover _ (Prancha.path_sessao) que ficou inútil
-            Prancha.pranchas, _, Prancha.screen_height = pickle.load(file)
+        with open(PATH_ARQ_SESSAO, "rb") as file:
+            Prancha.pranchas, cats_e_tags, Prancha.screen_height = pickle.load(file)
             Prancha.update_for_screen_change()
             Prancha.update_for_name_change()
-            Prancha.avisos("sessão carregada")
+            if cats_e_tags != Prancha.path_sessao and len(cats_e_tags) == 2: 
+                # compatibilidade com arquivos antigos!
+                Area.categorias, Area.tags = cats_e_tags
+                print("Categorias e tags carregados da sessão salva!")
+            mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
+            Prancha.avisos(mensagem)
+            print(mensagem)
+
             return True
     except Exception as e:
         # pode ser que não havia sessão ou outro erro...
         Prancha.avisos("não foi carregada uma sessão salva")
-        print "Se não imprimir 'Erro N:', pode ser bug (não é File IO) tente debug sem call-back!"
-        print("Erro ({0}): {1}".format(e.errno, e.strerror))
+        print "Deve imprimir 'Erro (File IO)', senão tem algo errado!"
+        print("Erro ({})".format(e))
         return False
 
 def salva_png():
