@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from pranchas import Prancha
 from areas import Area
-from categorias import criar_categorias, criar_tags
+from termos import criar_categorias, criar_tags
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, salva_png
 from planilhas import gera_csv, gera_csv2
 
