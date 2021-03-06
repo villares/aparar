@@ -172,15 +172,33 @@ class Prancha:
                 a.selected = False
 
     @classmethod
-    def avisos(cls, message=None):
+    def altera_categoria(cls, categoria, nova_cat):
+        # renomeia/remove categorias nas anotacoes
+        for p in cls.pranchas:
+            for a in p.areas:
+               Prancha.altera_termo(a.categorias_state, tag, ntag)      
 
+    @classmethod
+    def altera_tag(cls, tag, ntag):
+        # renomeia/remove tag nas anotacoes
+        for p in cls.pranchas:
+            for a in p.areas:
+               Prancha.altera_termo(a.tags_state, tag, ntag)      
+ 
+    @staticmethod
+    def altera_termo(dicionario, termo, novo_termo):
+        # renomeia/remove categorias/tag nos estados
+        estado_atual = self.dicionario.get(termo, None) # apaga a categoria antiga 
+        if (estado_atual is not None) and novo_termo:
+            # a categoria/tag existia (senão não faz nada) e o novo não é "" (vazio ou None)
+            dicionario[novo_termo] = estado_atual  # passa o estado do antigo
+                             
+                                                         
+    @classmethod
+    def avisos(cls, message=None):
         if message and cls.avisos_timer == 0:
             cls.avisos_texto = message
             cls.avisos_timer = millis()
-        # elif cls.carregando:
-        #     cls.avisos_texto = "CARREGANDO IMAGENS"
-        # cls.avisos_timer = millis()
-        # cls.carregando = False
 
         if millis() - cls.avisos_timer > 1200:
             cls.avisos_texto = t = ""
