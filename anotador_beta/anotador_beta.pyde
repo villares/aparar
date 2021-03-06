@@ -14,6 +14,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 # [ ] Opção de aumentar o rodapé para corrigir problema de pranchas longas!
 # [ ] Conferir operação em telas menores com 1024 px de largura (talvez reduzir texto).
 # [WIP] Editar tags e categorias ("termos")
+# ****[ ] Areas com uma categoria/tags que foram removidos quebram a exportação de planiha!!! ****
 #     [X] Sessão agora salva tags e categorias
 #     [/] Interface com janela para editar nomes (já permite acrescentar termos)
 #     [ ] Renomear termo (procurar aplicações do termo nas Areas)
