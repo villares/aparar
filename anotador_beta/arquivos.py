@@ -10,7 +10,7 @@ from pranchas import Prancha
 from areas import Area
 import interface
 
-imagens = {}  # dicionário contendo as imagens carregadas
+imagens = {}  # dicionário contendo os caminhos para carregar as imagens das pranchas
 
 NOME_ARQ_SESSAO = "sessao_aparar_v20210305.pickle"
 NOME_ARQ_SESSAO_LEGADO = "sessao_aparar_v20210104ire.pickle"
@@ -60,7 +60,6 @@ def adicionar_imagens(selection):
                 Prancha.avisos("carregando imagens")
                 img = loadImage(file_path)
                 img_name = file_name.split('.')[0]
-                # imagens[img_name.lower()] = img  # file_path
                 imagens[img_name.lower()] = file_path
                 fator = Prancha.calc_fator(img)
                 if not Prancha.in_pranchas(img_name):
@@ -68,7 +67,6 @@ def adicionar_imagens(selection):
                     p.areas.append(Area(interface.OX, interface.OY,
                                         img.width * fator, img.height * fator))
                     Prancha.pranchas.append(p)
-
 
 def salva_sessao():
     with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
@@ -80,7 +78,6 @@ def salva_sessao():
     print(mensagem)
 
 def carrega_sessao():
-    ARQ_SESSAO = NOME_ARQ_SESSAO 
     if isfile(join(Prancha.path_sessao, NOME_ARQ_SESSAO)):
         PATH_ARQ_SESSAO = join(Prancha.path_sessao, NOME_ARQ_SESSAO)
     else:
@@ -97,7 +94,6 @@ def carrega_sessao():
             mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
             Prancha.avisos(mensagem)
             print(mensagem)
-
             return True
     except Exception as e:
         # pode ser que não havia sessão ou outro erro...
@@ -133,7 +129,6 @@ def salva_png():
     if modo_diagrama:
         salva_legenda_diagrama(path)
     Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
-
 
 def salva_legenda_diagrama(path):
     png = createGraphics(300, 700)
