@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from termos import setup_terms_state, active_term_state, draw_terms, select_cat, select_tag
-from pranchas import Prancha
+from pranchas import Prancha # para usar nome_prancha_atual()
 import interface
 
 class Area:
