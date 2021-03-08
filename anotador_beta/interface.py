@@ -36,7 +36,6 @@ SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
 EDITA_CATS = ";", "editar categorias" # sem botão
 EDITA_TAGS = ":", "editar tags" # sem botão
 
-
 # menu "alto da prancha"
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
@@ -100,8 +99,6 @@ def setup_interface():
     Prancha.path = sketchPath('data')
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
-
-
 
 def ask_carrega_sessao():
     r = yes_no_pane("Atenção!", "Quer carregar o último estado salvo desta sessão?\n(descarta dados atuais não salvos)")
@@ -209,7 +206,7 @@ def key_pressed(k, kc):
 
     if k in (DELETE, BACKSPACE):
        areas = Prancha.get_areas_atual()
-       for a in areas[1:]:
+       for a in areas[1:]: # pula a primeira área (100%) que não pode ser removida
          if a.selected:
             areas.remove(a) 
             break
@@ -223,7 +220,6 @@ def key_pressed(k, kc):
         tecla, nome = modo   
         if k in (tecla, str(tecla).upper()):
             modo_ativo = modo
-
 
 def mouse_pressed(mb):
     # tratamento dos botões
@@ -259,7 +255,7 @@ def mouse_pressed(mb):
 def mouse_dragged(mb):
     areas = Prancha.get_areas_atual()
     dx, dy = mouseX - pmouseX, mouseY - pmouseY
-    a0 = areas[0]
+    a0 = areas[0]  # A primeira área, que o limite útil da prancha, referência de 100%
     if modo_ativo == ED100:
         if mb == LEFT:
             x = a0.x + dx
@@ -274,6 +270,7 @@ def mouse_dragged(mb):
             if a0.h + dy > MIN_SIZE:
                 a0.h += dy
     for r in reversed(areas[1:]):
+        # pula a primeira área (100%) que não pode ser editada nestes modos que seguem
         if r.selected:
             if modo_ativo == EDITA and mb == LEFT:
                 x = r.x + dx
@@ -295,14 +292,12 @@ def mouse_dragged(mb):
 
 def mouse_wheel(e):
     areas = Prancha.get_areas_atual()
-    if modo_ativo in (EDITA, CRIAR):  # editar ou criar
-        for a in reversed(areas[1:]):  # pula a primeira
+    if modo_ativo in (EDITA, CRIAR):   # editar ou criar
+        for a in reversed(areas[1:]):  # pula a primeira área (100%) que não pode ser girada
             if a.mouse_over():
                 a.rotation += radians(e.getCount())
                 break
     
-
-        
 def yes_no_pane(title, message):
     # Sim é 0, Não é 1, fechar a janela é -1
     from javax.swing import JOptionPane
@@ -310,7 +305,6 @@ def yes_no_pane(title, message):
                                          message,
                                          title,
                                          JOptionPane.YES_NO_OPTION)
-    
     
 def multiline_pane(title='', default=''):
     from javax.swing import JOptionPane, JScrollPane, JTextArea
