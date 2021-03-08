@@ -71,7 +71,7 @@ def adicionar_imagens(selection):
 def salva_sessao():
     with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
         # Cats e tags entraram no antigo slot de Prancha.path_sessao no Pickle!
-        sessao = (Prancha.pranchas, (Area.categorias, Area.tags), Prancha.screen_height)
+        sessao = (Prancha.pranchas, (interface.categorias, interface.tags), Prancha.screen_height)
         pickle.dump(sessao, file)
     mensagem = "sessão salva em …" + unicode(Prancha.path_sessao)[-40:]
     Prancha.avisos(mensagem)
@@ -89,7 +89,7 @@ def carrega_sessao():
             Prancha.update_for_name_change()
             if cats_e_tags != Prancha.path_sessao and len(cats_e_tags) == 2: 
                 # compatibilidade com arquivos antigos!
-                Area.categorias, Area.tags = cats_e_tags
+                interface.categorias, interface.tags = cats_e_tags
                 print("Categorias e tags carregados da sessão salva!")
             mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
             Prancha.avisos(mensagem)
@@ -134,7 +134,7 @@ def salva_legenda_diagrama(path):
     png = createGraphics(300, 700)
     png.beginDraw()
     png.background(200)
-    nomes_categorias = sorted(Area.categorias.keys())
+    nomes_categorias = sorted(interface.categorias.keys())
     for i, nome_cat in enumerate(nomes_categorias):
         png.fill(Area.calc_color(nome_cat))
         png.rect(20, i * 25, 40, 20)

@@ -16,8 +16,8 @@ class Area:
         self.over = False
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
-        self.tags_state = setup_terms_state(Area.tags)  # *
-        self.categorias_state = setup_terms_state(Area.categorias)  # *
+        self.tags_state = setup_terms_state(interface.tags)  # *
+        self.categorias_state = setup_terms_state(interface.categorias)  # *
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
@@ -47,15 +47,15 @@ class Area:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
-                draw_terms(Area.categorias, self.categorias_state, DEBUG)
-                draw_terms(Area.tags, self.tags_state, DEBUG)
+                draw_terms(interface.categorias, self.categorias_state, DEBUG)
+                draw_terms(interface.tags, self.tags_state, DEBUG)
         elif self.over and self.cobertura != 1 and not modo_diagrama:
             strokeWeight(5)
             self.over = False
         else:
             strokeWeight(2)
         # pega dados da categoria que está selecionada (se houver)
-        cat = Area.categorias.get(self.cat_selected)
+        cat = interface.categorias.get(self.cat_selected)
         if cat and modo_diagrama:
             fill(Area.calc_color(self.cat_selected))
             noStroke()
@@ -96,8 +96,8 @@ class Area:
 
     def cat_and_tag_selection(self):
         if self.cobertura != 1:  # menos para a àrea de ref. 100%
-            select_cat(Area.categorias, self.categorias_state)
-            select_tag(Area.tags, self.tags_state)
+            select_cat(interface.categorias, self.categorias_state)
+            select_tag(interface.tags, self.tags_state)
 
     def mouse_over(self):
         rp = rect_points(self.x + self.w / 2,
@@ -108,9 +108,9 @@ class Area:
                          )
         return point_inside_poly(mouseX, mouseY, rp)
 
-    @classmethod
-    def calc_color(cls, cat_name):
-        cat = cls.categorias.get(cat_name)
+    @staticmethod
+    def calc_color(cat_name):
+        cat = interface.categorias.get(cat_name)
         if cat:
             h = cat['id_cor']
             with push():

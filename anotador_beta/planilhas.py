@@ -15,9 +15,9 @@ NOME_PLANILHA2 = "planilha_aparar_expandida_v1126.csv"
 
 def collect_cats():
     global categorias, super_cats, tags
-    categorias = sorted(Area.categorias.keys())
-    super_cats = Area.super_cats
-    tags = sorted(Area.tags.keys())
+    categorias = sorted(interface.categorias.keys())
+    super_cats = interface.super_cats
+    tags = sorted(interface.tags.keys())
 
 def gera_csv():
     table = Table()

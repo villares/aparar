@@ -52,11 +52,11 @@ modos = (EDITA, ED100, CRIAR, DIAGR)
 modo_ativo = CRIAR
 
 def setup_interface():
-    global botoes, comandos, categorias, tags, imagem_prancha_atual
+    global botoes, comandos, categorias, tags, super_cats, imagem_prancha_atual
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Prancha.screen_height = height - (OY + rodape)
-    Area.categorias, Area.super_cats = criar_categorias()
-    Area.tags = criar_tags()
+    categorias, super_cats = criar_categorias()
+    tags = criar_tags()
         
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
@@ -118,14 +118,16 @@ def gera_planilhas():
     gera_csv2()
 
 def edita_categorias():
-    nomes = '\n'.join(Area.categorias.keys())
+    global categorias
+    nomes = '\n'.join(categorias.keys())
     resultado = multiline_pane(title=EDITA_CATS[1], default=nomes)
-    criar_categorias(resultado.split('\n'))
+    categorias = criar_categorias(resultado.split('\n'))
     
 def edita_tags():
-    nomes = '\n'.join(Area.tags.keys())
+    global tags
+    nomes = '\n'.join(tags.keys())
     resultado = multiline_pane(title=EDITA_TAGS[1], default=nomes)
-    criar_tags(resultado.split('\n'))
+    tags = criar_tags(resultado.split('\n'))
 
 def salva_todas_png():
     """
