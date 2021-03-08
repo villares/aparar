@@ -2,7 +2,6 @@
 
 from collections import OrderedDict
 
-import areas
 import interface
 
 # arquivos com as categorias e tags iniciais
@@ -11,20 +10,22 @@ CATEGORIAS_TXT, TAGS_TXT = "categorias.txt", "tags.txt"
 def criar_categorias(strings=None):
     strings = strings or loadStrings(CATEGORIAS_TXT)
     nomes = list(OrderedDict.fromkeys(strings))      # remove duplicações mas mantém a ordem
-    areas.Area.categorias = setup_terms(nomes,       # nomes das categorias
+    categorias = setup_terms(nomes,       # nomes das categorias
                                         interface.MENU_OX, # x_inicial
                                         interface.OY + interface.MENU_V_SPACE * 13, # y_inicial
                                         interface.OX - 10,                          # w
                                         interface.TERM_FONT_SIZE + 2)               # h
-    areas.Area.super_cats = find_super_cats(areas.Area.categorias)
+    super_cats = find_super_cats(categorias)
+    return categorias, super_cats
     
 def criar_tags(strings=None):
     strings = strings or loadStrings(TAGS_TXT)
     nomes = list(OrderedDict.fromkeys(strings))      # remove duplicações mas mantém a ordem
-    areas.Area.tags = setup_terms(nomes,             # nomes dos tags
+    tags = setup_terms(nomes,             # nomes dos tags
                                   20 + interface.OX,              # x_inicial
                                   4 + height - interface.rodape,  # y_inicial
                                   width - 20, interface.TERM_FONT_SIZE + 2, wgap=10)  # w, h, wgap: espaço entre tags 
+    return tags
 
 def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
     term_names = [term for term in strings

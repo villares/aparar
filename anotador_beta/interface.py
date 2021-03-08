@@ -7,7 +7,6 @@ from termos import criar_categorias, criar_tags
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, salva_png
 from planilhas import gera_csv, gera_csv2
 
-
 # offset da área que mostra a imagem da prancha
 OX, OY = 200, 40
 rodape = 100
@@ -56,8 +55,8 @@ def setup_interface():
     global botoes, comandos, categorias, tags, imagem_prancha_atual
     Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
     Prancha.screen_height = height - (OY + rodape)
-    criar_categorias()
-    criar_tags()
+    Area.categorias, Area.super_cats = criar_categorias()
+    Area.tags = criar_tags()
         
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
@@ -327,3 +326,14 @@ def multiline_pane(title='', default=''):
         return ta.getText()
     else: 
         return default
+    
+def option_pane(title, message, options, default=''):
+    from javax.swing import JOptionPane
+    return JOptionPane.showInputDialog(
+        None,
+        message,
+        title,
+        JOptionPane.QUESTION_MESSAGE,
+        None,
+        options,
+        default)  # must be in options, otherwise 1st is shown
