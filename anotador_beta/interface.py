@@ -158,8 +158,7 @@ def rot_prancha():
     pa.rot = (pa.rot + 1) % 4
     img, rot, fator = Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
-        pa.areas[0] = Area(
-            OX, OY, img.height * fator, img.width * fator)  # INVERTED
+        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator) # INVERTIDA
     elif img:
         pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
 
