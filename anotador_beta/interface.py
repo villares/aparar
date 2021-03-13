@@ -115,16 +115,24 @@ def gera_planilhas():
     gera_csv2()
 
 def edita_categorias():
-    global categorias
     nomes = '\n'.join(categorias.keys())
     resultado = multiline_pane(title=EDITA_CATS[1], default=nomes)
-    categorias = criar_categorias(resultado.split('\n'))
-    
+    recria_categorias(resultado.split('\n'))
+      
 def edita_tags():
-    global tags
     nomes = '\n'.join(tags.keys())
     resultado = multiline_pane(title=EDITA_TAGS[1], default=nomes)
-    tags = criar_tags(resultado.split('\n'))
+    recria_tags(resultado.split('\n'))
+
+def recria_categorias(novos_nomes=None):
+    global categorias
+    novos_nomes = novos_nomes or categorias.keys()
+    categorias, _ = criar_categorias(novos_nomes)
+
+def recria_tags(novos_nomes=None):
+    global tags
+    novos_nomes = novos_nomes or tags.keys()
+    tags = criar_tags(novos_nomes)
 
 def salva_todas_png():
     """
@@ -333,6 +341,6 @@ def option_pane(title, message, options, default=''):
         options,
         default)  # must be in options, otherwise 1st is shown
     
-def input(question='', suggestion=''):
+def input_pane(question='', suggestion=''):
     from javax.swing import JOptionPane
     return JOptionPane.showInputDialog(None, question, suggestion)
