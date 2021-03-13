@@ -28,7 +28,7 @@ def criar_tags(strings=None):
     return tags
 
 def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
-    term_names = [term for term in strings
+    term_names = [term.strip() for term in strings
                   if term and not '(' in term
                   and not term.startswith('\t')]
                   
