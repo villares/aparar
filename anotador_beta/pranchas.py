@@ -170,6 +170,16 @@ class Prancha:
         for p in cls.pranchas:
             for a in p.areas:
                 a.selected = False
+    
+    # @classmethod
+    # def coleta_termos_existentes(cls)
+    #     categorias, tags = set(), set()
+    #     for p in cls.pranchas:
+    #         for a in p.areas:
+    #             if a.cat_selected:
+    #                 categorias.add(a.cat_selected)
+    #             tags.update(set(a.tags_selected))
+    #     return categorias, tags
 
     @classmethod
     def altera_categoria(cls, categoria, nova_cat):
