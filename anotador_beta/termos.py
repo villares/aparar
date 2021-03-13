@@ -13,8 +13,8 @@ def criar_categorias(strings=None):
     categorias = setup_terms(nomes,       # nomes das categorias
                                         interface.MENU_OX, # x_inicial
                                         interface.OY + interface.MENU_V_SPACE * 13, # y_inicial
-                                        interface.OX - 10,                          # w
-                                        interface.TERM_FONT_SIZE + 2)               # h
+                                        interface.OX - 10,                          # largura da area de cats
+                                        interface.TERM_FONT_SIZE + 2)               # line height
     super_cats = find_super_cats(categorias)
     return categorias, super_cats
     
@@ -24,7 +24,8 @@ def criar_tags(strings=None):
     tags = setup_terms(nomes,             # nomes dos tags
                                   20 + interface.OX,              # x_inicial
                                   4 + height - interface.rodape,  # y_inicial
-                                  width - 20, interface.TERM_FONT_SIZE + 2, wgap=10)  # w, h, wgap: espaço entre tags 
+                                  width - 20,                     # largura da area de tags
+                                  interface.TERM_FONT_SIZE + 2, wgap=10)  # altura, wgap: espaço entre tags 
     return tags
 
 def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
