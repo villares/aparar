@@ -12,8 +12,7 @@ from os.path import join
 NOME_PLANILHA = "planilha_aparar_v1126.csv"
 NOME_PLANILHA2 = "planilha_aparar_expandida_v1126.csv"
 
-
-def collect_cats():
+def coleta_termos():
     global categorias, super_cats, tags
     categorias = sorted(interface.categorias.keys())
     super_cats = interface.super_cats
@@ -21,7 +20,7 @@ def collect_cats():
 
 def gera_csv():
     table = Table()
-    collect_cats()
+    coleta_termos()
     cria_colunas(table)
     prancha_atual = "000"
     linhas_iguais = 0
@@ -76,7 +75,7 @@ def gera_csv():
 
 def gera_csv2():
     table = Table()
-    collect_cats()
+    coleta_termos()
     cria_colunas(table, expandida=True)
     prancha_atual = "000"
     linhas_iguais = 0
