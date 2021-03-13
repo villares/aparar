@@ -22,7 +22,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 
 from __future__ import unicode_literals
 
-import interface
+import interface, x_menu
 from areas import Area
 from pranchas import Prancha
 from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
@@ -51,6 +51,7 @@ def draw():
             interface.exportar_tudo = False
     # Textos de aviso
     Prancha.avisos()
+    x_menu.desenha()
 
 def mousePressed():
     interface.mouse_pressed(mouseButton)
@@ -65,6 +66,9 @@ def keyPressed():
     
 def mouseWheel(e):
     interface.mouse_wheel(e)    
+    
+def mouseClicked():
+    x_menu.mouse_clicked(mouseButton)
     
 def stop():
     r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
