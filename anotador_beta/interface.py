@@ -332,3 +332,7 @@ def option_pane(title, message, options, default=''):
         None,
         options,
         default)  # must be in options, otherwise 1st is shown
+    
+def input(question='', suggestion=''):
+    from javax.swing import JOptionPane
+    return JOptionPane.showInputDialog(None, question, suggestion)
