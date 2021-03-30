@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 
 from processing.data import Table
 from collections import Counter, defaultdict
+from os.path import join
 
 from pranchas import Prancha
 from areas import Area
-from os.path import join
-
+import interface
 
 NOME_PLANILHA = "planilha_aparar_v1126.csv"
-NOME_PLANILHA2 = "planilha_aparar_expandida_v1126.csv"
+NOME_PLANILHA2 = "planilha_aparar_expandida_v20210330.csv"
 
 def coleta_termos():
     global categorias, super_cats, tags
@@ -130,6 +130,7 @@ def gera_csv2():
             nova_linha_area.setString("BBB", prancha.idb)
             nova_linha_area.setString("CCC", prancha.idc)
             nova_linha_area.setInt("AREA", i)
+            nova_linha_area.setString("NOTA", area.nota)
             if area.cat_selected:
                 nova_linha_area.setInt(area.cat_selected + "_num", 1)
                 nova_linha.setFloat(
@@ -160,6 +161,7 @@ def cria_colunas(table, expandida=False):
     table.addColumn("CCC")
     if expandida:
         table.addColumn("AREA")
+        table.addColumn("NOTA")
 
     for cat in categorias:
         table.addColumn(cat + "_num")

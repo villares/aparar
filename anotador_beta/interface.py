@@ -215,9 +215,16 @@ def key_pressed(k, kc):
     if k in (DELETE, BACKSPACE):
        areas = Prancha.get_areas_atual()
        for a in areas[1:]: # pula a primeira área (100%) que não pode ser removida
-         if a.selected:
-            areas.remove(a) 
-            break
+           if a.selected:
+               areas.remove(a) 
+               break
+           
+    if k in ('N', 'n'):
+        areas = Prancha.get_areas_atual()
+        for a in areas[1:]: # pula a primeira área (100%) 
+           if a.selected:
+               a.nota = multiline_pane(title='Anotação livre', default=a.nota)
+               break
 
     for comando in comandos.keys():
         tecla, nome = comando

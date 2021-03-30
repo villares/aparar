@@ -35,6 +35,11 @@ class Area:
         # atualiza lista de tags que estão selecionados
         self.tags_selected = active_term_state(self.tags_state, all=True)
 
+        try:
+            self.nota
+        except AttributeError:
+            self.nota = ""
+
     def display(self, mp, DEBUG=False):
         self.update()
         modo_anotativo = (interface.modo_ativo == interface.EDITA or
@@ -81,6 +86,11 @@ class Area:
             text(self.cat_selected,
                  self.x + 10,
                  self.y + 10)
+            if self.nota:
+                text(self.nota[:10] + '…',
+                    self.x + 10,
+                    self.y + 30)
+            
         textAlign(CENTER, CENTER)
         textSize(interface.AREA_FONT_SIZE)
         # caso da área de referência 100% (cobertura == 1)
