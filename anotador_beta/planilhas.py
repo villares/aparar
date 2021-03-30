@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 
 from processing.data import Table
 from collections import Counter, defaultdict
+from os.path import join
 
 from pranchas import Prancha
 from areas import Area
-from os.path import join
-
+import interface
 
 NOME_PLANILHA = "planilha_aparar_v1126.csv"
 NOME_PLANILHA2 = "planilha_aparar_expandida_v1126.csv"
