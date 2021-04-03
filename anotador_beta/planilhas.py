@@ -154,7 +154,20 @@ def gera_csv2():
     saveTable(table, file)
     Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
 
-
+    # tentativa de fazer abrir mais fácil no Excel - não deu certo, perde a ordem das colunas.
+    # import csv
+    # file_e = join(Prancha.path_sessao, 'teste_excel.csv')
+    # with open(file) as csvfile:
+    #     reader = csv.DictReader(csvfile)
+    #     with open(file_e, 'w') as csvfile:
+    #         row0 = next(reader)
+    #         writer = csv.DictWriter(csvfile, fieldnames=row0.keys(), dialect='excel')
+    #         writer.writeheader()    
+    #         writer.writerow(row0)    
+    #         for row in reader:
+    #             writer.writerow(row)    
+    #             print(row)
+                    
 def cria_colunas(table, expandida=False):
     table.addColumn("AAA")
     table.addColumn("BBB")
