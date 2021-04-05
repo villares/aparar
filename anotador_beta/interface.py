@@ -136,7 +136,7 @@ def recria_tags(novos_nomes=None):
 
 def salva_todas_png():
     """
-    Exporta em PNG todoas as pranhcas anotadas.
+    Exporta em PNG todas as pranhcas anotadas.
     Em modo 'normal' ou em modo diagrama
     """
     global imagem_prancha_atual, exportar_tudo
