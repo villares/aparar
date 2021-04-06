@@ -157,8 +157,9 @@ class Prancha:
                     area.y = (area.y - interface.OY) * cf + interface.OY
                     area.w *= cf
                     area.h *= cf
-                    for tag in area.tags:
-                        area.tags[tag]['y'] += dy
+            # interface.recria_tags()  # not working
+            for tag in Area.tags:      # crude...
+                tag['h'] += dy
         else:
             print("Não houve mudança no tamanho da tela")
 
