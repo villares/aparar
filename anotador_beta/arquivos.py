@@ -41,7 +41,7 @@ def carrega_pranchas():
     # para debug!
     selectFolder("Selecione uma pasta", "adicionar_imagens")
     # Para o debug, comente a linha acima e use "chamada direta" de adicionar_imagens() abaixo
-    # adicionar_imagens(File("/home/villares/Área de Trabalho/APARAR/Pranchas para teste"))
+    # adicionar_imagens(File("/home/villares/GitHub/doutorado/APARAR/Pranchas para teste/"))
 
 def adicionar_imagens(selection):
     if selection == None:
@@ -52,20 +52,13 @@ def adicionar_imagens(selection):
         Prancha.nome_sessao = unicode(selection)
         print("Pasta selecionada: " + dir_path)
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
-        for file_name, file_path in lista_imagens(dir_path):
-            img_name = file_name.split('.')[0]
-            imagens[img_name.lower()] = file_path
         if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
             for file_name, file_path in lista_imagens(dir_path):
                 Prancha.avisos("carregando imagens")
-                img = loadImage(file_path)
-                img_name = file_name.split('.')[0]
+                img_name = '.'.join(file_name.split('.')[:-1]) # joga fora extensão
                 imagens[img_name.lower()] = file_path
-                fator = Prancha.calc_fator(img)
                 if not Prancha.in_pranchas(img_name):
                     p = Prancha(img_name)
-                    p.areas.append(Area(interface.OX, interface.OY,
-                                        img.width * fator, img.height * fator))
                     Prancha.pranchas.append(p)
 
 def salva_sessao():

@@ -148,16 +148,23 @@ def salva_todas_png():
     else:
         Prancha.avisos("Não há pranchas para exportar.")
 
-def prox_prancha():
+def navegar_prancha(direcao):
     global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
+    Prancha.i_atual = (Prancha.i_atual + direcao) % len(Prancha.pranchas)
     imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
-
-def volta_prancha():
-    global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+    p = Prancha.pranchas[Prancha.i_atual]
+    if not p.areas:
+        fator = Prancha.calc_fator(imagem_prancha_atual)    
+        p.areas.append(Area(OX, OY,
+                            imagem_prancha_atual.width * fator,
+                            imagem_prancha_atual.height * fator))    
     
+def volta_prancha():
+    navegar_prancha(-1)
+
+def prox_prancha():
+    navegar_prancha(1)
+            
 def rot_prancha():
     pa = Prancha.pranchas[Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4

@@ -19,6 +19,9 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #     [/] Interface com janela para editar nomes (já permite acrescentar termos)
 #     [ ] Renomear termo (procurar aplicações do termo nas Areas)
 #     [ ] Remover termo (remover aplicações)
+# Pensar processo de mudar de sessão. Se pedir carregar imagens com uma sessão já carregada?
+# - mais imagens na mesma sessão? ***
+# - pede pra mudar sessão
 
 from __future__ import unicode_literals
 

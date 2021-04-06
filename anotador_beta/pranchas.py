@@ -114,10 +114,20 @@ class Prancha:
 
     @classmethod
     def calc_fator(cls, img, rotated=False):
+        """ Agradecimentos especiais para John @introscopia """
+        scrR = float(width - interface.OX - 10) / float(height - (interface.OY + interface.rodape))
         if not rotated:
-            return float(height - (interface.OY + interface.rodape)) / img.height
+            imgR = img.width / img.height
+            if imgR > scrR:
+                return float(width - interface.OX - 10) / img.width
+            else:
+                return float(height - (interface.OY + interface.rodape)) / img.height
         else:
-            return float(height - (interface.OY + interface.rodape)) / img.width
+            imgR = img.height / img.width
+            if imgR > scrR:
+                return float(width - interface.OX - 10) / img.height
+            else:
+                return float(height - (interface.OY + interface.rodape)) / img.width  
 
     @classmethod
     def calc_correction_factor(self):
