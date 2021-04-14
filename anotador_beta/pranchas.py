@@ -62,11 +62,7 @@ class Prancha:
 
     @classmethod
     def in_pranchas(cls, nome):
-        return nome in cls.get_names()
-
-    @classmethod
-    def get_names(cls):
-        return [p.nome for p in cls.pranchas]
+        return nome in [p.nome for p in cls.pranchas]
 
     @classmethod
     def display_nome_atual(cls, x, y):
@@ -130,6 +126,22 @@ class Prancha:
                 return float(height - (interface.OY + interface.rodape)) / img.width  
 
     @classmethod
+    def prancha_coords(cls, x, y, w, h, fator=None):
+        if fator is None:
+            img, rot, fator = cls.imagem_rot_fator_atual()
+        return ((x - interface.OX) / fator ,
+                (y - interface.OY) / fator,
+                (w / fator), (h / fator))
+
+    @classmethod
+    def screen_coords(cls, x, y, w, h, fator=None):
+        if fator is None:
+            img, rot, fator = cls.imagem_rot_fator_atual()
+        return ((x * fator) + interface.OX,
+                (y * fator) + interface.OY,
+                (w * fator), (h * fator))
+
+    @classmethod
     def calc_correction_factor(self):
         """para ajustar no caso de mudança de tela"""
         current_height = height - (interface.OY + interface.rodape)
@@ -142,21 +154,12 @@ class Prancha:
             prancha.init_ids()
 
     @classmethod
-    def update_for_screen_change(cls):
+    def ajusta_pos_tags(cls):
         current_height = height - (interface.OY + interface.rodape)
         recorded_height = Prancha.screen_height
         if current_height != recorded_height:
-            print("update for screen change")
-            dy = current_height - recorded_height
-            cf = Prancha.calc_correction_factor()
-            print int(recorded_height) * cf, current_height
+            print("Mudando altura dos tags")        
             Prancha.screen_height = current_height
-            for prancha in cls.pranchas:
-                for area in prancha.areas:
-                    area.x = (area.x - interface.OX) * cf + interface.OX
-                    area.y = (area.y - interface.OY) * cf + interface.OY
-                    area.w *= cf
-                    area.h *= cf
             # interface.recria_tags()  # not working
             for tag in Area.tags:      # crude...
                 tag['h'] += dy

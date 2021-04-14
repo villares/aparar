@@ -7,11 +7,11 @@ import interface
 
 class Area:
 
-    def __init__(self, x, y, w, h):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+    def __init__(self, x, y, w, h, **kwargs):
+        self.x, self.y = x, y
+        self.w, self.h = w, h
+        self.px, self.py = kwargs.get('px'), kwargs.get('py') 
+        self.pw, self.ph = kwargs.get('pw'), kwargs.get('ph') 
         self.selected = False
         self.over = False
         self.area = self.w * self.h

@@ -78,12 +78,13 @@ def carrega_sessao():
     try:
         with open(PATH_ARQ_SESSAO, "rb") as file:
             Prancha.pranchas, cats_e_tags, Prancha.screen_height = pickle.load(file)
-            Prancha.update_for_screen_change()
+            interface.navegar_prancha(0)
             Prancha.update_for_name_change()
             if cats_e_tags != Prancha.path_sessao and len(cats_e_tags) == 2: 
                 # compatibilidade com arquivos antigos!
                 interface.categorias, interface.tags = cats_e_tags
                 print("Categorias e tags carregados da sessão salva!")
+            Prancha.ajusta_pos_tags()
             mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
             Prancha.avisos(mensagem)
             print(mensagem)

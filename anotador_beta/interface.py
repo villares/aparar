@@ -97,7 +97,9 @@ def setup_interface():
     imagens["000"] = splash_img_file
     p = Prancha("000")
     Prancha.path = sketchPath('data')
-    p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
+    area0 = Area(OX, OY, img.width * fator, img.height * fator,
+                 px=0, py=0, pw=img.width, ph=img.height)
+    p.areas.append(area0)
     Prancha.pranchas.append(p)
 
 def ask_carrega_sessao():
@@ -151,13 +153,22 @@ def salva_todas_png():
 def navegar_prancha(direcao):
     global imagem_prancha_atual
     Prancha.i_atual = (Prancha.i_atual + direcao) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)    
     p = Prancha.pranchas[Prancha.i_atual]
+    fator = Prancha.calc_fator(imagem_prancha_atual, (p.rot == 1 or p.rot == 3))    
     if not p.areas:
-        fator = Prancha.calc_fator(imagem_prancha_atual)    
-        p.areas.append(Area(OX, OY,
-                            imagem_prancha_atual.width * fator,
-                            imagem_prancha_atual.height * fator))    
+        area0 = Area(OX, OY,
+                    imagem_prancha_atual.width * fator,
+                    imagem_prancha_atual.height * fator,
+                    px=0, py=0, pw=imagem_prancha_atual.width, ph=imagem_prancha_atual.height)
+        p.areas.append(area0)  
+    else:
+        for area in p.areas:
+            x, y, w, h = Prancha.screen_coords(area.px, area.py, area.pw, area.ph, fator)
+            area.x = x
+            area.y = y
+            area.w = w
+            area.h = h
     
 def volta_prancha():
     navegar_prancha(-1)
@@ -170,9 +181,13 @@ def rot_prancha():
     pa.rot = (pa.rot + 1) % 4
     img, rot, fator = Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
-        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator) # INVERTIDA
+        x, y, w, h = OX, OY, img.height * fator, img.width * fator # INVERTIDA
+        px, py, pw, ph = 0, 0, img.height, img.width               # INVERTIDA
+        pa.areas[0] = Area(x, y, w, h, px=px, py=py, pw=pw, ph=ph) 
     elif img:
-        pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
+        x, y, w, h = OX, OY, img.width * fator, img.height * fator 
+        px, py, pw, ph = 0, 0, img.width, img.height               
+        pa.areas[0] = Area(x, y, w, h, px=px, py=py, pw=pw, ph=ph) 
 
 def abre_imagem_prancha_atual():
     """ comando Z: abre imagem original da prancha pelo sistema operacional ('launch()')"""
@@ -270,14 +285,17 @@ def mouse_pressed(mb):
     elif modo_ativo == CRIAR and mb == LEFT:  # criar
         if areas[0].mouse_over():
             Prancha.desselect_all()
-            a = Area(mouseX, mouseY, MIN_SIZE, MIN_SIZE)
+            x, y, w, h = mouseX, mouseY, MIN_SIZE, MIN_SIZE
+            px, py, pw, ph = Prancha.prancha_coords(x, y, w, h) 
+            a = Area(x, y, w, h, px=px, py=py, pw=pw, ph=ph)
             a.selected = True
             areas.append(a)
 
 def mouse_dragged(mb):
     areas = Prancha.get_areas_atual()
+    img, rot, fator = Prancha.imagem_rot_fator_atual()
     dx, dy = mouseX - pmouseX, mouseY - pmouseY
-    a0 = areas[0]  # A primeira área, que o limite útil da prancha, referência de 100%
+    a0 = areas[0]  # A primeira área, o limite útil da prancha, referência de 100%
     if modo_ativo == ED100:
         if mb == LEFT:
             x = a0.x + dx
@@ -286,11 +304,15 @@ def mouse_dragged(mb):
             if na_tela:
                 a0.x = x
                 a0.y = y
+                a0.px = a0.px + dx / fator
+                a0.py = a0.py + dy / fator
         else:
             if a0.w + dx > MIN_SIZE:
                 a0.w += dx
+                a0.pw += dx / fator
             if a0.h + dy > MIN_SIZE:
                 a0.h += dy
+                a0.ph += dy / fator
     for r in reversed(areas[1:]):
         # pula a primeira área (100%) que não pode ser editada nestes modos que seguem
         if r.selected:
@@ -301,16 +323,22 @@ def mouse_dragged(mb):
                 if na_tela:
                     r.x = x
                     r.y = y
+                    r.px = r.px + dx / fator
+                    r.py = r.py + dy / fator
             elif modo_ativo in (EDITA, CRIAR) and mb == RIGHT:
                 if r.w + dx > MIN_SIZE:
                     r.w = r.w + dx
+                    r.pw = r.w / fator
                 if r.h + dy > MIN_SIZE:
                     r.h = r.h + dy
+                    r.ph = r.h / fator
             elif modo_ativo == CRIAR and areas[0].mouse_over():
                 if mouseX - r.x > MIN_SIZE:
                     r.w = mouseX - r.x
+                    r.pw = r.w / fator
                 if mouseY - r.y > MIN_SIZE:
                     r.h = mouseY - r.y
+                    r.ph = r.h / fator
 
 def mouse_wheel(e):
     areas = Prancha.get_areas_atual()
