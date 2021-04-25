@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import pickle
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, splitext
 from java.io import File
 
 from pranchas import Prancha
@@ -53,7 +53,7 @@ def adicionar_imagens(selection):
         print("Pasta selecionada: " + dir_path)
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
         for file_name, file_path in lista_imagens(dir_path):
-            img_name = file_name.split('.')[0]
+            img_name = splitext(file_name)[0]
             imagens[img_name.lower()] = file_path
         if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
             for file_name, file_path in lista_imagens(dir_path):
