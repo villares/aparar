@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import pickle
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, splitext
 from java.io import File
 
 from pranchas import Prancha
@@ -55,7 +55,7 @@ def adicionar_imagens(selection):
         if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
             for file_name, file_path in lista_imagens(dir_path):
                 Prancha.avisos("carregando imagens")
-                img_name = '.'.join(file_name.split('.')[:-1]) # joga fora extensão
+                img_name = splitext(file_name)[0] # joga fora extensão
                 imagens[img_name.lower()] = file_path
                 if not Prancha.in_pranchas(img_name):
                     p = Prancha(img_name)
