@@ -33,7 +33,7 @@ def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
                   if term and not '(' in term
                   and not term.startswith('\t')]
                   
-    def pos(i, t, lw, lh=25, wgap=20, hgap=2):
+    def pos(i, t, lw, lh=25):
         # set pos.x, pos.xo, pox.y before you call this
         textSize(interface.TERM_FONT_SIZE)
         pos.tw = textWidth(t)
@@ -47,7 +47,7 @@ def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
     # x and y for first term             
     pos.x = pos.xo = x
     pos.y = y  
-    terms = OrderedDict((term, {'x': pos(i, term, width_, lh, wgap, hgap),
+    terms = OrderedDict((term, {'x': pos(i, term, width_, lh),
                                 'y': pos.y,
                                 'w': pos.tw,
                                 'h': lh,
