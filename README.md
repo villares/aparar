@@ -14,5 +14,5 @@ Ferramenta experimental para facilitar a anotação e posterior análise de docu
 
 - Selecione uma pasta com imagens PNG ou JPG com nomes no formato `AAAAA_BBBBB_CCC_texto_livre.png`
 > `AAAAA` é um identificador de grupo (concurso, disciplina, etc.), `BBBBB` é um identificador de autor (aluno, equipe, etc.) e `CCC` é um identificador do número da prancha (ou página do documento).
-> `AAAAA`, e `BBBBB` podem ter quaisquer número de caracteres, mas `CCC` deve ter exatamente 3 caractere (todo o texto após CCC será ignorado, e por isso é considerado "livre").
+> `AAAAA`, e `BBBBB` podem ter quaisquer número de caracteres, mas `CCC` deve ter exatamente 3 caracteres. Todo o texto após `CCC` será ignorado, e por isso é considerado como um "texto livre".
 > Os identificadores serão usados na exportação dos relatórios em CSV, populando a primeira, segunda e terceira colunas. Pranchas de um mesmo grupo (`AAAAA`) e mesmo autor (`BBBBB`) produzirão linhas de totalização do projeto no relatório.
