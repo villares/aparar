@@ -21,8 +21,7 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #     [ ] Remover termo (remover aplicações)
 
 import interface
-from areas import Area
-from pranchas import Prancha
+import pranchas
 from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
 
 DEBUG = False
@@ -38,26 +37,26 @@ def draw():
     interface.display_botoes(DEBUG)
     # Mostra imagem da prancha (se não estiver no modo digagrama)
     if interface.modo_ativo != interface.DIAGR:
-        Prancha.display_imagem_atual(imagens)
+        pranchas.Prancha.display_imagem_atual(imagens)
     # Desenha as áreas anotadas        
-    Prancha.display_areas_atual(mousePressed, DEBUG)
+    pranchas.Prancha.display_areas_atual(is_mouse_pressed, DEBUG)
     # Tratamento do flag de exportar todas as pranchas
     if interface.exportar_tudo:   
         salva_png()
         interface.prox_prancha()  # next from last is 0
-        if Prancha.i_atual == 0:  # it will not be exported
+        if pranchas.Prancha.i_atual == 0:  # it will not be exported
             interface.exportar_tudo = False
     # Textos de aviso
-    Prancha.avisos()
+    pranchas.Prancha.avisos()
 
 def mouse_pressed():
-    interface.mouse_pressed(mouseButton)
+    interface.mouse_pressed(mouse_button)
 
 def mouse_dragged():
-    interface.mouse_dragged(mouseButton)
+    interface.mouse_dragged(mouse_button)
 
 def key_pressed():
-    interface.key_pressed(key, keyCode)
+    interface.key_pressed(key, key_code)
     global DEBUG
     if key == '!': DEBUG = not DEBUG
     

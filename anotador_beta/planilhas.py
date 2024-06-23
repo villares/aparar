@@ -4,7 +4,7 @@
 from collections import Counter, defaultdict
 from os.path import join
 
-from pranchas import Prancha
+import pranchas as pr
 from areas import Area
 import interface
 
@@ -25,7 +25,7 @@ def gera_csv():
     linhas_iguais = 0
     reset_acumulador()
 
-    for prancha in Prancha.pranchas:
+    for prancha in pr.Prancha.pranchas:
         if prancha_atual != (prancha.ida, prancha.idb):
             if prancha_atual != "000" and linhas_iguais > 1:
                 t_nova_linha = table.addRow()
@@ -67,10 +67,10 @@ def gera_csv():
         escreve_linha(nova_linha, super_cats, scat_count, scobertura,
                       categorias, cat_count, cobertura,
                       tags, tag_count)
-    print(Prancha.path_sessao)
-    file = join(Prancha.path_sessao, NOME_PLANILHA)
+    print(pr.Prancha.path_sessao)
+    file = join(pr.Prancha.path_sessao, NOME_PLANILHA)
     saveTable(table, file)
-    Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
+    pr.Prancha.avisos("CSV salvo em …" + unicode(pr.Prancha.path_sessao)[-40:])
 
 def gera_csv2():
     table = Table()
@@ -80,7 +80,7 @@ def gera_csv2():
     linhas_iguais = 0
     reset_acumulador()
 
-    for prancha in Prancha.pranchas:
+    for prancha in pr.Prancha.pranchas:
         if prancha_atual != (prancha.ida, prancha.idb):
             if prancha_atual != "000" and linhas_iguais > 1:
                 t_nova_linha = table.addRow()
@@ -148,9 +148,9 @@ def gera_csv2():
             # for tag in tags:
             # nova_linha.setInt(tag, tag_count[tag])
 
-    file = join(Prancha.path_sessao, NOME_PLANILHA2)
+    file = join(pr.Prancha.path_sessao, NOME_PLANILHA2)
     saveTable(table, file)
-    Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
+    pr.Prancha.avisos("CSV salvo em …" + unicode(pr.Prancha.path_sessao)[-40:])
 
 
 def cria_colunas(table, expandida=False):

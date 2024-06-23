@@ -5,7 +5,7 @@ import pickle
 from os import listdir
 from os.path import isfile, join, splitext
 
-from pranchas import Prancha
+import pranchas as pr
 from areas import Area
 import interface
 
@@ -38,81 +38,81 @@ def carrega_pranchas():
     # Operação normal de adicionar_imagens() é via callback disparado por selectFolder()
     # Cuidado que o Processing silencia erros durante selectFolder, vide opção
     # para debug!
-    selectFolder("Selecione uma pasta", "adicionar_imagens")
+    select_folder("Selecione uma pasta", adicionar_imagens)
     # Para o debug, comente a linha acima e use "chamada direta" de adicionar_imagens() abaixo
-    # adicionar_imagens(File("/home/villares/Área de Trabalho/APARAR/Pranchas para teste"))
+    # adicionar_imagens(File("/home/villares/Área de Trabalho/APARAR/pr.Pranchas para teste"))
 
 def adicionar_imagens(selection):
     if selection == None:
-        Prancha.avisos("seleção da pasta cancelada")
+        pr.Prancha.avisos("seleção da pasta cancelada")
     else:
-        dir_path = selection.getAbsolutePath()
-        Prancha.path_sessao = dir_path
-        Prancha.nome_sessao = unicode(selection)
+        dir_path = selection
+        pr.Prancha.path_sessao = dir_path
+        pr.Prancha.nome_sessao = selection.name
         print("Pasta selecionada: " + dir_path)
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
         for file_name, file_path in lista_imagens(dir_path):
             img_name = splitext(file_name)[0]
             imagens[img_name.lower()] = file_path
-        if not carrega_sessao() or (len(imagens) != len(Prancha.pranchas) - 1):
+        if not carrega_sessao() or (len(imagens) != len(pr.Prancha.pranchas) - 1):
             for file_name, file_path in lista_imagens(dir_path):
-                Prancha.avisos("carregando imagens")
+                pr.Prancha.avisos("carregando imagens")
                 img = loadImage(file_path)
                 img_name = file_name.split('.')[0]
                 imagens[img_name.lower()] = file_path
-                fator = Prancha.calc_fator(img)
-                if not Prancha.in_pranchas(img_name):
-                    p = Prancha(img_name)
+                fator = pr.Prancha.calc_fator(img)
+                if not pr.Prancha.in_pranchas(img_name):
+                    p = pr.Prancha(img_name)
                     p.areas.append(Area(interface.OX, interface.OY,
                                         img.width * fator, img.height * fator))
-                    Prancha.pranchas.append(p)
+                    pr.Prancha.pranchas.append(p)
 
 def salva_sessao():
-    with open(join(Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
-        # Cats e tags entraram no antigo slot de Prancha.path_sessao no Pickle!
-        sessao = (Prancha.pranchas, (interface.categorias, interface.tags), Prancha.screen_height)
+    with open(join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
+        # Cats e tags entraram no antigo slot de pr.Prancha.path_sessao no Pickle!
+        sessao = (pr.Prancha.pranchas, (interface.categorias, interface.tags), pr.Prancha.screen_height)
         pickle.dump(sessao, file)
-    mensagem = "sessão salva em …" + unicode(Prancha.path_sessao)[-40:]
-    Prancha.avisos(mensagem)
+    mensagem = "sessão salva em …" + unicode(pr.Prancha.path_sessao)[-40:]
+    pr.Prancha.avisos(mensagem)
     print(mensagem)
 
 def carrega_sessao():
-    if isfile(join(Prancha.path_sessao, NOME_ARQ_SESSAO)):
-        PATH_ARQ_SESSAO = join(Prancha.path_sessao, NOME_ARQ_SESSAO)
+    if isfile(join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO)):
+        PATH_ARQ_SESSAO = join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO)
     else:
-        PATH_ARQ_SESSAO = join(Prancha.path_sessao, NOME_ARQ_SESSAO_LEGADO)        
+        PATH_ARQ_SESSAO = join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO_LEGADO)        
     try:
         with open(PATH_ARQ_SESSAO, "rb") as file:
-            Prancha.pranchas, cats_e_tags, Prancha.screen_height = pickle.load(file)
-            Prancha.update_for_screen_change()
-            Prancha.update_for_name_change()
-            if cats_e_tags != Prancha.path_sessao and len(cats_e_tags) == 2: 
+            pr.Prancha.pranchas, cats_e_tags, pr.Prancha.screen_height = pickle.load(file)
+            pr.Prancha.update_for_screen_change()
+            pr.Prancha.update_for_name_change()
+            if cats_e_tags != pr.Prancha.path_sessao and len(cats_e_tags) == 2: 
                 # compatibilidade com arquivos antigos!
                 interface.categorias, interface.tags = cats_e_tags
                 print("Categorias e tags carregados da sessão salva!")
             mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
-            Prancha.avisos(mensagem)
+            pr.Prancha.avisos(mensagem)
             print(mensagem)
             return True
     except Exception as e:
         # pode ser que não havia sessão ou outro erro...
-        Prancha.avisos("não foi carregada uma sessão salva")
+        pr.Prancha.avisos("não foi carregada uma sessão salva")
         print("Deve imprimir 'Erro (File IO)', senão tem algo errado!")
         print("Erro ({})".format(e))
         return False
 
 def salva_png():
     """
-    Inicialmente salva apenas imagem da "Prancha atual",
+    Inicialmente salva apenas imagem da "pr.Prancha atual",
     no modo normal de edição ou modo diagrama.
     """
     modo_diagrama = interface.modo_ativo == interface.DIAGR
     prefixo = "diagrama" if modo_diagrama else "imagem"
-    nome_arquivo = "{}-{}.png".format(prefixo, Prancha.nome_prancha_atual())
+    nome_arquivo = "{}-{}.png".format(prefixo, pr.Prancha.nome_prancha_atual())
     sub_folder = "diagramas" if modo_diagrama else "imagens"
-    path = join(Prancha.path_sessao, sub_folder)  # pasta diagramas ou imagens
+    path = join(pr.Prancha.path_sessao, sub_folder)  # pasta diagramas ou imagens
     path_arquivo = join(path, nome_arquivo)
-    area = Prancha.get_areas_atual()[0]
+    area = pr.Prancha.get_areas_atual()[0]
     x, y = int(area.x), int(area.y)
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100% da prancha
@@ -127,7 +127,7 @@ def salva_png():
     png.endDraw()
     if modo_diagrama:
         salva_legenda_diagrama(path)
-    Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
+    pr.Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
 def salva_legenda_diagrama(path):
     png = createGraphics(300, 700)

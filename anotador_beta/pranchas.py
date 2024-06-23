@@ -88,9 +88,9 @@ class Prancha:
         """devolve imagem na prancha atual ou None"""
         path_img = imagens.get(cls.nome_prancha_atual().lower())
         if path_img:
-            return loadImage(path_img)
+            return load_image(path_img)
         else:
-            return createGraphics(10, 10)
+            return create_graphics(10, 10)
 
     @classmethod
     def display_imagem_atual(cls, imagens):
@@ -218,7 +218,7 @@ class Prancha:
         if t:
             push()
             fill(200, 0, 0)
-            textSize(24)
+            text_size(24)
             text(t, interface.OX + 10, interface.OY + 30)
             pop()
 
@@ -226,7 +226,7 @@ class Prancha:
 def image_rot(img, rot, x, y, w=None, h=None):
     w = w or img.width
     h = h or img.height
-    pushMatrix()
+    push_matrix()
     if rot == 1:
         translate(x + h, y)
         rotate(HALF_PI)
@@ -241,4 +241,4 @@ def image_rot(img, rot, x, y, w=None, h=None):
         image(img, 0, 0, w, h)
     else:
         image(img, x, y, w, h)
-    popMatrix()
+    pop_matrix()

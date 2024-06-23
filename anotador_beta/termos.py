@@ -72,11 +72,11 @@ def draw_terms(terms, terms_state=None, DEBUG=False):
         x, y = terms[term]['x'], terms[term]['y']
         w, h = terms[term]['w'], terms[term]['h']
         if DEBUG:
-            pushStyle()
-            noFill()
+            push_style()
+            no_fill()
             strokeWeight(1)
             rect(x, y, w, h)
-            popStyle()
+            pop_style()
         selected = terms_state.get(term, False)
         if selected:
             fill(200, 0, 0)

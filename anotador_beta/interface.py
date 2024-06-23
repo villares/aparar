@@ -1,6 +1,8 @@
 # PY5 IMPORTED MODE CODE
 
-from pranchas import Prancha
+from pathlib import Path
+
+import pranchas as pr
 from areas import Area
 from termos import criar_categorias, criar_tags
 from arquivos import imagens, carrega_pranchas, salva_sessao, carrega_sessao, salva_png
@@ -49,13 +51,20 @@ DIAGR = "d", "mostra [d]iagrama"
 modos = (EDITA, ED100, CRIAR, DIAGR)
 modo_ativo = CRIAR
 
+
 def setup_interface():
-    global botoes, comandos, categorias, tags, super_cats, imagem_prancha_atual
-    Prancha.path_sessao = Prancha.path_sessao or sketch_path('data')
-    Prancha.screen_height = height - (OY + rodape)
+    global tags, categorias, super_cats
+    global botoes, comandos, imagem_prancha_atual
+    pr.Prancha.path_sessao = pr.Prancha.path_sessao or Path.cwd() / 'data'
+    pr.Prancha.screen_height = height - (OY + rodape)
+    
     categorias, super_cats = criar_categorias()
     tags = criar_tags()
-        
+    Area.tags = tags
+    Area.categorias = categorias
+    Area.super_cats = super_cats
+    
+    
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
         LOAD_PRANCHAS:    (MENU_OX, OY + MENU_V_SPACE    , MENU_SELECT_W, MENU_SELECT_H),
@@ -92,12 +101,12 @@ def setup_interface():
     # imagem da prancha "exemplo" ou "home"
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
     imagem_prancha_atual = img = load_image(splash_img_file)
-    fator = Prancha.calc_fator(img)
+    fator = pr.Prancha.calc_fator(img)
     imagens["000"] = splash_img_file
-    p = Prancha("000")
-    Prancha.path = sketch_path('data')
+    p = pr.Prancha("000")
+    pr.Prancha.path =  Path.cwd() / 'data'
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
-    Prancha.pranchas.append(p)
+    pr.Prancha.pranchas.append(p)
 
 def ask_carrega_sessao():
     r = yes_no_pane("Atenção!", "Quer carregar o último estado salvo desta sessão?\n(descarta dados atuais não salvos)")
@@ -114,24 +123,22 @@ def gera_planilhas():
     gera_csv2()
 
 def edita_categorias():
-    nomes = '\n'.join(categorias.keys())
+    nomes = '\n'.join(Area.categorias.keys())
     resultado = multiline_pane(title=EDITA_CATS[1], default=nomes)
     recria_categorias(resultado.split('\n'))
       
 def edita_tags():
-    nomes = '\n'.join(tags.keys())
+    nomes = '\n'.join(Area.tags.keys())
     resultado = multiline_pane(title=EDITA_TAGS[1], default=nomes)
     recria_tags(resultado.split('\n'))
 
 def recria_categorias(novos_nomes=None):
-    global categorias
-    novos_nomes = novos_nomes or categorias.keys()
-    categorias, _ = criar_categorias(novos_nomes)
-
+    novos_nomes = novos_nomes or Area.categorias.keys()
+    Area.categorias, Area.super_cats = criar_categorias(novos_nomes)
+    
 def recria_tags(novos_nomes=None):
-    global tags
-    novos_nomes = novos_nomes or tags.keys()
-    tags = criar_tags(novos_nomes)
+    novos_nomes = novos_nomes or Area.tags.keys()
+    Area.tags = criar_tags(novos_nomes)
 
 def salva_todas_png():
     """
@@ -139,28 +146,28 @@ def salva_todas_png():
     Em modo 'normal' ou em modo diagrama
     """
     global imagem_prancha_atual, exportar_tudo
-    if len(Prancha.pranchas) > 1:
-        Prancha.desselect_all_in_all()
-        Prancha.i_atual = 1
-        imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens) 
+    if len(pr.Prancha.pranchas) > 1:
+        pr.Prancha.desselect_all_in_all()
+        pr.Prancha.i_atual = 1
+        imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens) 
         exportar_tudo = True
     else:
-        Prancha.avisos("Não há pranchas para exportar.")
+        pr.Prancha.avisos("Não há pranchas para exportar.")
 
 def prox_prancha():
     global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual + 1) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+    pr.Prancha.i_atual = (pr.Prancha.i_atual + 1) % len(pr.Prancha.pranchas)
+    imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens)
 
 def volta_prancha():
     global imagem_prancha_atual
-    Prancha.i_atual = (Prancha.i_atual - 1) % len(Prancha.pranchas)
-    imagem_prancha_atual = Prancha.load_img_prancha_atual(imagens)
+    pr.Prancha.i_atual = (pr.Prancha.i_atual - 1) % len(pr.Pranchancha.pranchas)
+    imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens)
     
 def rot_prancha():
-    pa = Prancha.pranchas[Prancha.i_atual]
+    pa = pr.Prancha.pranchas[pr.Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
-    img, rot, fator = Prancha.imagem_rot_fator_atual()
+    img, rot, fator = pr.Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
         pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator) # INVERTIDA
     elif img:
@@ -168,23 +175,23 @@ def rot_prancha():
 
 def abre_imagem_prancha_atual():
     """ comando Z: abre imagem original da prancha pelo sistema operacional ('launch()')"""
-    nome_prancha_lower = Prancha.nome_prancha_atual().lower()
+    nome_prancha_lower = pr.Prancha.nome_prancha_atual().lower()
     if nome_prancha_lower != '000':
         path_img = imagens.get(nome_prancha_lower)
         # print(path_img)
         if path_img:        
             launch(path_img)
     else:
-        Prancha.avisos("Só para pranchas de verdade!")
+        pr.Prancha.avisos("Só para pranchas de verdade!")
 
 def mouse_over(b):
     x, y, w, h = botoes[b]
-    return x < mouseX < x + w and y < mouseY < y + h
+    return x < mouse_x < x + w and y < mouse_y < y + h
 
 def display_botoes(DEBUG=False):
-    pushStyle()
-    textSize(MENU_TEXT_SIZE)
-    textAlign(LEFT, TOP)    
+    push_style()
+    text_size(MENU_TEXT_SIZE)
+    text_align(LEFT, TOP)    
     for b in botoes:
         tecla, nome = b
         if b == modo_ativo:
@@ -197,14 +204,14 @@ def display_botoes(DEBUG=False):
         # desenha botão (texto)
         x, y, w, h = botoes[b]
         if DEBUG:
-            pushStyle()
-            noFill()
+            push_style()
+            no_fill()
             rect(x, y, w, h)  # área clicável do texto dos botoes
-            popStyle()
+            pop_style()
         text(nome, x, y)
     # Nome da prancha atual
-    Prancha.display_nome_atual(OX + 4.5 * MENU_H_SPACE, MENU_OY)
-    pushStyle()
+    pr.Prancha.display_nome_atual(OX + 4.5 * MENU_H_SPACE, MENU_OY)
+    pop_style()
 
 def key_pressed(k, kc):
     global modo_ativo
@@ -212,7 +219,7 @@ def key_pressed(k, kc):
         k = kc
 
     if k in (DELETE, BACKSPACE):
-       areas = Prancha.get_areas_atual()
+       areas = pr.Prancha.get_areas_atual()
        for a in areas[1:]: # pula a primeira área (100%) que não pode ser removida
          if a.selected:
             areas.remove(a) 
@@ -239,7 +246,7 @@ def mouse_pressed(mb):
                 comandos[botao]()
             return  # evita que qualquer outra ação seja realizada
 
-    areas = Prancha.get_areas_atual()
+    areas = pr.Prancha.get_areas_atual()
     # tratamento dos tags e categorias
     if modo_ativo in (EDITA, CRIAR):
         for a in areas:
@@ -249,19 +256,19 @@ def mouse_pressed(mb):
     if modo_ativo == EDITA:  # editar
         for a in reversed(areas):
             if a.mouse_over():
-                Prancha.desselect_all()
+                pr.Prancha.desselect_all()
                 a.selected = True
                 break
     elif modo_ativo == CRIAR and mb == LEFT:  # criar
         if areas[0].mouse_over():
-            Prancha.desselect_all()
-            a = Area(mouseX, mouseY, MIN_SIZE, MIN_SIZE)
+            pr.Prancha.desselect_all()
+            a = Area(mouse_x, mouse_y, MIN_SIZE, MIN_SIZE)
             a.selected = True
             areas.append(a)
 
 def mouse_dragged(mb):
-    areas = Prancha.get_areas_atual()
-    dx, dy = mouseX - pmouseX, mouseY - pmouseY
+    areas = pr.Prancha.get_areas_atual()
+    dx, dy = mouse_x - pmouse_x, mouse_y - pmouse_y
     a0 = areas[0]  # A primeira área, que o limite útil da prancha, referência de 100%
     if modo_ativo == ED100:
         if mb == LEFT:
@@ -292,13 +299,13 @@ def mouse_dragged(mb):
                 if r.h + dy > MIN_SIZE:
                     r.h = r.h + dy
             elif modo_ativo == CRIAR and areas[0].mouse_over():
-                if mouseX - r.x > MIN_SIZE:
-                    r.w = mouseX - r.x
-                if mouseY - r.y > MIN_SIZE:
-                    r.h = mouseY - r.y
+                if mouse_x - r.x > MIN_SIZE:
+                    r.w = mouse_x - r.x
+                if mouse_y - r.y > MIN_SIZE:
+                    r.h = mouse_y - r.y
 
 def mouse_wheel(e):
-    areas = Prancha.get_areas_atual()
+    areas = pr.Prancha.get_areas_atual()
     if modo_ativo in (EDITA, CRIAR):   # editar ou criar
         for a in reversed(areas[1:]):  # pula a primeira área (100%) que não pode ser girada
             if a.mouse_over():

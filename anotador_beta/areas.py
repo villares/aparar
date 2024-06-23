@@ -1,7 +1,7 @@
 # PY5 IMPORTED MODE CODE
 
 from termos import setup_terms_state, active_term_state, draw_terms, select_cat, select_tag
-from pranchas import Prancha # para usar nome_prancha_atual()
+import pranchas # para usar nome_prancha_atual()
 import interface
 
 class Area:
@@ -15,8 +15,8 @@ class Area:
         self.over = False
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
-        self.tags_state = setup_terms_state(interface.tags)  # *
-        self.categorias_state = setup_terms_state(interface.categorias)  # *
+        self.tags_state = setup_terms_state(Area.tags)  # *
+        self.categorias_state = setup_terms_state(Area.categorias)  # *
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
@@ -39,35 +39,35 @@ class Area:
         modo_anotativo = (interface.modo_ativo == interface.EDITA or
                           interface.modo_ativo == interface.CRIAR)
         modo_diagrama = interface.modo_ativo == interface.DIAGR
-        pushStyle()
-        textSize(interface.TERM_FONT_SIZE)
+        push_style()
+        text_size(interface.TERM_FONT_SIZE)
         stroke(0)
         if self.selected and self.cobertura != 1 and not modo_diagrama:
             stroke(200, 0, 0)
             strokeWeight(3)
             if modo_anotativo:
-                draw_terms(interface.categorias, self.categorias_state, DEBUG)
-                draw_terms(interface.tags, self.tags_state, DEBUG)
+                draw_terms(Area.categorias, self.categorias_state, DEBUG)
+                draw_terms(Area.tags, self.tags_state, DEBUG)
         elif self.over and self.cobertura != 1 and not modo_diagrama:
-            strokeWeight(5)
+            stroke_weight(5)
             self.over = False
         else:
-            strokeWeight(2)
+            stroke_weight(2)
         # pega dados da categoria que está selecionada (se houver)
-        cat = interface.categorias.get(self.cat_selected)
+        cat = Area.categorias.get(self.cat_selected)
         if cat and modo_diagrama:
             fill(Area.calc_color(self.cat_selected))
-            noStroke()
+            no_stroke()
         else:  # senão usa cinza translúcido padrão
             fill(0, 20)
         # caso especial do modo de editar área de referência 100%
         if interface.modo_ativo == interface.ED100:
             if self.cobertura == 1:
                 stroke(200, 0, 0)
-                strokeWeight(5)
+                stroke_weight(5)
             else:
                 stroke(0)
-                strokeWeight(3)
+                stroke_weight(3)
         # desenha o retângulo da área
         push()
         translate(self.x + self.w / 2, self.y + self.h / 2)
@@ -76,27 +76,27 @@ class Area:
         pop()
         fill(0)  # textos da área em preto
         if not modo_diagrama:
-            textAlign(LEFT, TOP)
+            text_align(LEFT, TOP)
             text(self.cat_selected,
                  self.x + 10,
                  self.y + 10)
-        textAlign(CENTER, CENTER)
-        textSize(interface.AREA_FONT_SIZE)
+        text_align(CENTER, CENTER)
+        text_size(interface.AREA_FONT_SIZE)
         # caso da área de referência 100% (cobertura == 1)
         if self.cobertura == 1 and modo_diagrama:
-            text(Prancha.nome_prancha_atual(),
+            text(pranchas.Prancha.nome_prancha_atual(),
                  self.x + self.w / 2,
                  self.y + self.h - 20)
         else:
             text("{:2.1%}".format(self.cobertura),
                  self.x + self.w / 2,
                  self.y + self.h - 20)
-        popStyle()
+        pop_style()
 
     def cat_and_tag_selection(self):
         if self.cobertura != 1:  # menos para a àrea de ref. 100%
-            select_cat(interface.categorias, self.categorias_state)
-            select_tag(interface.tags, self.tags_state)
+            select_cat(Area.categorias, self.categorias_state)
+            select_tag(Area.tags, self.tags_state)
 
     def mouse_over(self):
         rp = rect_points(self.x + self.w / 2,
@@ -105,15 +105,15 @@ class Area:
                          mode=CENTER,
                          angle=self.rotation
                          )
-        return point_inside_poly(mouseX, mouseY, rp)
+        return point_inside_poly(mouse_x, mouse_y, rp)
 
     @staticmethod
     def calc_color(cat_name):
-        cat = interface.categorias.get(cat_name)
+        cat = Area.categorias.get(cat_name)
         if cat:
             h = cat['id_cor']
             with push():
-                colorMode(HSB)
+                color_mode(HSB)
                 return color(h, 128 + 128 * (h % 2), 255 - 128 * (h % 3), 155)
 
 def point_inside_poly(x, y, pts):
