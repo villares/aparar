@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*
-from __future__ import unicode_literals
+# PY5 IMPORTED MODE CODE
 
 from termos import setup_terms_state, active_term_state, draw_terms, select_cat, select_tag
 from pranchas import Prancha # para usar nome_prancha_atual()
@@ -117,12 +116,12 @@ class Area:
                 colorMode(HSB)
                 return color(h, 128 + 128 * (h % 2), 255 - 128 * (h % 3), 155)
 
-def point_inside_poly(x, y, points):
+def point_inside_poly(x, y, pts):
     # ray-casting algorithm based on
     # https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
     inside = False
-    for i, p in enumerate(points):
-        pp = points[i - 1]
+    for i, p in enumerate(pts):
+        pp = pts[i - 1]
         xi, yi = p
         xj, yj = pp
         intersect = ((yi > y) != (yj > y)) and (
@@ -136,12 +135,12 @@ def rect_points(ox, oy, w, h, mode=CORNER, angle=None):
         x, y = ox - w / 2.0, oy - h / 2.0
     else:
         x, y = ox, oy
-    points = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+    pts = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
     if angle is None:
-        return points
+        return pts
     else:
         return [rotate_point((x, y), angle, (ox, oy))
-                for x, y in points]
+                for x, y in pts]
 
 def rotate_point(*args):
     (xp, yp), angle, (x0, y0) = args
