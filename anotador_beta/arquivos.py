@@ -111,7 +111,7 @@ def salva_png():
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100% da prancha
     # Salva img temporária da tela toda, não queria ter que usar isso :(
-    tem_path = Path.cwd()/ 'data" / "temp.png"
+    tem_path = Path.cwd() / 'data' / 'temp.png'
     save_frame(tem_path)
     temp = load_image(tem_path)
     png = create_graphics(w, h)
