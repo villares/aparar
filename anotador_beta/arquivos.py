@@ -48,12 +48,14 @@ def adicionar_imagens(selection):
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
         caminhos_imagens = lista_imagens(selection)
         for image_path in caminhos_imagens:
-            imagens[image_path.name.lower()] = image_path
+            img_name = image_path.name.lower()
+            imagens[img_name] = image_path
         if not carrega_sessao() or (len(imagens) != len(pr.Prancha.pranchas) - 1):
             for image_path in caminhos_imagens:
+                img_name = image_path.name.lower()
                 pr.Prancha.avisos("carregando imagens")
                 img = load_image(image_path)
-                imagens[image_path.name.lower()] = image_path
+                imagens[img_name] = image_path
                 fator = pr.Prancha.calc_fator(img)
                 if not pr.Prancha.in_pranchas(img_name):
                     p = pr.Prancha(img_name)
