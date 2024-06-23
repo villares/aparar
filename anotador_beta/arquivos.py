@@ -2,8 +2,9 @@
 
 import pickle
 # TODO - convert to pathlib.Path
-from os import listdir
-from os.path import isfile, join, splitext
+from pathlib import Path
+#from os import listdir
+#from os.path import isfile, join, splitext
 
 import pranchas as pr
 from areas import Area
@@ -16,50 +17,46 @@ NOME_ARQ_SESSAO_LEGADO = "sessao_aparar_v20210104ire.pickle"
 
 def lista_imagens(dir=None):
     """
-    Devolve uma a lista de tuplas com os nomes dos arquivos de imagem e os caminhos
-    completos para cada uma das images na pasta `dir` ou na pasta /data/ do sketch.
+    Devolve uma a lista de caminhos completos (paths) dos arquivos de imagem
+    para cada imagem na pasta `dir` ou na pasta /data/ do diretório corrente
     """
-    def has_image_ext(file_name):
-        # extensões dos formatos de imagem que o Processing aceita!
-        valid_ext = ('jpg', 'png', 'jpeg', 'gif', 'tif', 'tga')
-        file_ext = file_name.split('.')[-1]
-        return file_ext.lower() in valid_ext
+    def has_image_ext(file_path):
+        # extensões dos formatos de imagem aceitos
+        valid_ext = ('.jpg', '.png', '.jpeg', '.gif', '.tif', '.tga')
+        return file_path.suffix.lower() in valid_ext
 
-    data_path = dir or sketchPath('data')
+    data_path = dir or Path.cwd() / 'data'
     try:
-        f_list = [(f, join(data_path, f)) for f in listdir(data_path)
-                  if isfile(join(data_path, f)) and has_image_ext(f)]
+        p_list = [fp for fp in Path(dir).iterdir()
+                  if fp.isfile() and has_image_ext(fp)]
     except Exception as e:
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return []
-    return f_list
+    return p_list
 
 def carrega_pranchas():
     # Operação normal de adicionar_imagens() é via callback disparado por selectFolder()
-    # Cuidado que o Processing silencia erros durante selectFolder, vide opção
-    # para debug!
     select_folder("Selecione uma pasta", adicionar_imagens)
-    # Para o debug, comente a linha acima e use "chamada direta" de adicionar_imagens() abaixo
-    # adicionar_imagens(File("/home/villares/Área de Trabalho/APARAR/pr.Pranchas para teste"))
+    # Para o debug, talvez seja preciso comentar a linha acima e
+    # usar "chamada direta" de adicionar_imagens() abaixo
+    # adicionar_imagens(Path("/home/villares/Área de Trabalho/APARAR/pr.Pranchas para teste"))
 
 def adicionar_imagens(selection):
     if selection == None:
-        pr.Prancha.avisos("seleção da pasta cancelada")
+        pr.Prancha.avisos("Seleção da pasta cancelada")
     else:
-        dir_path = selection
-        pr.Prancha.path_sessao = dir_path
+        pr.Prancha.path_sessao = selection
         pr.Prancha.nome_sessao = selection.name
-        print("Pasta selecionada: " + dir_path)
+        print("Pasta selecionada: " + str(dir_path))
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
-        for file_name, file_path in lista_imagens(dir_path):
-            img_name = splitext(file_name)[0]
-            imagens[img_name.lower()] = file_path
+        caminhos_imagens = lista_imagens(selection)
+        for image_path in caminhos_imagens:
+            imagens[image_path.name.lower()] = image_path
         if not carrega_sessao() or (len(imagens) != len(pr.Prancha.pranchas) - 1):
-            for file_name, file_path in lista_imagens(dir_path):
+            for image_path in caminhos_imagens:
                 pr.Prancha.avisos("carregando imagens")
-                img = loadImage(file_path)
-                img_name = file_name.split('.')[0]
-                imagens[img_name.lower()] = file_path
+                img = load_image(image_path)
+                imagens[image_path.name.lower()] = image_path
                 fator = pr.Prancha.calc_fator(img)
                 if not pr.Prancha.in_pranchas(img_name):
                     p = pr.Prancha(img_name)
