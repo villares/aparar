@@ -27,7 +27,7 @@ from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
 DEBUG = False
 
 def setup():
-    size(1200, 740)
+    size(1500, 740)
     #full_screen()
     interface.setup_interface()
 
