@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+# PY5 IMPORTED MODE CODE
 
-from processing.data import Table
+#from processing.data import Table
 from collections import Counter, defaultdict
 from os.path import join
 
@@ -68,7 +67,7 @@ def gera_csv():
         escreve_linha(nova_linha, super_cats, scat_count, scobertura,
                       categorias, cat_count, cobertura,
                       tags, tag_count)
-    print Prancha.path_sessao
+    print(Prancha.path_sessao)
     file = join(Prancha.path_sessao, NOME_PLANILHA)
     saveTable(table, file)
     Prancha.avisos("CSV salvo em …" + unicode(Prancha.path_sessao)[-40:])
