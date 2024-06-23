@@ -1,10 +1,7 @@
 # PY5 IMPORTED MODE CODE
 
 import pickle
-# TODO - convert to pathlib.Path
 from pathlib import Path
-#from os import listdir
-#from os.path import isfile, join, splitext
 
 import pranchas as pr
 from areas import Area
@@ -28,7 +25,7 @@ def lista_imagens(dir=None):
     data_path = dir or Path.cwd() / 'data'
     try:
         p_list = [fp for fp in Path(dir).iterdir()
-                  if fp.isfile() and has_image_ext(fp)]
+                  if fp.is_file() and has_image_ext(fp)]
     except Exception as e:
         print("Erro ({0}): {1}".format(e.errno, e.strerror))
         return []
@@ -47,7 +44,7 @@ def adicionar_imagens(selection):
     else:
         pr.Prancha.path_sessao = selection
         pr.Prancha.nome_sessao = selection.name
-        print("Pasta selecionada: " + str(dir_path))
+        print("Pasta selecionada: " + str(selection))
         # ESTA PARTE FINAL MUDA NA VERSAO QUE NAO MANTEM IMAGENS NA MEMORIA
         caminhos_imagens = lista_imagens(selection)
         for image_path in caminhos_imagens:
@@ -107,28 +104,29 @@ def salva_png():
     prefixo = "diagrama" if modo_diagrama else "imagem"
     nome_arquivo = "{}-{}.png".format(prefixo, pr.Prancha.nome_prancha_atual())
     sub_folder = "diagramas" if modo_diagrama else "imagens"
-    path = join(pr.Prancha.path_sessao, sub_folder)  # pasta diagramas ou imagens
-    path_arquivo = join(path, nome_arquivo)
+    path_folder = pr.Prancha.path_sessao / sub_folder  # pasta diagramas ou imagens
+    path_arquivo = path_folder / nome_arquivo
     area = pr.Prancha.get_areas_atual()[0]
     x, y = int(area.x), int(area.y)
     w, h = int(area.w), int(area.h)
     # Para salvar só a área 100% da prancha
     # Salva img temporária da tela toda, não queria ter que usar isso :(
-    saveFrame(join("data", "temp.png"))
-    temp = loadImage("temp.png")
-    png = createGraphics(w, h)
-    png.beginDraw()
+    tem_path = Path.cwd()/ 'data" / "temp.png"
+    save_frame(tem_path)
+    temp = load_image(tem_path)
+    png = create_graphics(w, h)
+    png.begin_draw()
     png.background(255)
     png.copy(temp, x + 1, y + 1, w, h, 0, 0, w, h)
     png.save(path_arquivo)  # salva arquivo só com o conteúdo da área do 100%
-    png.endDraw()
+    png.end_draw()
     if modo_diagrama:
         salva_legenda_diagrama(path)
     pr.Prancha.avisos("Imagem salva: {}".format(nome_arquivo))
 
 def salva_legenda_diagrama(path):
-    png = createGraphics(300, 700)
-    png.beginDraw()
+    png = create_graphics(300, 700)
+    png.begin_draw()
     png.background(200)
     nomes_categorias = sorted(interface.categorias.keys())
     for i, nome_cat in enumerate(nomes_categorias):
@@ -136,5 +134,5 @@ def salva_legenda_diagrama(path):
         png.rect(20, i * 25, 40, 20)
         png.fill(0)
         png.text(nome_cat, 70, 15 + i * 25)
-    png.save(join(path, "legenda.png"))
-    png.endDraw()
+    png.save(Path(path) / "legenda.png")
+    png.end_draw()
