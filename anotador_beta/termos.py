@@ -114,5 +114,5 @@ def active_term_state(terms_state, all=False):
 def mouse_over_term(term, terms):
     x, y = terms[term]['x'], terms[term]['y']
     w, h = terms[term]['w'], terms[term]['h']
-    return (x < mouseX < x + w and
-            y < mouseY < y + h)
+    return (x < mouse_x < x + w and
+            y < mouse_y < y + h)
