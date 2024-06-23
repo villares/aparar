@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# PY5 IMPORTED MODE CODE
 
 from collections import OrderedDict
 
