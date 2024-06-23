@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals, division
+# PY5 IMPORTED MODE CODE
 
 import interface
 
@@ -139,7 +138,7 @@ class Prancha:
             print("update for screen change")
             dy = current_height - recorded_height
             cf = Prancha.calc_correction_factor()
-            print int(recorded_height) * cf, current_height
+            print(int(recorded_height) * cf, current_height)
             Prancha.screen_height = current_height
             for prancha in cls.pranchas:
                 for area in prancha.areas:
