@@ -8,7 +8,7 @@ import interface
 CATEGORIAS_TXT, TAGS_TXT = "categorias.txt", "tags.txt"
 
 def criar_categorias(strings=None):
-    strings = strings or loadStrings(CATEGORIAS_TXT)
+    strings = strings or load_strings(CATEGORIAS_TXT)
     nomes = list(OrderedDict.fromkeys(strings))      # remove duplicações mas mantém a ordem
     categorias = setup_terms(nomes,       # nomes das categorias
                                         interface.MENU_OX, # x_inicial
@@ -19,7 +19,7 @@ def criar_categorias(strings=None):
     return categorias, super_cats
     
 def criar_tags(strings=None):
-    strings = strings or loadStrings(TAGS_TXT)
+    strings = strings or load_strings(TAGS_TXT)
     nomes = list(OrderedDict.fromkeys(strings))      # remove duplicações mas mantém a ordem
     tags = setup_terms(nomes,             # nomes dos tags
                                   20 + interface.OX,              # x_inicial
@@ -35,8 +35,8 @@ def setup_terms(strings, x, y, width_, lh, wgap=20, hgap=2):
                   
     def pos(i, t, lw, lh=25):
         # set pos.x, pos.xo, pox.y before you call this
-        textSize(interface.TERM_FONT_SIZE)
-        pos.tw = textWidth(t)
+        text_size(interface.TERM_FONT_SIZE)
+        pos.tw = text_width(t)
         if pos.x + pos.tw > lw:
             pos.x = pos.xo
             pos.y += lh + hgap
