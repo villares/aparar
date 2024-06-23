@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+# PY5 IMPORTED MODE CODE
 
 import pickle
+# TODO - convert to pathlib.Path
 from os import listdir
 from os.path import isfile, join, splitext
-from java.io import File
 
 from pranchas import Prancha
 from areas import Area
@@ -98,7 +97,7 @@ def carrega_sessao():
     except Exception as e:
         # pode ser que não havia sessão ou outro erro...
         Prancha.avisos("não foi carregada uma sessão salva")
-        print "Deve imprimir 'Erro (File IO)', senão tem algo errado!"
+        print("Deve imprimir 'Erro (File IO)', senão tem algo errado!")
         print("Erro ({})".format(e))
         return False
 
