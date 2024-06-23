@@ -62,7 +62,7 @@ def adicionar_imagens(selection):
                     pr.Prancha.pranchas.append(p)
 
 def salva_sessao():
-    with open(join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO), "wb") as file:
+    with open(pr.Prancha.path_sessao / NOME_ARQ_SESSAO, "wb") as file:
         # Cats e tags entraram no antigo slot de pr.Prancha.path_sessao no Pickle!
         sessao = (pr.Prancha.pranchas, (interface.categorias, interface.tags), pr.Prancha.screen_height)
         pickle.dump(sessao, file)
@@ -71,10 +71,10 @@ def salva_sessao():
     print(mensagem)
 
 def carrega_sessao():
-    if isfile(join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO)):
-        PATH_ARQ_SESSAO = join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO)
+    if (pr.Prancha.path_sessao / NOME_ARQ_SESSAO).is_file():
+        PATH_ARQ_SESSAO =pr.Prancha.path_sessao / NOME_ARQ_SESSAO
     else:
-        PATH_ARQ_SESSAO = join(pr.Prancha.path_sessao, NOME_ARQ_SESSAO_LEGADO)        
+        PATH_ARQ_SESSAO = pr.Prancha.path_sessao / NOME_ARQ_SESSAO_LEGADO        
     try:
         with open(PATH_ARQ_SESSAO, "rb") as file:
             pr.Prancha.pranchas, cats_e_tags, pr.Prancha.screen_height = pickle.load(file)
@@ -84,7 +84,7 @@ def carrega_sessao():
                 # compatibilidade com arquivos antigos!
                 interface.categorias, interface.tags = cats_e_tags
                 print("Categorias e tags carregados da sessão salva!")
-            mensagem = "Sessao carregada de …" + unicode(PATH_ARQ_SESSAO[-40:])
+            mensagem = "Sessao carregada de …" + str(PATH_ARQ_SESSAO)[-40:]
             pr.Prancha.avisos(mensagem)
             print(mensagem)
             return True
