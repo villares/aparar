@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+# PY5 IMPORTED MODE CODE
 
 from pranchas import Prancha
 from areas import Area
@@ -52,7 +51,7 @@ modo_ativo = CRIAR
 
 def setup_interface():
     global botoes, comandos, categorias, tags, super_cats, imagem_prancha_atual
-    Prancha.path_sessao = Prancha.path_sessao or sketchPath('data')
+    Prancha.path_sessao = Prancha.path_sessao or sketch_path('data')
     Prancha.screen_height = height - (OY + rodape)
     categorias, super_cats = criar_categorias()
     tags = criar_tags()
@@ -92,11 +91,11 @@ def setup_interface():
                 }
     # imagem da prancha "exemplo" ou "home"
     splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
-    imagem_prancha_atual = img = loadImage(splash_img_file)
+    imagem_prancha_atual = img = load_image(splash_img_file)
     fator = Prancha.calc_fator(img)
     imagens["000"] = splash_img_file
     p = Prancha("000")
-    Prancha.path = sketchPath('data')
+    Prancha.path = sketch_path('data')
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     Prancha.pranchas.append(p)
 
