@@ -1,6 +1,6 @@
 # PY5 IMPORTED MODE CODE
 
-#from processing.data import Table
+from processing.data import Table
 from collections import Counter, defaultdict
 from os.path import join
 
