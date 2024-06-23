@@ -20,8 +20,6 @@ co-criar co-mover de Graziele Lautenschlaeger https://github.com/grazilaut/co_cr
 #     [ ] Renomear termo (procurar aplicações do termo nas Areas)
 #     [ ] Remover termo (remover aplicações)
 
-from __future__ import unicode_literals
-
 import interface
 from areas import Area
 from pranchas import Prancha
@@ -30,8 +28,8 @@ from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
 DEBUG = False
 
 def setup():
-    # size(1200, 740)
-    fullScreen()
+    size(1200, 740)
+    #full_screen()
     interface.setup_interface()
 
 def draw():
@@ -52,18 +50,18 @@ def draw():
     # Textos de aviso
     Prancha.avisos()
 
-def mousePressed():
+def mouse_pressed():
     interface.mouse_pressed(mouseButton)
 
-def mouseDragged():
+def mouse_dragged():
     interface.mouse_dragged(mouseButton)
 
-def keyPressed():
+def key_pressed():
     interface.key_pressed(key, keyCode)
     global DEBUG
     if key == '!': DEBUG = not DEBUG
     
-def mouseWheel(e):
+def mouse_wheel(e):
     interface.mouse_wheel(e)    
     
 def stop():
