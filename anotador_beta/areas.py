@@ -44,7 +44,7 @@ class Area:
         stroke(0)
         if self.selected and self.cobertura != 1 and not modo_diagrama:
             stroke(200, 0, 0)
-            strokeWeight(3)
+            stroke_weight(3)
             if modo_anotativo:
                 draw_terms(Area.categorias, self.categorias_state, DEBUG)
                 draw_terms(Area.tags, self.tags_state, DEBUG)
