@@ -161,7 +161,7 @@ def prox_prancha():
 
 def volta_prancha():
     global imagem_prancha_atual
-    pr.Prancha.i_atual = (pr.Prancha.i_atual - 1) % len(pr.Pranchancha.pranchas)
+    pr.Prancha.i_atual = (pr.Prancha.i_atual - 1) % len(pr.Prancha.pranchas)
     imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens)
     
 def rot_prancha():
@@ -309,7 +309,7 @@ def mouse_wheel(e):
     if modo_ativo in (EDITA, CRIAR):   # editar ou criar
         for a in reversed(areas[1:]):  # pula a primeira área (100%) que não pode ser girada
             if a.mouse_over():
-                a.rotation += radians(e.getCount())
+                a.rotation += radians(e.get_count())
                 break
     
 def yes_no_pane(title, message):
