@@ -2,14 +2,15 @@
 
 ### Anotador de Pranchas para Análise e Registro de Áreas Relativas
 
+**Este branch contém a tentativa de migrar a ferramenta, saindo do Processing IDE, adotando a biblioteca [py5](https://py5coding) como infraestrutura.**
+
 #### Objetivo
 Ferramenta experimental para facilitar a anotação e posterior análise de documentos, especialmente "pranchas" usadas para representação de projetos, permitindo  marcar e identificar com categorias regiões do documento, gerando depois um relatório com quantificação das áreas relativas entre as regiões.
 
 #### Dependências e instalação
- - Instale o Processing IDE 3.5.4 e a extensão modo Python ([instruções detalhadas](https://abav.lugaralgum.com/como-instalar-o-processing-modo-python/))
- - Baixe o conteúdo da pasta `anotador_beta` e caso esteja em um arquivo compactado, a descompacte.
- - Abra o Processing IDE e use-o para abrir o arquivo com terminação `.pyde` na pasta `anotador_beta`.
-
+ - [Ambiente com Thonny + py5](https://abav.lugaralgum.com/como-instalar-py5/)
+ - ...  (trabalho em andamento) 
+ 
 #### Instruções de operação
 
 - Selecione uma pasta com imagens PNG ou JPG com nomes no formato `AAAAA_BBBBB_CCC_texto_livre.png`
