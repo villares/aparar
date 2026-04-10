@@ -1,10 +1,15 @@
 # PY5 IMPORTED MODE CODE
 
 from termos import setup_terms_state, active_term_state, draw_terms, select_cat, select_tag
-import pranchas # para usar nome_prancha_atual()
+import pranchas  # para usar nome_prancha_atual()
 import interface
 
 class Area:
+
+    # NOTE: Area.tags, Area.categorias, Area.super_cats are set as class attributes
+    # by interface.setup_interface() before any Area instance is created.
+    # Pickle restore does NOT call __init__, so class attributes just need to be
+    # set by setup_interface() (which runs before any session loading).
 
     def __init__(self, x, y, w, h):
         self.x = x
@@ -15,8 +20,8 @@ class Area:
         self.over = False
         self.area = self.w * self.h
         self.cobertura = 1  # 100%
-        self.tags_state = setup_terms_state(Area.tags)  # *
-        self.categorias_state = setup_terms_state(Area.categorias)  # *
+        self.tags_state = setup_terms_state(Area.tags)
+        self.categorias_state = setup_terms_state(Area.categorias)
         self.cat_selected = ""
         self.scat_selected = None
         self.tags_selected = []
@@ -94,7 +99,7 @@ class Area:
         pop_style()
 
     def cat_and_tag_selection(self):
-        if self.cobertura != 1:  # menos para a àrea de ref. 100%
+        if self.cobertura != 1:  # menos para a área de ref. 100%
             select_cat(Area.categorias, self.categorias_state)
             select_tag(Area.tags, self.tags_state)
 
