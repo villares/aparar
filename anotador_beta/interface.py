@@ -33,15 +33,15 @@ SALVA_SESSAO = "s", "[s]alvar sessão"
 LOAD_SESSAO = "c", "[c]arregar sessão"
 GERA_CSV = "g", "[g]erar CSV"
 SALVA_PNG = "p", "salvar [p]ng/t[o]das"
-SALVA_TODAS_PNG = "o", "salvar todas png" # sem botão
-EDITA_CATS = ";", "editar categorias" # sem botão
-EDITA_TAGS = ":", "editar tags" # sem botão
+SALVA_TODAS_PNG = "o", "salvar todas png"  # sem botão
+EDITA_CATS = ";", "editar categorias"     # sem botão
+EDITA_TAGS = ":", "editar tags"           # sem botão
 
 # menu "alto da prancha"
 VOLTA_PRANCHA = LEFT, "[←] volta prancha"
 PROX_PRANCHA = RIGHT, "[→] prox. prancha"
 ROT_PRANCHA = "9", "[9] girar imagem 90°"
-ZOOM = "z", "[z] abrir imagem original"  
+ZOOM = "z", "[z] abrir imagem original"
 
 # menu de modos / estados de operação da ferramenta
 CRIAR = "a", "[a]dicionar áreas"
@@ -53,18 +53,18 @@ modo_ativo = CRIAR
 
 
 def setup_interface():
-    global tags, categorias, super_cats
     global botoes, comandos, imagem_prancha_atual
     pr.Prancha.path_sessao = pr.Prancha.path_sessao or Path.cwd() / 'data'
     pr.Prancha.screen_height = height - (OY + rodape)
-    
+
     categorias, super_cats = criar_categorias()
     tags = criar_tags()
+
+    # Store on the Area class so all modules share the same single source of truth.
     Area.tags = tags
     Area.categorias = categorias
     Area.super_cats = super_cats
-    
-    
+
     botoes = {
         ("", "ARQUIVOS"): (MENU_OX, OY,                    MENU_SELECT_W, MENU_SELECT_H),
         LOAD_PRANCHAS:    (MENU_OX, OY + MENU_V_SPACE    , MENU_SELECT_W, MENU_SELECT_H),
@@ -73,16 +73,16 @@ def setup_interface():
         GERA_CSV:         (MENU_OX, OY + MENU_V_SPACE * 4, MENU_SELECT_W, MENU_SELECT_H),
         SALVA_PNG:        (MENU_OX, OY + MENU_V_SPACE * 5, MENU_SELECT_W, MENU_SELECT_H),
         # modos / estados de operação da ferramenta
-        ("", "ÁREAS"):    (MENU_OX, OY + MENU_V_SPACE * 7, MENU_SELECT_W, MENU_SELECT_H),
-        CRIAR:            (MENU_OX, OY + MENU_V_SPACE * 8, MENU_SELECT_W, MENU_SELECT_H),
-        EDITA:            (MENU_OX, OY + MENU_V_SPACE * 9, MENU_SELECT_W, MENU_SELECT_H),
+        ("", "ÁREAS"):    (MENU_OX, OY + MENU_V_SPACE * 7,  MENU_SELECT_W, MENU_SELECT_H),
+        CRIAR:            (MENU_OX, OY + MENU_V_SPACE * 8,  MENU_SELECT_W, MENU_SELECT_H),
+        EDITA:            (MENU_OX, OY + MENU_V_SPACE * 9,  MENU_SELECT_W, MENU_SELECT_H),
         ED100:            (MENU_OX, OY + MENU_V_SPACE * 10, MENU_SELECT_W, MENU_SELECT_H),
         DIAGR:            (MENU_OX, OY + MENU_V_SPACE * 11, MENU_SELECT_W, MENU_SELECT_H),
         # menu superior ("menu da prancha")
         VOLTA_PRANCHA: (OX,                    MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
         PROX_PRANCHA:  (OX + MENU_H_SPACE,     MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
         ROT_PRANCHA:   (OX + MENU_H_SPACE * 2, MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
-        ZOOM:          (OX + MENU_H_SPACE * 3, MENU_OY, MENU_SELECT_W, MENU_SELECT_H)
+        ZOOM:          (OX + MENU_H_SPACE * 3, MENU_OY, MENU_SELECT_W, MENU_SELECT_H),
     }
     # dict de funções acionadas pelos botões ou pelo teclado
     comandos = {LOAD_PRANCHAS: carrega_pranchas,
@@ -94,17 +94,17 @@ def setup_interface():
                 PROX_PRANCHA: prox_prancha,
                 VOLTA_PRANCHA: volta_prancha,
                 ROT_PRANCHA: rot_prancha,
-                ZOOM: abre_imagem_prancha_atual, 
+                ZOOM: abre_imagem_prancha_atual,
                 EDITA_CATS: edita_categorias,
                 EDITA_TAGS: edita_tags,
                 }
     # imagem da prancha "exemplo" ou "home"
-    splash_img_file = 'splash_img.jpg'  # aquivo na pasta /data/
+    splash_img_file = 'splash_img.jpg'  # arquivo na pasta /data/
     imagem_prancha_atual = img = load_image(splash_img_file)
     fator = pr.Prancha.calc_fator(img)
     imagens["000"] = splash_img_file
     p = pr.Prancha("000")
-    pr.Prancha.path =  Path.cwd() / 'data'
+    pr.Prancha.path = Path.cwd() / 'data'
     p.areas.append(Area(OX, OY, img.width * fator, img.height * fator))
     pr.Prancha.pranchas.append(p)
 
@@ -126,30 +126,30 @@ def edita_categorias():
     nomes = '\n'.join(Area.categorias.keys())
     resultado = multiline_pane(title=EDITA_CATS[1], default=nomes)
     recria_categorias(resultado.split('\n'))
-      
+
 def edita_tags():
     nomes = '\n'.join(Area.tags.keys())
     resultado = multiline_pane(title=EDITA_TAGS[1], default=nomes)
     recria_tags(resultado.split('\n'))
 
 def recria_categorias(novos_nomes=None):
-    novos_nomes = novos_nomes or Area.categorias.keys()
+    novos_nomes = novos_nomes or list(Area.categorias.keys())
     Area.categorias, Area.super_cats = criar_categorias(novos_nomes)
-    
+
 def recria_tags(novos_nomes=None):
-    novos_nomes = novos_nomes or Area.tags.keys()
+    novos_nomes = novos_nomes or list(Area.tags.keys())
     Area.tags = criar_tags(novos_nomes)
 
 def salva_todas_png():
     """
-    Exporta em PNG todoas as pranhcas anotadas.
-    Em modo 'normal' ou em modo diagrama
+    Exporta em PNG todas as pranchas anotadas.
+    Em modo 'normal' ou em modo diagrama.
     """
     global imagem_prancha_atual, exportar_tudo
     if len(pr.Prancha.pranchas) > 1:
         pr.Prancha.desselect_all_in_all()
         pr.Prancha.i_atual = 1
-        imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens) 
+        imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens)
         exportar_tudo = True
     else:
         pr.Prancha.avisos("Não há pranchas para exportar.")
@@ -163,24 +163,23 @@ def volta_prancha():
     global imagem_prancha_atual
     pr.Prancha.i_atual = (pr.Prancha.i_atual - 1) % len(pr.Prancha.pranchas)
     imagem_prancha_atual = pr.Prancha.load_img_prancha_atual(imagens)
-    
+
 def rot_prancha():
     pa = pr.Prancha.pranchas[pr.Prancha.i_atual]
     pa.rot = (pa.rot + 1) % 4
     img, rot, fator = pr.Prancha.imagem_rot_fator_atual()
     if img and (rot == 1 or rot == 3):
-        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator) # INVERTIDA
+        pa.areas[0] = Area(OX, OY, img.height * fator, img.width * fator)  # INVERTIDA
     elif img:
         pa.areas[0] = Area(OX, OY, img.width * fator, img.height * fator)
 
 def abre_imagem_prancha_atual():
-    """ comando Z: abre imagem original da prancha pelo sistema operacional ('launch()')"""
+    """comando Z: abre imagem original da prancha pelo sistema operacional ('launch()')"""
     nome_prancha_lower = pr.Prancha.nome_prancha_atual().lower()
     if nome_prancha_lower != '000':
         path_img = imagens.get(nome_prancha_lower)
-        # print(path_img)
-        if path_img:        
-            launch(path_img)
+        if path_img:
+            launch(str(path_img))
     else:
         pr.Prancha.avisos("Só para pranchas de verdade!")
 
@@ -191,7 +190,7 @@ def mouse_over(b):
 def display_botoes(DEBUG=False):
     push_style()
     text_size(MENU_TEXT_SIZE)
-    text_align(LEFT, TOP)    
+    text_align(LEFT, TOP)
     for b in botoes:
         tecla, nome = b
         if b == modo_ativo:
@@ -219,19 +218,19 @@ def key_pressed(k, kc):
         k = kc
 
     if k in (DELETE, BACKSPACE):
-       areas = pr.Prancha.get_areas_atual()
-       for a in areas[1:]: # pula a primeira área (100%) que não pode ser removida
-         if a.selected:
-            areas.remove(a) 
-            break
+        areas = pr.Prancha.get_areas_atual()
+        for a in areas[1:]:  # pula a primeira área (100%) que não pode ser removida
+            if a.selected:
+                areas.remove(a)
+                break
 
     for comando in comandos.keys():
         tecla, nome = comando
         if k in (tecla, str(tecla).upper()):
             comandos[comando]()
 
-    for modo in modos:    
-        tecla, nome = modo   
+    for modo in modos:
+        tecla, nome = modo
         if k in (tecla, str(tecla).upper()):
             modo_ativo = modo
 
@@ -311,7 +310,7 @@ def mouse_wheel(e):
             if a.mouse_over():
                 a.rotation += radians(e.get_count())
                 break
-    
+
 def yes_no_pane(title, message):
     # Sim é 0, Não é 1, fechar a janela é -1
     from javax.swing import JOptionPane
@@ -319,7 +318,7 @@ def yes_no_pane(title, message):
                                          message,
                                          title,
                                          JOptionPane.YES_NO_OPTION)
-    
+
 def multiline_pane(title='', default=''):
     from javax.swing import JOptionPane, JScrollPane, JTextArea
     ta = JTextArea(20, 20)
@@ -328,14 +327,12 @@ def multiline_pane(title='', default=''):
                                            JScrollPane(ta),
                                            title,
                                            JOptionPane.OK_CANCEL_OPTION,
-                                           JOptionPane.PLAIN_MESSAGE,
-                                           # JOptionPane.QUESTION_MESSAGE
-                                           )
+                                           JOptionPane.PLAIN_MESSAGE)
     if result == JOptionPane.OK_OPTION:
         return ta.getText()
-    else: 
+    else:
         return default
-    
+
 def option_pane(title, message, options, default=''):
     from javax.swing import JOptionPane
     return JOptionPane.showInputDialog(
@@ -345,8 +342,8 @@ def option_pane(title, message, options, default=''):
         JOptionPane.QUESTION_MESSAGE,
         None,
         options,
-        default)  # must be in options, otherwise 1st is shown
-    
+        default)
+
 def input_pane(question='', suggestion=''):
     from javax.swing import JOptionPane
     return JOptionPane.showInputDialog(None, question, suggestion)
