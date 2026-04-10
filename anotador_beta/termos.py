@@ -74,7 +74,7 @@ def draw_terms(terms, terms_state=None, DEBUG=False):
         if DEBUG:
             push_style()
             no_fill()
-            strokeWeight(1)
+            stroke_weight(1)
             rect(x, y, w, h)
             pop_style()
         selected = terms_state.get(term, False)
