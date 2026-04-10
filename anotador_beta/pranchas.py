@@ -20,6 +20,9 @@ class Prancha:
 
     def init_ids(self):
         nome_r = self.nome.replace("-", "_")
+        # Remover extensão do arquivo?
+        if "." in nome_r:
+            nome_r = nome_r.rsplit(".", 1)[0]
         count_sep = nome_r.count("_")        
         if count_sep >= 2:
             ids = nome_r.split("_")
@@ -28,7 +31,7 @@ class Prancha:
             self.idc = ids[2][:3]  # CCC (3 caracteres)
         else:
             if nome_r != "000":
-                println(self.nome + " (nome da imagem não está no padrão)")
+                print(self.nome + " (nome da imagem não está no padrão)")
             self.ida = self.nome
             self.idb = self.idc = "---"
 
@@ -119,10 +122,10 @@ class Prancha:
             return float(height - (interface.OY + interface.rodape)) / img.width
 
     @classmethod
-    def calc_correction_factor(self):
+    def calc_correction_factor(cls):
         """para ajustar no caso de mudança de tela"""
         current_height = height - (interface.OY + interface.rodape)
-        return current_height / self.screen_height
+        return current_height / cls.screen_height
 
     @classmethod
     def update_for_name_change(cls):
@@ -169,23 +172,13 @@ class Prancha:
         for p in cls.pranchas:
             for a in p.areas:
                 a.selected = False
-    
-    # @classmethod
-    # def coleta_termos_existentes(cls)
-    #     categorias, tags = set(), set()
-    #     for p in cls.pranchas:
-    #         for a in p.areas:
-    #             if a.cat_selected:
-    #                 categorias.add(a.cat_selected)
-    #             tags.update(set(a.tags_selected))
-    #     return categorias, tags
 
     @classmethod
     def altera_categoria(cls, categoria, nova_cat):
         # renomeia/remove categorias nas anotacoes
         for p in cls.pranchas:
             for a in p.areas:
-               Prancha.altera_termo(a.categorias_state, tag, ntag)      
+               Prancha.altera_termo(a.categorias_state, categoria, nova_cat)      
 
     @classmethod
     def altera_tag(cls, tag, ntag):
@@ -197,12 +190,11 @@ class Prancha:
     @staticmethod
     def altera_termo(dicionario, termo, novo_termo):
         # renomeia/remove categorias/tag nos estados
-        estado_atual = self.dicionario.get(termo, None) # apaga a categoria antiga 
+        estado_atual = dicionario.get(termo, None)  
         if (estado_atual is not None) and novo_termo:
             # a categoria/tag existia (senão não faz nada) e o novo não é "" (vazio ou None)
             dicionario[novo_termo] = estado_atual  # passa o estado do antigo
                              
-                                                         
     @classmethod
     def avisos(cls, message=None):
         if message and cls.avisos_timer == 0:
