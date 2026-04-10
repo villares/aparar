@@ -1,8 +1,9 @@
 # PY5 IMPORTED MODE CODE
 
-from processing.data import Table
+# Replaced Processing Table with a lightweight Python csv-backed Table class.
+
+import csv
 from collections import Counter, defaultdict
-from os.path import join
 
 import pranchas as pr
 from areas import Area
@@ -11,11 +12,54 @@ import interface
 NOME_PLANILHA = "planilha_aparar_v1126.csv"
 NOME_PLANILHA2 = "planilha_aparar_expandida_v1126.csv"
 
+
+# ---------------------------------------------------------------------------
+# Minimal Table / TableRow replacement for Processing's Table API
+# ---------------------------------------------------------------------------
+
+class TableRow:
+    def __init__(self, columns):
+        self.data = {col: '' for col in columns}
+
+    def setString(self, col, val):
+        self.data[col] = str(val) if val is not None else ''
+
+    def setInt(self, col, val):
+        self.data[col] = int(val)
+
+    def setFloat(self, col, val):
+        self.data[col] = float(val)
+
+
+class Table:
+    def __init__(self):
+        self.columns = []
+        self.rows = []
+
+    def addColumn(self, name):
+        self.columns.append(name)
+
+    def addRow(self):
+        row = TableRow(self.columns)
+        self.rows.append(row)
+        return row
+
+    def save_csv(self, filepath):
+        with open(str(filepath), 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=self.columns)
+            writer.writeheader()
+            for row in self.rows:
+                writer.writerow(row.data)
+
+
+# ---------------------------------------------------------------------------
+
 def coleta_termos():
     global categorias, super_cats, tags
-    categorias = sorted(interface.categorias.keys())
-    super_cats = interface.super_cats
-    tags = sorted(interface.tags.keys())
+    # Mudei pra pegar da Area e não da interface...
+    categorias = sorted(Area.categorias.keys())
+    super_cats = Area.super_cats
+    tags = sorted(Area.tags.keys())
 
 def gera_csv():
     table = Table()
@@ -67,10 +111,11 @@ def gera_csv():
         escreve_linha(nova_linha, super_cats, scat_count, scobertura,
                       categorias, cat_count, cobertura,
                       tags, tag_count)
+
     print(pr.Prancha.path_sessao)
-    file = join(pr.Prancha.path_sessao, NOME_PLANILHA)
-    saveTable(table, file)
-    pr.Prancha.avisos("CSV salvo em …" + unicode(pr.Prancha.path_sessao)[-40:])
+    filepath = pr.Prancha.path_sessao / NOME_PLANILHA
+    table.save_csv(filepath)
+    pr.Prancha.avisos("CSV salvo em …" + str(pr.Prancha.path_sessao)[-40:])
 
 def gera_csv2():
     table = Table()
@@ -131,26 +176,18 @@ def gera_csv2():
             nova_linha_area.setInt("AREA", i)
             if area.cat_selected:
                 nova_linha_area.setInt(area.cat_selected + "_num", 1)
-                nova_linha.setFloat(
+                nova_linha_area.setFloat(  # FIX?
                     area.cat_selected + "_area", area.cobertura)
             if area.scat_selected:
                 nova_linha_area.setInt(area.scat_selected + "_num", 1)
-                nova_linha.setFloat(
+                nova_linha_area.setFloat(  # FIX?
                     area.scat_selected + "_area", area.cobertura)
             for tag in tags:
-                nova_linha_area.setInt(tag, (tag in area.tags_selected))
-            # for scat in super_cats:
-            #     nova_linha.setInt(scat + "_num", scat_count[scat])
-            #     nova_linha.setFloat(scat + "_area", scobertura[scat] / num_pranchas)
-            # for cat in categorias:
-            #     nova_linha.setInt(cat + "_num", cat_count[cat])
-            #     nova_linha.setFloat(cat + "_area", cobertura[cat] / num_pranchas)
-            # for tag in tags:
-            # nova_linha.setInt(tag, tag_count[tag])
+                nova_linha_area.setInt(tag, int(tag in area.tags_selected))
 
-    file = join(pr.Prancha.path_sessao, NOME_PLANILHA2)
-    saveTable(table, file)
-    pr.Prancha.avisos("CSV salvo em …" + unicode(pr.Prancha.path_sessao)[-40:])
+    filepath = pr.Prancha.path_sessao / NOME_PLANILHA2 
+    table.save_csv(filepath)  # saveTable() replacement
+    pr.Prancha.avisos("CSV salvo em …" + str(pr.Prancha.path_sessao)[-40:]) 
 
 
 def cria_colunas(table, expandida=False):
