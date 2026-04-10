@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # [WIP] ESTA VERSÂO COM PY5 AINDA NÂO ESTÁ FUNCIONANDO 
-#     [ ] Migrar para Pathlib
+#     [X] Migrar para Pathlib 
 # [WIP] Checar branches (como "clean_up") se melhorias foram incorporadas
 #     [ ] ? "primazia das coordenadas de prancha"
 #     [ ] ? "nota livre"
@@ -45,7 +45,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import interface
 import pranchas
-from arquivos import imagens, adicionar_imagens, salva_sessao, salva_png
+from arquivos import imagens, salva_sessao, salva_png
 
 DEBUG = False
 
@@ -58,7 +58,7 @@ def draw():
     background(200)
     # Elementos de interface/menu
     interface.display_botoes(DEBUG)
-    # Mostra imagem da prancha (se não estiver no modo digagrama)
+    # Mostra imagem da prancha (se não estiver no modo diagrama)
     if interface.modo_ativo != interface.DIAGR:
         pranchas.Prancha.display_imagem_atual(imagens)
     # Desenha as áreas anotadas        
@@ -85,8 +85,8 @@ def key_pressed():
     
 def mouse_wheel(e):
     interface.mouse_wheel(e)    
-    
-def stop():
+
+def exiting():  # equivalente do stop() no Processing Modo Python
     r = interface.yes_no_pane("Fechando a ferramenta!", "Quer salvar a sessão?")
     if r == 0:
         salva_sessao()
