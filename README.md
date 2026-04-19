@@ -6,7 +6,7 @@
 Ferramenta experimental para facilitar a anotação e posterior análise de documentos, especialmente "pranchas" usadas para representação de projetos, permitindo  marcar e identificar com categorias regiões do documento, gerando depois um relatório com quantificação das áreas relativas entre as regiões.
 
 > [!NOTE]
->  O desenvolvimento desta versão da ferramenta está pausado e deve ser retomando em [github.com/villares/aparar/blob/py5_port](https://github.com/villares/aparar/blob/py5_port/)
+>  O desenvolvimento da versão original da ferramenta foi interrompido e uma nova versão está em desenvolvimento em https://github.com/villares/aparar/tree/py5_port
 
 #### Dependências e instalação
  - Instale o Processing IDE 3.5.4 e a extensão modo Python ([instruções detalhadas](https://abav.lugaralgum.com/como-instalar-o-processing-modo-python/))
